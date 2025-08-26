@@ -67,12 +67,22 @@ const eslintConfig = [
               position: 'after',
             },
             {
+              pattern: '@/services/**',
+              group: 'internal',
+              position: 'after',
+            },
+            {
               pattern: '@/types/**',
               group: 'type',
               position: 'after',
             },
             {
               pattern: '@/states/**',
+              group: 'type',
+              position: 'after',
+            },
+            {
+              pattern: '@/styles/**',
               group: 'type',
               position: 'after',
             },

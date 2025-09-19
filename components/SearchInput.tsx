@@ -1,6 +1,8 @@
-import { ChangeEvent, FormEvent, useEffect, useRef } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useMemo, useRef } from 'react';
 
 import { SearchIcon } from '@/states/icon/svgs';
+import { animationStyle } from '@/app/utils/animation';
+import { AnimationType } from '@/types/animation';
 
 interface SearchInputProps {
   value: string;
@@ -11,6 +13,7 @@ interface SearchInputProps {
   delay?: number;
   duration?: number;
   useAnimation?: boolean;
+  animationType?: AnimationType;
 }
 
 const SearchInput = ({
@@ -20,6 +23,7 @@ const SearchInput = ({
   onChange,
   onSubmit,
   useAnimation = false,
+  animationType,
   delay,
   duration,
 }: SearchInputProps) => {
@@ -36,16 +40,13 @@ const SearchInput = ({
     }
   }, []);
 
-  const animationStyles: React.CSSProperties = useAnimation
-    ? ({
-        '--animation-delay-var': `${delay}s`,
-        '--animation-duration-var': `${duration}s`,
-      } as React.CSSProperties)
-    : {};
+  const animationStyles = useMemo(() => {
+    return animationStyle({ useAnimation, delay, duration });
+  }, [useAnimation, delay, duration]);
 
   return (
     <form
-      className={`relative w-full ${useAnimation ? 'fade-in-up' : ''}`}
+      className={`relative w-full ${useAnimation ? animationType : ''}`}
       onSubmit={handleSubmit}
       style={animationStyles}
     >
@@ -57,6 +58,7 @@ const SearchInput = ({
         placeholder={placeholder}
         disabled={disabled}
         className='h-[50px] w-full leading-[50px] py-0 pr-[50px] pl-6 text-sm text-[#f3f3f3] bg-[#121212] rounded-full border-none outline-none'
+        name='search-input'
       />
       <button
         type='submit'

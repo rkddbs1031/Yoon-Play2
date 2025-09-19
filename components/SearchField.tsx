@@ -1,12 +1,14 @@
 import { ChangeEvent, FormEvent, useEffect, useMemo, useRef } from 'react';
 
 import { SearchIcon } from '@/states/icon/svgs';
-import { animationStyle } from '@/app/utils/animation';
+import { animationStyle } from '@/utils/animation';
 import { AnimationType } from '@/types/animation';
+import { TextFieldType } from '@/types/textFiled';
 
-interface SearchInputProps {
+interface SearchFieldProps {
+  fieldType?: TextFieldType;
   value: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
   placeholder?: string;
   disabled?: boolean;
@@ -16,7 +18,8 @@ interface SearchInputProps {
   animationType?: AnimationType;
 }
 
-const SearchInput = ({
+const SearchField = ({
+  fieldType = TextFieldType.Input,
   value,
   placeholder = '검색어를 입력해 주세요.',
   disabled = false,
@@ -26,8 +29,10 @@ const SearchInput = ({
   animationType,
   delay,
   duration,
-}: SearchInputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
+}: SearchFieldProps) => {
+  const textFieldRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
+
+  const TextFieldComponent = fieldType; // 'input' | 'textarea'
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,8 +40,8 @@ const SearchInput = ({
   };
 
   useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
+    if (textFieldRef.current) {
+      textFieldRef.current.focus();
     }
   }, []);
 
@@ -50,15 +55,14 @@ const SearchInput = ({
       onSubmit={handleSubmit}
       style={animationStyles}
     >
-      <input
-        ref={inputRef}
-        type='text'
+      <TextFieldComponent
+        ref={textFieldRef}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
         className='h-[50px] w-full leading-[50px] py-0 pr-[50px] pl-6 text-sm text-[#f3f3f3] bg-[#121212] rounded-full border-none outline-none'
-        name='search-input'
+        id='search-input-textarea'
       />
       <button
         type='submit'
@@ -72,4 +76,4 @@ const SearchInput = ({
   );
 };
 
-export default SearchInput;
+export default SearchField;

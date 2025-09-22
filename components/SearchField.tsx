@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useMemo, useRef } from 'react';
+import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 
 import { SearchIcon } from '@/states/icon/svgs';
 import { animationStyle } from '@/utils/animation';
@@ -62,6 +62,13 @@ const SearchField = ({
     onChange && onChange(e);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      e.currentTarget.form?.requestSubmit();
+    }
+  };
+
   return (
     <form
       className={`flex items-center gap-2 max-w-[720px] w-full bg-[#121212] rounded-[24px] overflow-hidden ${useAnimation ? animationType : ''} py-3 px-[16px] `}
@@ -72,6 +79,7 @@ const SearchField = ({
         ref={textFieldRef}
         value={value}
         onChange={handleChange}
+        onKeyDown={fieldType === TextFieldType.Textarea ? handleKeyDown : undefined}
         placeholder={placeholder}
         disabled={disabled}
         className={`w-full text-sm text-[#f3f3f3] border-none outline-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}

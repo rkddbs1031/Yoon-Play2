@@ -6,7 +6,7 @@ import { AnimationType } from '@/types/animation';
 import { TextFieldType } from '@/types/textFiled';
 
 interface SearchFieldProps {
-  fieldType?: TextFieldType;
+  fieldType: TextFieldType;
   value: string;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
@@ -19,7 +19,7 @@ interface SearchFieldProps {
 }
 
 const SearchField = ({
-  fieldType = TextFieldType.Input,
+  fieldType,
   value,
   placeholder = '검색어를 입력해 주세요.',
   disabled = false,
@@ -49,26 +49,36 @@ const SearchField = ({
     return animationStyle({ useAnimation, delay, duration });
   }, [useAnimation, delay, duration]);
 
+  const handleResizeHeight = () => {
+    const fieldRefCurrent = textFieldRef.current;
+    if (!fieldRefCurrent) return;
+
+    fieldRefCurrent.style.height = 'auto';
+    fieldRefCurrent.style.height = fieldRefCurrent.scrollHeight + 'px';
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (fieldType === TextFieldType.Textarea) handleResizeHeight();
+    onChange && onChange(e);
+  };
+
   return (
     <form
-      className={`relative w-full ${useAnimation ? animationType : ''}`}
+      className={`flex items-center gap-2 max-w-[720px] w-full bg-[#121212] rounded-[24px] overflow-hidden ${useAnimation ? animationType : ''} py-3 px-[16px] `}
       onSubmit={handleSubmit}
       style={animationStyles}
     >
       <TextFieldComponent
         ref={textFieldRef}
         value={value}
-        onChange={onChange}
+        onChange={handleChange}
         placeholder={placeholder}
         disabled={disabled}
-        className='h-[50px] w-full leading-[50px] py-0 pr-[50px] pl-6 text-sm text-[#f3f3f3] bg-[#121212] rounded-full border-none outline-none'
+        className={`w-full text-sm text-[#f3f3f3] border-none outline-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}
         id='search-input-textarea'
+        rows={1}
       />
-      <button
-        type='submit'
-        className='absolute z-100 top-[50%] right-6 translate-y-[-50%] text-[#fff] cursor-pointer'
-        aria-label='검색'
-      >
+      <button type='submit' className='text-white cursor-pointer' aria-label='검색'>
         <span className='sr-only'>검색</span>
         <SearchIcon size={16} stroke='#666666' />
       </button>

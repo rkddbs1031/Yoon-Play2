@@ -3,8 +3,9 @@
 
 :root {
   --background: #000000;
+  --gradient: linear-gradient(135deg, #e0c3fc 0%, #f9f9f9 40%, #8ec5fc 100% /* 파스텔 블루 */);
   --foreground: #171717;
-  --text: #ffffff;
+  --text: #52527a;
 }
 
 @theme inline {
@@ -22,7 +23,7 @@
 }
 
 body {
-  background: var(--background);
+  background: var(--gradient);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }

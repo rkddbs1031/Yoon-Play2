@@ -9,7 +9,7 @@ interface SearchFieldProps {
   fieldType: TextFieldType;
   value: string;
   onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onSubmit?: (e: FormEvent<HTMLFormElement>) => void;
+  onSubmit?: () => void;
   placeholder?: string;
   disabled?: boolean;
   delay?: number;
@@ -36,7 +36,7 @@ const SearchField = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit?.(e);
+    onSubmit && onSubmit();
   };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const SearchField = ({
 
   return (
     <form
-      className={`flex items-center gap-2 max-w-[720px] w-full bg-[#121212] rounded-[24px] overflow-hidden ${useAnimation ? animationType : ''} py-3 px-[16px] `}
+      className={`flex items-center gap-2 max-w-[720px] w-full bg-[#ffffff33] rounded-[24px] overflow-hidden ${useAnimation ? animationType : ''} py-3 px-[16px] shadow-[0 4px 20px rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg`}
       onSubmit={handleSubmit}
       style={animationStyles}
     >
@@ -82,7 +82,7 @@ const SearchField = ({
         onKeyDown={fieldType === TextFieldType.Textarea ? handleKeyDown : undefined}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full text-sm text-[#f3f3f3] border-none outline-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}
+        className={`w-full text-sm text-medium border-none outline-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}
         id='search-input-textarea'
         rows={1}
       />

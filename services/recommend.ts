@@ -1,12 +1,12 @@
 import { FetchMethod } from '@/types/fetch';
-import { RecommendationResponse } from '@/types/recommend';
+import { Recommendation } from '@/types/recommend';
 import { fetcher } from '@/utils/request';
 
 export const RECOMMEND_API_KEY = '/api/recommend';
 
 const getRecommendations = async (query: string) => {
   try {
-    const data = await fetcher<RecommendationResponse>(RECOMMEND_API_KEY, {
+    const data = await fetcher<Recommendation>(RECOMMEND_API_KEY, {
       method: FetchMethod.POST,
       data: { query },
     });

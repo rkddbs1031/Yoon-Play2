@@ -3,7 +3,7 @@ interface List {
   playlist: string[];
 }
 
-export interface RecommendationResponse {
+export interface Recommendation {
   description: string;
   list: null | List;
 }

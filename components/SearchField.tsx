@@ -71,7 +71,7 @@ const SearchField = ({
 
   return (
     <form
-      className={`${useAnimation ? animationType : ''} flex items-center gap-2 max-w-[720px] w-full bg-[#ffffff33] rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto`}
+      className={`${useAnimation ? animationType : ''} flex items-center gap-2 w-full bg-[#ffffff33] rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto`}
       onSubmit={handleSubmit}
       style={animationStyles}
     >

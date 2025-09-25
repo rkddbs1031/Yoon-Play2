@@ -1,12 +1,13 @@
 'use client';
 
 import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { getRecommendations } from '@/services/recommend';
 import { RANDOM_HEADLINES } from '@/states/headLine';
 import { animationStyle } from '@/utils/animation';
 import { AnimationType } from '@/types/animation';
-import { Recommendation } from '@/types/recommend';
+import { RecommendationResultType, Recommendation, RandomHeadLineType } from '@/types/recommend';
 import { TextFieldType } from '@/types/textFiled';
 
 import { ListWrapper } from '@/components/ListWrapper';
@@ -19,12 +20,14 @@ const INIT_RECOMMEND = {
 };
 
 export default function Home() {
-  const [headLine, setHeadline] = useState('');
+  const [headLine, setHeadline] = useState<RandomHeadLineType>({ type: null, text: '' });
   const [searchValue, setSearchValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [recommend, setRecommend] = useState<Recommendation>(INIT_RECOMMEND);
   const [showResults, setShowResults] = useState(false);
+
+  const router = useRouter();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
@@ -32,11 +35,11 @@ export default function Home() {
   };
 
   const handleSubmit = () => {
-    if (!searchValue) return;
+    if (!searchValue && !headLine.type) return;
 
     setIsLoading(true);
 
-    getRecommendations(searchValue)
+    getRecommendations({ value: searchValue, type: headLine.type })
       .then(({ data }) => {
         const { description, list } = data;
         setRecommend({ description, list });
@@ -57,73 +60,66 @@ export default function Home() {
   };
 
   useEffect(() => {
-    const random = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
-    setHeadline(random);
+    const { type, text } = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
+    setHeadline({ type, text });
   }, []);
 
   const animationStyles = useMemo(() => {
     return animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 });
   }, []);
 
-  const animationStyle2 = useMemo(() => {
-    return animationStyle({ useAnimation: true, delay: 0.6, duration: 0.6 });
-  }, []);
-
-  const handleClick = (key: string) => {
-    console.log(key);
-  };
-
   const handleResetSearch = () => {
     setRecommend(INIT_RECOMMEND);
     setShowResults(prev => !prev);
   };
 
+  const handleClick = ({ value, type }: { value: string; type: RecommendationResultType }) => {
+    router.push(`/result?type=${type}&value=${encodeURIComponent(value)}`);
+  };
+
   return (
     <section className='flex flex-col w-full items-center justify-center'>
-      <>
-        <h1
-          className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-bold text-center whitespace-pre-wrap`}
-          style={animationStyles}
-        >
-          {headLine}
-        </h1>
-        <div className='w-full mt-[60px]' style={animationStyle2}>
-          <SearchField
-            fieldType={TextFieldType.Textarea}
-            value={searchValue}
-            onChange={handleChange}
-            onSubmit={handleSubmit}
-            useAnimation={true}
-            animationType={AnimationType.FadeInUp}
-            delay={0.6}
-            duration={0.6}
-          />
-        </div>
-      </>
-
-      <div
-        className={`transition-all duration-500 ease-in-out ${isLoading ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}
+      <h1
+        className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-bold text-center whitespace-pre-wrap`}
+        style={animationStyles}
       >
-        {isLoading && <LoadingSpinner />}
+        {headLine.text}
+      </h1>
+      <div className='w-full mt-[60px]'>
+        <SearchField
+          fieldType={TextFieldType.Textarea}
+          value={searchValue}
+          onChange={handleChange}
+          onSubmit={handleSubmit}
+          useAnimation={true}
+          animationType={AnimationType.FadeInUp}
+          delay={0.6}
+          duration={0.6}
+        />
       </div>
 
       {showResults && !isLoading && (
         <div
           className={`result-wrapper flex flex-col items-center w-full gap-10 mt-10 ${AnimationType.FadeInUp}`}
-          style={animationStyle2}
+          style={animationStyles}
         >
           <p className='text-center text-[16px] sm:text-[18px]'>{recommend.description}</p>
 
           {recommend.list && (
             <>
-              <div className='recommend-list flex flex-col gap-10 max-w-[720px] w-full'>
+              <div className='recommend-list flex flex-col gap-10 w-full'>
                 <ListWrapper
-                  sectionName='play-list'
+                  type={RecommendationResultType.Playlist}
                   title='플레이리스트 추천'
                   list={recommend.list.playlist}
                   onClick={handleClick}
                 />
-                <ListWrapper sectionName='genre' title='장르 추천' list={recommend.list.genre} onClick={handleClick} />
+                <ListWrapper
+                  type={RecommendationResultType.Genre}
+                  title='장르 추천'
+                  list={recommend.list.genre}
+                  onClick={handleClick}
+                />
               </div>
 
               <div>
@@ -142,6 +138,8 @@ export default function Home() {
       )}
 
       {errorMessage && <p>{errorMessage}</p>}
+
+      <LoadingSpinner isLoading={isLoading} />
     </section>
   );
 }

@@ -1,21 +1,11 @@
-interface ButtonProps {
-  label: string;
-  onClick: () => void;
-}
+import { ReactNode } from 'react';
 
-const KeywordButton = ({ onClick, label, ...props }: ButtonProps) => {
+export const Card = ({ children, style }: { children: ReactNode; style?: string }) => {
   return (
-    <button
-      type='button'
-      className='w-full py-4 sm:py-3 px-2 text-[14px] rounded-[32px] backdrop-blur-xl shadow-[0_4px_12px_rgba(0,0,0,0.1)] cursor-pointer transition-bg duration-400 bg-white/20 hover:bg-white/70'
-      {...props}
-      onClick={onClick}
+    <div
+      className={`flex flex-col gap-4 bg-[#ffffff33] px-5 pt-5 pb-6 rounded-[24px] shadow-lg shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl ${style}`}
     >
-      {label}
-    </button>
+      {children}
+    </div>
   );
-};
-
-export const Card = {
-  Keyword: KeywordButton,
 };

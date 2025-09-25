@@ -1,3 +1,4 @@
+import { RecommendationType } from '@/types/recommend';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -5,38 +6,35 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
 });
 
+const TYPE_PROMPT_MAP: Record<RecommendationType, string> = {
+  artist: '좋아하는 가수에 맞는 음악을 추천해줘',
+  mood: '사용자의 기분과 상태에 맞는 음악을 추천해줘.',
+  weather: '오늘 날씨에 맞는 음악을 추천해줘.',
+  time: '현재 시간대에 맞는 음악을 추천해줘.',
+  activity: '사용자의 활동에 맞는 음악을 추천해줘.',
+};
+
 export async function POST(request: NextRequest) {
   try {
-    const { query } = await request.json();
+    const { query, type } = await request.json();
+    // 1. 타입 관련 여부 확인
+    const { isRelevant } = await checkQueryRelevance(query, type);
 
-    const response = await openai.chat.completions.create({
+    console.log(isRelevant);
+    // 2. 추천 생성
+    const typePrompt = isRelevant ? getTypePrompt(type) : '';
+    const recommendationResp = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo',
       messages: [
         { role: 'system', content: '너는 음악 추천 전문가 겸 도우미야.' },
-        {
-          role: 'user',
-          content: `
-            ${query}의 내용은 사용자의 상태, 감정, 좋아하는 가수, 현재 날씨가 될 수 있어. 그에 맞는 음악을 추천해줘.
-            - 설명: 추천 배경이나 분위기에 대한 설명.
-            - 리스트: 음악 장르 3개, 플레이리스트 이름 3개만(유튜브 플레이리스트 제목), 배열 형태로 제공, 장르와 플레이리스트 외의 다른 데이터는 없어야할 것.
-            - 리스트 하위의 장르와 플레이리스트는 중복되지 않아야 함.
-            - 유튜브 링크는 절대 포함하지 않을 것.
-            - JSON 형식으로 꼭 지키며 답변해:
-              {
-                "description": "...",
-                "list": {
-                  "genre": ["...", "...", "...],
-                  "playlist": ["...", "...", "...],
-                }
-              }
-          `,
-        },
+        { role: 'user', content: generateRecommendationPrompt(query, typePrompt) },
       ],
+      temperature: 0.7,
       response_format: { type: 'json_object' },
     });
 
-    const result = JSON.parse(response.choices[0].message?.content || '{}');
-    return NextResponse.json(result);
+    const result = JSON.parse(recommendationResp.choices[0].message?.content || '{}');
+    return NextResponse.json({ ...result, is_relevant: isRelevant });
   } catch (error: any) {
     console.error('OpenAI API 오류:', error, error.status);
 
@@ -73,3 +71,53 @@ export async function POST(request: NextRequest) {
     }
   }
 }
+
+async function checkQueryRelevance(query: string, type: RecommendationType) {
+  try {
+    const result = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [
+        { role: 'system', content: '너는 사용자의 입력과 헤드라인 타입의 관련성을 판단하는 전문가야.' },
+        {
+          role: 'user',
+          content: `
+            사용자의 입력: "${query}"
+            헤드라인 타입: "${type}"
+  
+            질문: 사용자의 입력이 위 타입과 관련이 있나요? 
+            응답은 JSON으로 {"isRelevant": true/false} 형태만 반환해주세요.
+            `,
+        },
+      ],
+      temperature: 0,
+    });
+
+    const rawContent = JSON.parse(result.choices[0].message?.content ?? '{"isRelevant":false}');
+    return { isRelevant: rawContent.isRelevant === true };
+  } catch (err) {
+    return { isRelevant: false };
+  }
+}
+
+function getTypePrompt(type: RecommendationType | null) {
+  if (!type) return '';
+  return TYPE_PROMPT_MAP[type] || '';
+}
+
+const generateRecommendationPrompt = (query: string, typePrompt?: string) => `
+사용자의 입력: "${query}"
+${typePrompt ? `타입 기반 추천: "${typePrompt}"` : ''}
+
+- 설명: 추천 배경이나 분위기에 대한 설명
+- 리스트: 음악 장르 3개, 플레이리스트 이름 3개 (유튜브 플레이리스트 제목), 배열 형태
+- 리스트 하위의 장르와 플레이리스트 중복 금지
+- 유튜브 링크는 절대 포함하지 마세요
+- JSON 형식:
+{
+  "description": "...",
+  "list": {
+    "genre": ["...", "...", "..."],
+    "playlist": ["...", "...", "..."]
+  }
+}
+`;

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 const Card = ({ children, style }: { children: ReactNode; style?: string }) => {
   return (
@@ -18,9 +18,27 @@ interface ContentProps {
 }
 
 const Content = ({ thumbnail, title, channelTitle, onClick }: ContentProps) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
-    <button type='button' className='flex flex-col w-full items-start gap-2 cursor-pointer' onClick={onClick}>
-      <img src={thumbnail} alt={title} className='rounded-[8px] block w-full aspect-square object-cover' />
+    <button
+      type='button'
+      className='flex flex-col w-full items-start gap-2 cursor-pointer'
+      onClick={onClick}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className='relative w-full'>
+        <img src={thumbnail} alt={title} className='rounded-[8px] block w-full aspect-square object-cover' />
+
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-black/40 rounded-[8px] transition-opacity duration-400 ${
+            isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <button className='px-3 py-1 text-white font-bold bg-red-500 rounded'>Play</button>
+        </div>
+      </div>
       <h3 className='text-[14px] sm:text-4 font-semibold text-left line-clamp-2 md:line-clamp-3'>{title}</h3>
       <p className='text-[12px] sm:text-[14px]'>{channelTitle}</p>
     </button>

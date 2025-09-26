@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 
 import type { Metadata } from 'next';
 import '../styles/globals.css';
+import { ReactQueryProvider } from './providers/ReactQueryProvider';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -26,7 +27,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main className='p-6 md:p-[50px] min-h-screen max-w-[720px] w-full mx-auto'>{children}</main>
+        <ReactQueryProvider>
+          <main className='p-6 md:py-[50px]  md:px-[24px] min-h-screen max-w-[856px] w-full mx-auto'>{children}</main>
+        </ReactQueryProvider>
       </body>
     </html>
   );

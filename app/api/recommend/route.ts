@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
     // 1. 타입 관련 여부 확인
     const { isRelevant } = await checkQueryRelevance(query, type);
 
-    console.log(isRelevant);
     // 2. 추천 생성
     const typePrompt = isRelevant ? getTypePrompt(type) : '';
     const recommendationResp = await openai.chat.completions.create({

@@ -26,9 +26,8 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
     queryKey: ['recommend-youtube-search', type, value],
     queryFn: async ({ pageParam }) => {
       const params = new URLSearchParams({
-        type: encodeURIComponent(type ?? ''),
         query: encodeURIComponent(value ?? ''),
-        ...(type && { type: encodeURIComponent(type) }),
+        type: encodeURIComponent(type ?? ''),
         ...(pageParam && { pageToken: pageParam }),
       });
 

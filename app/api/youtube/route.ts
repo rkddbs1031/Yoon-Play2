@@ -1,19 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { RecommendationResultType } from '@/types/recommend';
+
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3/search';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
-    const pageToken = searchParams.get('pageToken') || '';
+    const searchType = searchParams.get('type') || '';
+    const pageToken = searchParams.get('pageToken');
 
     const youtubeParams = new URLSearchParams({
       part: 'snippet',
       type: 'video',
       maxResults: '10',
-      ...(query && { q: query }),
-      ...(pageToken && { pageToken }), // pageToken이 있을 때만 추가
+      ...(query && {
+        q: `${query} ${searchType === RecommendationResultType.Genre ? '장르' : ''} 플레이리스트 `,
+      }),
+      ...(pageToken && { pageToken }),
       key: process.env.YOUTUBE_API_KEY || '',
     });
 

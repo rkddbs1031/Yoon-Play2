@@ -4,12 +4,12 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { AnimationType } from '@/types/animation';
+import { YoutubeItem } from '@/types/youtube';
 import { animationStyle } from '@/utils/animation';
 import { useYoutubeInfiniteQuery } from '@/services/search';
-
 import { PlayList } from '@/components/Playlist';
-import { YoutubeItem } from '@/types/youtube';
 import LoadingSpinner from '@/components/Loading';
+import { Skeleton } from '@/components/Skeleton';
 
 const OBSERVE_OPTIONS = {
   root: null,
@@ -77,9 +77,14 @@ export default function PlayListResult() {
                   />
                 </PlayList.Card>
               ))}
+              {isFetchingNextPage && (
+                <>
+                  <Skeleton.PlayList length={3} />
+                </>
+              )}
             </ul>
 
-            <div ref={target}></div>
+            <div ref={target} className='h-px'></div>
           </div>
         </>
       )}

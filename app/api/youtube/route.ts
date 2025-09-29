@@ -1,31 +1,34 @@
-import { RecommendationType } from '@/types/recommend';
 import { NextRequest, NextResponse } from 'next/server';
 
-const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=10';
+const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3/search';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('query');
+    const pageToken = searchParams.get('pageToken') || '';
 
-    if (!query) {
-      return NextResponse.json({ error: 'Missing query' }, { status: 400 });
-    }
+    const youtubeParams = new URLSearchParams({
+      part: 'snippet',
+      type: 'video',
+      maxResults: '10',
+      ...(query && { q: query }),
+      ...(pageToken && { pageToken }), // pageToken이 있을 때만 추가
+      key: process.env.YOUTUBE_API_KEY || '',
+    });
 
-    const result = await fetch(
-      `${YOUTUBE_SEARCH_URL}&q=${encodeURIComponent(query)}&key=${process.env.YOUTUBE_API_KEY}`,
-    );
+    const response = await fetch(`${YOUTUBE_API_BASE}?${youtubeParams.toString()}`);
 
-    if (!result.ok) {
+    if (!response.ok) {
       return NextResponse.json(
         { error: 'YouTube API 오류가 발생했습니다. 잠시 후 다시 시도해주세요.' },
-        { status: result.status },
+        { status: response.status },
       );
     }
 
-    const data = await result.json();
+    const data = await response.json();
     return NextResponse.json(data);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Youtube API 오류:', error);
 
     return NextResponse.json(

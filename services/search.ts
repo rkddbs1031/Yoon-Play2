@@ -1,5 +1,5 @@
 import { YouTubeSearchList } from '@/types/youtube';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 interface YouTubeSearchProps {
@@ -16,6 +16,27 @@ export const useYoutubeSearchQuery = ({ type, value }: YouTubeSearchProps) => {
       );
       return data;
     },
+    enabled: !!value && !!type,
+    staleTime: 60 * 1000, // 1분
+  });
+};
+
+export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => {
+  return useInfiniteQuery({
+    queryKey: ['recommend-youtube-search', type, value],
+    queryFn: async ({ pageParam }) => {
+      const params = new URLSearchParams({
+        type: encodeURIComponent(type ?? ''),
+        query: encodeURIComponent(value ?? ''),
+        ...(type && { type: encodeURIComponent(type) }),
+        ...(pageParam && { pageToken: pageParam }),
+      });
+
+      const { data } = await axios.get<YouTubeSearchList>(`/api/youtube?${params.toString()}`);
+      return data;
+    },
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: lastPage => lastPage.nextPageToken,
     enabled: !!value && !!type,
     staleTime: 60 * 1000, // 1분
   });

@@ -26,8 +26,8 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
     queryKey: ['recommend-youtube-search', type, value],
     queryFn: async ({ pageParam }) => {
       const params = new URLSearchParams({
-        query: encodeURIComponent(value ?? ''),
-        type: encodeURIComponent(type ?? ''),
+        query: value ?? '',
+        type: type ?? '',
         ...(pageParam && { pageToken: pageParam }),
       });
 
@@ -38,5 +38,7 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
     getNextPageParam: lastPage => lastPage.nextPageToken,
     enabled: !!value && !!type,
     staleTime: 60 * 1000, // 1분
+    retry: 2,
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };

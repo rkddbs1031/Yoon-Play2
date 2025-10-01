@@ -78,7 +78,7 @@ export default function Home() {
   };
 
   return (
-    <section className='flex flex-col w-full items-center justify-center'>
+    <section className='flex flex-col w-full items-center justify-center max-w-[720px] w-full mx-auto'>
       <h1
         className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-bold text-center whitespace-pre-wrap`}
         style={animationStyles}

@@ -1,25 +1,14 @@
-import { atom } from 'recoil';
-
-import { YoutubeThumbnail } from '@/types/youtube';
+import { atom } from 'jotai';
 
 export interface PlaylistItem {
   videoId: string;
   title: string;
   channelTitle: string;
-  thumbnail: YoutubeThumbnail;
+  thumbnail: string;
 }
 
-export const playlistState = atom<PlaylistItem[]>({
-  key: 'playlistState',
-  default: [],
-});
+export const playlistState = atom<PlaylistItem[]>([]);
 
-export const isPlayingState = atom<boolean>({
-  key: 'isPlayingState',
-  default: false,
-});
+export const isPlayingState = atom<boolean>(false);
 
-export const currentPlayingIndexState = atom<number>({
-  key: 'currentPlayingIndexState',
-  default: 0,
-});
+export const currentPlayingIndexState = atom<number>(0);

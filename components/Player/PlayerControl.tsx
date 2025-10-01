@@ -109,7 +109,49 @@ const PlayerButtons = () => {
     </div>
   );
 };
+
+const ProgressBar = ({ className }: { className?: string }) => {
+  const { duration, currentTime, playerRef, setCurrentTime } = usePlayer();
+  const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!playerRef || duration === 0) return;
+
+    const newTime = Number(e.target.value);
+    setCurrentTime(newTime);
+
+    if (seekTimeoutRef.current) {
+      clearTimeout(seekTimeoutRef.current);
+    }
+
+    seekTimeoutRef.current = setTimeout(() => {
+      playerRef.seekTo(newTime, true);
+    }, 100);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (seekTimeoutRef.current) {
+        clearTimeout(seekTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  return (
+    <input
+      type='range'
+      min='0'
+      max={duration || 0}
+      value={currentTime}
+      step='0.1'
+      onChange={handleChange}
+      className={`w-full h-1 ${className || ''}`}
+    />
+  );
+};
+
 export const PlayerControl = {
   Frame: PlayerFrame,
   Buttons: PlayerButtons,
+  ProgressBar,
 };

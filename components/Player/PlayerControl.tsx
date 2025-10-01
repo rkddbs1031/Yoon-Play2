@@ -87,6 +87,29 @@ const PlayerFrame = () => {
   );
 };
 
+const PlayerButtons = () => {
+  const { playlist, isPlaying, currentIndex, prevPlay, nextPlay, togglePlay } = usePlayer();
+
+  return (
+    <div className='controls-wrapper flex flex-row gap-2 items-center'>
+      <button type='button' onClick={prevPlay} disabled={currentIndex === 0} className='cursor-pointer'>
+        <PrevIcon />
+      </button>
+      <button type='button' onClick={togglePlay} className='cursor-pointer'>
+        {isPlaying ? <PauseIcon /> : <PlayIcon />}
+      </button>
+      <button
+        type='button'
+        onClick={nextPlay}
+        disabled={currentIndex === playlist.length - 1}
+        className='cursor-pointer'
+      >
+        <NextIcon />
+      </button>
+    </div>
+  );
+};
 export const PlayerControl = {
   Frame: PlayerFrame,
+  Buttons: PlayerButtons,
 };

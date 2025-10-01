@@ -5,7 +5,7 @@ import { usePlayer } from '@/hooks/usePlayer';
 import { NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
 
 const PlayerFrame = () => {
-  const { currentVideo, isPlaying, setPlayerRef, setDuration, setCurrentTime } = usePlayer();
+  const { currentVideo, isPlaying, setPlayerRef, setDuration, setCurrentTime, volume } = usePlayer();
   const localRef = useRef<YouTubePlayer | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -65,6 +65,12 @@ const PlayerFrame = () => {
   }, [isPlaying]);
 
   useEffect(() => {
+    if (localRef.current) {
+      localRef.current.setVolume(volume);
+    }
+  }, [volume]);
+
+  useEffect(() => {
     return () => stopInterval();
   }, [stopInterval]);
 
@@ -91,12 +97,12 @@ const PlayerButtons = () => {
   const { playlist, isPlaying, currentIndex, prevPlay, nextPlay, togglePlay } = usePlayer();
 
   return (
-    <div className='controls-wrapper flex flex-row gap-2 items-center'>
+    <div className='button-wrapper flex flex-row gap-2 items-center'>
       <button type='button' onClick={prevPlay} disabled={currentIndex === 0} className='cursor-pointer'>
-        <PrevIcon />
+        <PrevIcon color={'white'} />
       </button>
       <button type='button' onClick={togglePlay} className='cursor-pointer'>
-        {isPlaying ? <PauseIcon /> : <PlayIcon />}
+        {isPlaying ? <PauseIcon color={'white'} /> : <PlayIcon color={'white'} />}
       </button>
       <button
         type='button'
@@ -104,7 +110,7 @@ const PlayerButtons = () => {
         disabled={currentIndex === playlist.length - 1}
         className='cursor-pointer'
       >
-        <NextIcon />
+        <NextIcon color={'white'} />
       </button>
     </div>
   );
@@ -145,8 +151,41 @@ const ProgressBar = ({ className }: { className?: string }) => {
       value={currentTime}
       step='0.1'
       onChange={handleChange}
-      className={`w-full h-1 ${className || ''}`}
+      className={`h-1 ${className || ''}`}
     />
+  );
+};
+
+const PlayerVolumeControl = () => {
+  const [isHovered, setIsHovered] = useState(false);
+  const { handleVolume, volume, setVolume } = usePlayer();
+
+  const handleVolumeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Number(e.target.value);
+    handleVolume(newVolume);
+    setVolume(newVolume);
+  };
+
+  return (
+    <div
+      className='volume-wrapper flex items-center gap-3'
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <button type='button' className='cursor-pointer'>
+        <VolumeIcon size={20} color={'white'} />
+      </button>
+      {isHovered && (
+        <input
+          type='range'
+          min={0}
+          max={100}
+          value={volume}
+          onChange={handleVolumeChange}
+          className='cursor-pointer h-1'
+        />
+      )}
+    </div>
   );
 };
 
@@ -154,4 +193,5 @@ export const PlayerControl = {
   Frame: PlayerFrame,
   Buttons: PlayerButtons,
   ProgressBar,
+  Volume: PlayerVolumeControl,
 };

@@ -8,6 +8,7 @@ import {
   durationAtom,
   isPlayingState,
   playlistState,
+  volumeAtom,
 } from '@/store/playerAtom';
 
 export const playerRefAtom = atom<YouTubePlayer | null>(null);
@@ -19,6 +20,7 @@ export const usePlayer = () => {
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
   const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
   const [duration, setDuration] = useAtom(durationAtom);
+  const [volume, setVolume] = useAtom(volumeAtom);
 
   const currentVideo = playlist[currentIndex] || null;
 
@@ -52,7 +54,7 @@ export const usePlayer = () => {
     setIsPlaying(false);
   };
 
-  const setVolume = (volume: number) => {
+  const handleVolume = (volume: number) => {
     if (playerRef) {
       playerRef.setVolume(volume); // 0-100
     }
@@ -76,11 +78,13 @@ export const usePlayer = () => {
     clearPlaylist,
     playerRef,
     setPlayerRef,
-    setVolume,
     seekTo,
     currentTime,
     duration,
     setCurrentTime,
     setDuration,
+    handleVolume,
+    volume,
+    setVolume,
   };
 };

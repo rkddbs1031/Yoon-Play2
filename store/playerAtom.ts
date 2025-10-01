@@ -12,3 +12,7 @@ export const playlistState = atom<PlaylistItem[]>([]);
 export const isPlayingState = atom<boolean>(false);
 
 export const currentPlayingIndexState = atom<number>(0);
+
+export const durationAtom = atom<number>(0);
+
+export const currentTimeAtom = atom<number>(0);

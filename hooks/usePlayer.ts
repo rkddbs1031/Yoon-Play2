@@ -1,6 +1,14 @@
 import { atom, useAtom } from 'jotai';
-import { PlaylistItem, currentPlayingIndexState, isPlayingState, playlistState } from '@/store/playerAtom';
 import { YouTubePlayer } from 'react-youtube';
+
+import {
+  PlaylistItem,
+  currentPlayingIndexState,
+  currentTimeAtom,
+  durationAtom,
+  isPlayingState,
+  playlistState,
+} from '@/store/playerAtom';
 
 export const playerRefAtom = atom<YouTubePlayer | null>(null);
 
@@ -9,6 +17,8 @@ export const usePlayer = () => {
   const [currentIndex, setCurrentIndex] = useAtom(currentPlayingIndexState);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingState);
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
+  const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
+  const [duration, setDuration] = useAtom(durationAtom);
 
   const currentVideo = playlist[currentIndex] || null;
 
@@ -64,8 +74,13 @@ export const usePlayer = () => {
     prevPlay,
     togglePlay,
     clearPlaylist,
+    playerRef,
     setPlayerRef,
     setVolume,
     seekTo,
+    currentTime,
+    duration,
+    setCurrentTime,
+    setDuration,
   };
 };

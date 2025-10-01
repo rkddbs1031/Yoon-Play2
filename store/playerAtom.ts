@@ -16,3 +16,5 @@ export const currentPlayingIndexState = atom<number>(0);
 export const durationAtom = atom<number>(0);
 
 export const currentTimeAtom = atom<number>(0);
+
+export const volumeAtom = atom<number>(50);

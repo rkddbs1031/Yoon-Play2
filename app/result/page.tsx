@@ -3,13 +3,16 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { AnimationType } from '@/types/animation';
-import { YoutubeItem } from '@/types/youtube';
-import { animationStyle } from '@/utils/animation';
+import { usePlayer } from '@/hooks/usePlayer';
 import { useYoutubeInfiniteQuery } from '@/services/search';
+import { PlaylistItem } from '@/store/playerAtom';
+import { AnimationType } from '@/types/animation';
+import { animationStyle } from '@/utils/animation';
+
 import { PlayList } from '@/components/Playlist';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
+import { MusicPlayer } from '@/components/Player/Player';
 
 const OBSERVE_OPTIONS = {
   root: null,
@@ -27,10 +30,21 @@ export default function PlayListResult() {
     value,
   });
 
+  const { setPlaylistAndPlay } = usePlayer();
+
   const target = useRef<HTMLDivElement | null>(null);
 
-  const handlePlay = (item: YoutubeItem) => {
-    console.log(item);
+  const handlePlay = (idx: number) => {
+    // 누른 시점의 allItems로 적용
+    const playlistItems: PlaylistItem[] = allItems.map(item => ({
+      videoId: item.id.videoId,
+      title: item.snippet.title,
+      channelTitle: item.snippet.channelTitle,
+      thumbnail: item.snippet.thumbnails.high.url,
+    }));
+
+    setPlaylistAndPlay(playlistItems, idx);
+    // setPlaylistAndPlay는 플레이어 플레이리스트 저장과  currentIndex 저장, 재생되게끔 저장!
   };
 
   useEffect(() => {
@@ -51,43 +65,46 @@ export default function PlayListResult() {
   }, [data?.pages]);
 
   return (
-    <section className='playlist-wrapper'>
-      <LoadingSpinner isLoading={isLoading} />
+    <>
+      <section className='playlist-wrapper'>
+        <LoadingSpinner isLoading={isLoading} />
 
-      {!isLoading && data && (
-        <>
-          <h1
-            className={`${AnimationType.FadeInUp} text-2xl font-bold whitespace-pre-wrap mb-8`}
-            style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
-          >
-            "{value}" 키워드에 맞는 추천 플레이리스트예요!
-          </h1>
-          <div
-            className={`list-wrapper ${AnimationType.FadeInUp}`}
-            style={animationStyle({ useAnimation: true, delay: 0.5, duration: 0.6 })}
-          >
-            <ul className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6 auto-rows-fr'>
-              {allItems.map(item => (
-                <PlayList.Card key={item.id.videoId}>
-                  <PlayList.Content
-                    thumbnail={item.snippet.thumbnails.high.url}
-                    title={item.snippet.title}
-                    channelTitle={item.snippet.channelTitle}
-                    onPlay={() => handlePlay(item)}
-                  />
-                </PlayList.Card>
-              ))}
-              {isFetchingNextPage && (
-                <>
-                  <Skeleton.PlayList length={3} />
-                </>
-              )}
-            </ul>
+        {!isLoading && data && (
+          <>
+            <h1
+              className={`${AnimationType.FadeInUp} text-2xl font-bold whitespace-pre-wrap mb-8`}
+              style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
+            >
+              "{value}" 키워드에 맞는 추천 플레이리스트예요!
+            </h1>
+            <div
+              className={`list-wrapper ${AnimationType.FadeInUp}`}
+              style={animationStyle({ useAnimation: true, delay: 0.5, duration: 0.6 })}
+            >
+              <ul className='grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-6 auto-rows-fr'>
+                {allItems.map((item, idx) => (
+                  <PlayList.Card key={`${item.id.videoId}-${idx}`}>
+                    <PlayList.Content
+                      thumbnail={item.snippet.thumbnails.high.url}
+                      title={item.snippet.title}
+                      channelTitle={item.snippet.channelTitle}
+                      onPlay={() => handlePlay(idx)}
+                    />
+                  </PlayList.Card>
+                ))}
+                {isFetchingNextPage && (
+                  <>
+                    <Skeleton.PlayList length={3} />
+                  </>
+                )}
+              </ul>
 
-            <div ref={target} className='h-px'></div>
-          </div>
-        </>
-      )}
-    </section>
+              <div ref={target} className='h-px'></div>
+            </div>
+          </>
+        )}
+      </section>
+      <MusicPlayer />
+    </>
   );
 }

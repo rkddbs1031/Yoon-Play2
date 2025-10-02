@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const youtubeParams = new URLSearchParams({
       part: 'snippet',
       type: 'video',
-      maxResults: '10',
+      maxResults: '12',
       ...(query && {
         q: `${query} ${searchType === RecommendationResultType.Genre ? '장르' : ''} 플레이리스트 `,
       }),

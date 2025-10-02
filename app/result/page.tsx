@@ -40,7 +40,7 @@ export default function PlayListResult() {
       videoId: item.id.videoId,
       title: item.snippet.title,
       channelTitle: item.snippet.channelTitle,
-      thumbnail: item.snippet.thumbnails.high.url,
+      thumbnail: item.snippet.thumbnails,
     }));
 
     setPlaylistAndPlay(playlistItems, idx);
@@ -85,7 +85,7 @@ export default function PlayListResult() {
                 {allItems.map((item, idx) => (
                   <PlayList.Card key={`${item.id.videoId}-${idx}`}>
                     <PlayList.Content
-                      thumbnail={item.snippet.thumbnails.high.url}
+                      thumbnail={item.snippet.thumbnails}
                       title={item.snippet.title}
                       channelTitle={item.snippet.channelTitle}
                       onPlay={() => handlePlay(idx)}

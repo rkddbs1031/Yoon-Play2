@@ -16,7 +16,7 @@ export const MusicPlayer = () => {
           <div className='music-info-wrapper flex gap-2 items-center'>
             <div className='thumbnail rounded-[8px] overflow-hidden w-[50px] h-[50px] flex-shrink-0'>
               <img
-                src={currentVideo.thumbnail}
+                src={currentVideo.thumbnail.medium.url}
                 alt={currentVideo.title}
                 className='block w-full h-full object-cover'
                 width={50}

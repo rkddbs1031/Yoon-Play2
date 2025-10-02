@@ -1,10 +1,11 @@
+import { YoutubeThumbnail } from '@/types/youtube';
 import { atom } from 'jotai';
 
 export interface PlaylistItem {
   videoId: string;
   title: string;
   channelTitle: string;
-  thumbnail: string;
+  thumbnail: YoutubeThumbnail;
 }
 
 export const playlistState = atom<PlaylistItem[]>([]);

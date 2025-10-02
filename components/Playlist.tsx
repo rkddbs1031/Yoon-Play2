@@ -1,11 +1,12 @@
 import { ReactNode, useState } from 'react';
 
 import { PlayIcon } from '@/states/icon/svgs';
+import { YoutubeThumbnail } from '@/types/youtube';
 
 const Card = ({ children, style }: { children: ReactNode; style?: string }) => {
   return (
     <li
-      className={`relative z-10 flex flex-col gap-4 bg-[#ffffff33] hover:bg-white/70 transition-bg duration-400 hover:-translate-y-[10px] p-3 sm:p-4 rounded-2xl shadow-lg shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
+      className={`relative z-10 flex flex-col gap-4 bg-[#ffffff33] hover:bg-white/30 transition-bg duration-400 hover:-translate-y-[10px] p-3 sm:p-4 rounded-2xl shadow-lg shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
     >
       {children}
     </li>
@@ -13,7 +14,7 @@ const Card = ({ children, style }: { children: ReactNode; style?: string }) => {
 };
 
 interface ContentProps {
-  thumbnail: string;
+  thumbnail: YoutubeThumbnail;
   title: string;
   channelTitle: string;
   onPlay: () => void;
@@ -31,10 +32,10 @@ const Content = ({ thumbnail, title, channelTitle, onPlay }: ContentProps) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className='relative w-full'>
-        <img src={thumbnail} alt={title} className='rounded-[8px] block w-full aspect-square object-cover' />
+        <img src={thumbnail.high.url} alt={title} className='rounded-[8px] block w-full aspect-square object-cover' />
 
         <div
-          className={`absolute inset-0 flex items-center justify-center bg-black/40 rounded-[8px] transition-opacity duration-400 ${
+          className={`absolute inset-0 flex items-center justify-center bg-black/60 rounded-[8px] transition-opacity duration-400 ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >

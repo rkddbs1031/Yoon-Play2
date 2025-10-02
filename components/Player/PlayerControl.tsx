@@ -1,16 +1,26 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
+import YouTube, { YouTubeEvent } from 'react-youtube';
 
 import { usePlayer } from '@/hooks/usePlayer';
 import { NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
 
 const PlayerFrame = () => {
-  const { currentVideo, isPlaying, setPlayerRef, setDuration, setCurrentTime, volume } = usePlayer();
-  const localRef = useRef<YouTubePlayer | null>(null);
+  const {
+    currentVideo,
+    isPlaying,
+    setIsPlaying,
+    playerRef,
+    setPlayerRef,
+    setDuration,
+    setCurrentTime,
+    volume,
+    lastIndex,
+    currentIndex,
+    setCurrentIndex,
+  } = usePlayer();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleReady = (e: YouTubeEvent) => {
-    localRef.current = e.target;
     setPlayerRef(e.target);
 
     const duration = e.target.getDuration();
@@ -22,14 +32,22 @@ const PlayerFrame = () => {
     }
   };
 
+  const handleEnd = () => {
+    if (currentIndex < lastIndex) {
+      setCurrentIndex(currentIndex + 1);
+    } else if (currentIndex === lastIndex) {
+      setIsPlaying(false);
+    }
+  };
+
   const startInterval = () => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
 
     intervalRef.current = setInterval(() => {
-      if (localRef.current) {
-        const time = localRef.current.getCurrentTime();
+      if (playerRef.current) {
+        const time = playerRef.current.getCurrentTime();
         setCurrentTime(time);
       }
     }, 300);
@@ -42,37 +60,33 @@ const PlayerFrame = () => {
   };
 
   const handleStateChange = (e: YouTubeEvent) => {
-    // 1 = 재생중, 2 = 일시 정지, 0 = 종료
+    // 0 = 종료, 1 = 재생중, 2 = 일시 정지, 3 = 버퍼링 5 = 동영상 준비
     if (e.data === 1) {
       startInterval();
-    } else {
+    } else if (e.data === 0 || e.data === 2) {
       stopInterval();
     }
   };
 
-  const handleEnd = () => {
-    // TODO: 다음 곡 재생
-  };
-
   useEffect(() => {
-    if (!localRef.current) return;
+    if (!playerRef?.current) return;
 
     if (isPlaying) {
-      localRef.current.playVideo();
+      playerRef.current.playVideo();
     } else {
-      localRef.current.pauseVideo();
+      playerRef.current.pauseVideo();
     }
-  }, [isPlaying]);
+  }, [isPlaying, playerRef]);
 
   useEffect(() => {
-    if (localRef.current) {
-      localRef.current.setVolume(volume);
+    if (playerRef?.current) {
+      playerRef.current.setVolume(volume);
     }
   }, [volume]);
 
   useEffect(() => {
     return () => stopInterval();
-  }, [stopInterval]);
+  }, []);
 
   if (!currentVideo) return null;
 
@@ -82,8 +96,8 @@ const PlayerFrame = () => {
       className='hidden'
       videoId={currentVideo.videoId}
       onReady={handleReady}
-      onStateChange={handleStateChange}
       onEnd={handleEnd}
+      onStateChange={handleStateChange}
       opts={{
         playerVars: {
           autoplay: 0,

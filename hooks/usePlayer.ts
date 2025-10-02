@@ -23,6 +23,7 @@ export const usePlayer = () => {
   const [volume, setVolume] = useAtom(volumeAtom);
 
   const currentVideo = playlist[currentIndex] || null;
+  const lastIndex = playlist.length - 1;
 
   const setPlaylistAndPlay = (items: PlaylistItem[], startIndex: number) => {
     setPlaylist(items);
@@ -45,6 +46,7 @@ export const usePlayer = () => {
   };
 
   const togglePlay = () => {
+    if (!playerRef) return;
     setIsPlaying(!isPlaying);
   };
 
@@ -69,6 +71,8 @@ export const usePlayer = () => {
   return {
     playlist,
     currentIndex,
+    setCurrentIndex,
+    lastIndex,
     isPlaying,
     currentVideo,
     setPlaylistAndPlay,
@@ -86,5 +90,6 @@ export const usePlayer = () => {
     handleVolume,
     volume,
     setVolume,
+    setIsPlaying,
   };
 };

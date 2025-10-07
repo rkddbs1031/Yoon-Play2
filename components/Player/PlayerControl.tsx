@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo } from 'react';
+import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo, useMemo } from 'react';
 import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 import { useAtom, useAtomValue } from 'jotai';
 
@@ -241,18 +241,18 @@ const ProgressBar = ({ className }: { className?: string }) => {
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        className='h-1 bg-[#e5e4e3] cursor-pointer relative overflow-hidden touch-none'
+        className='h-[3px] hover:h-[6px] transition-all delay-[0.2] bg-[#e5e4e3] cursor-pointer relative overflow-hidden touch-none'
       >
         <div
           className='progress absolute inset-0 h-full origin-left will-change-transform'
           style={{
             transform: `scaleX(${progress / 100})`,
-            background: 'linear-gradient(90deg, #7367e5 0%, #d4b8f3 50%, #dbb6fd 100%)',
+            background: 'linear-gradient(90deg, #6b5cf0 0%, #d4b8f3 70%, #b681e7 100%)',
           }}
         />
 
         <div
-          className={`thumb absolute top-1/2 w-3 h-3 bg-[#dbb6fd] rounded-full shadow-lg transition-shadow will-change-transform ${
+          className={`thumb absolute top-1/2 w-3 h-3 bg-[#b681e7] rounded-full shadow-lg transition-shadow will-change-transform ${
             isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'
           }`}
           style={{

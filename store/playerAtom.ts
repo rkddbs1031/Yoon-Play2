@@ -1,5 +1,7 @@
-import { YoutubeThumbnail } from '@/types/youtube';
 import { atom } from 'jotai';
+import { YouTubePlayer } from 'react-youtube';
+
+import { YoutubeThumbnail } from '@/types/youtube';
 
 export interface PlaylistItem {
   videoId: string;
@@ -7,6 +9,10 @@ export interface PlaylistItem {
   channelTitle: string;
   thumbnail: YoutubeThumbnail;
 }
+
+export const isPlayerReadyAtom = atom(false);
+
+export const playerRefAtom = atom<YouTubePlayer | null>(null);
 
 export const playlistState = atom<PlaylistItem[]>([]);
 
@@ -19,3 +25,5 @@ export const durationAtom = atom<number>(0);
 export const currentTimeAtom = atom<number>(0);
 
 export const volumeAtom = atom<number>(50);
+
+export const isHoveredVolumeButton = atom<boolean>(false);

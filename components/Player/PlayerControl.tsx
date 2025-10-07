@@ -2,9 +2,9 @@ import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, use
 import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 import { useAtom, useAtomValue } from 'jotai';
 
+import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
 import { usePlayer } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
-import { activeColor, activeCursor, disabledColor, disabledCursor } from '@/states/color';
 import { isHoveredVolumeButton } from '@/store/playerAtom';
 
 const PlayerFrame = () => {
@@ -102,7 +102,7 @@ const PlayerFrame = () => {
       try {
         playerRef.setVolume(volume);
       } catch (error) {
-        console.error('Failed to set volume:', error);
+        // console.error('Failed to set volume:', error);
       }
     }
   }, [volume, isActuallyPlayerReady]);
@@ -140,16 +140,16 @@ const PlayerButtons = memo(() => {
   const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayer();
 
   const isPrevButtonDisabled = !isActuallyPlayerReady || currentIndex === 0;
-  const prevIconColor = isPrevButtonDisabled ? disabledColor : activeColor;
-  const prevCursor = isPrevButtonDisabled ? disabledCursor : activeCursor;
+  const prevIconColor = isPrevButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR;
+  const prevCursor = isPrevButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isToggleButtonDisabled = !isActuallyPlayerReady;
-  const toggleIconColor = isToggleButtonDisabled ? disabledColor : activeColor; // 토글 버튼 아이콘 색상
-  const toggleCursor = isToggleButtonDisabled ? disabledCursor : activeCursor;
+  const toggleIconColor = isToggleButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR; // 토글 버튼 아이콘 색상
+  const toggleCursor = isToggleButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isNextButtonDisabled = !isActuallyPlayerReady || currentIndex === lastIndex;
-  const nextIconColor = isNextButtonDisabled ? disabledColor : activeColor;
-  const nextCursor = isNextButtonDisabled ? disabledCursor : activeCursor;
+  const nextIconColor = isNextButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR;
+  const nextCursor = isNextButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   return (
     <div
@@ -279,7 +279,7 @@ const PlayerVolumeControl = memo(() => {
     [handleVolume, setVolume],
   );
 
-  const volumeIconColor = isActuallyPlayerReady && volume > 0 ? activeColor : disabledColor;
+  const volumeIconColor = isActuallyPlayerReady && volume > 0 ? ACTIVE_COLOR : DISABLED_COLOR;
   const CurrentVolumeIcon = volume === 0 ? MutedVolumeIcon : VolumeIcon;
 
   const handleMouseEnter = () => {

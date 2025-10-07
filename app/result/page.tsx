@@ -12,7 +12,7 @@ import { animationStyle } from '@/utils/animation';
 import { PlayList } from '@/components/Playlist';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
-import { MusicPlayer } from '@/components/Player/Player';
+import { PlayerBar } from '@/components/Player/PlayerBar';
 
 const OBSERVE_OPTIONS = {
   root: null,
@@ -66,13 +66,13 @@ export default function PlayListResult() {
 
   return (
     <>
-      <section className='playlist-wrapper max-w-[960px] mx-auto'>
+      <section className='playlist-wrapper max-w-[960px] mx-auto pb-20'>
         <LoadingSpinner isLoading={isLoading} />
 
         {!isLoading && data && (
           <>
             <h1
-              className={`${AnimationType.FadeInUp} text-xl sm:text-2xl font-bold whitespace-pre-wrap mb-6 sm:mb-8`}
+              className={`${AnimationType.FadeInUp} text-lg sm:text-xl font-[600] text-[#52527a] mb-6 sm:mb-8 whitespace-pre-wrap`}
               style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
             >
               "{value}" 키워드에 맞는 추천 플레이리스트예요!
@@ -81,7 +81,7 @@ export default function PlayListResult() {
               className={`list-wrapper ${AnimationType.FadeInUp}`}
               style={animationStyle({ useAnimation: true, delay: 0.5, duration: 0.6 })}
             >
-              <ul className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 auto-rows-fr'>
+              <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-x-6 sm:gap-y-8 auto-rows-fr'>
                 {allItems.map((item, idx) => (
                   <PlayList.Card key={`${item.id.videoId}-${idx}`}>
                     <PlayList.Content
@@ -94,7 +94,7 @@ export default function PlayListResult() {
                 ))}
                 {isFetchingNextPage && (
                   <>
-                    <Skeleton.PlayList length={3} />
+                    <Skeleton.PlayList length={2} />
                   </>
                 )}
               </ul>
@@ -104,7 +104,7 @@ export default function PlayListResult() {
           </>
         )}
       </section>
-      <MusicPlayer />
+      <PlayerBar />
     </>
   );
 }

@@ -1,5 +1,4 @@
-import { atom, useAtom } from 'jotai';
-import { YouTubePlayer } from 'react-youtube';
+import { useAtom } from 'jotai';
 
 import {
   PlaylistItem,
@@ -9,21 +8,23 @@ import {
   isPlayingState,
   playlistState,
   volumeAtom,
+  playerRefAtom,
+  isPlayerReadyAtom,
 } from '@/store/playerAtom';
-
-export const playerRefAtom = atom<YouTubePlayer | null>(null);
 
 export const usePlayer = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);
   const [currentIndex, setCurrentIndex] = useAtom(currentPlayingIndexState);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingState);
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
+  const [isPlayerReady, setIsPlayerReady] = useAtom(isPlayerReadyAtom);
   const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
   const [duration, setDuration] = useAtom(durationAtom);
   const [volume, setVolume] = useAtom(volumeAtom);
 
   const currentVideo = playlist[currentIndex] || null;
   const lastIndex = playlist.length - 1;
+  const isActuallyPlayerReady = playerRef !== null && isPlayerReady; // 실제 플레이어 조작 가능 상태
 
   const setPlaylistAndPlay = (items: PlaylistItem[], startIndex: number) => {
     setPlaylist(items);
@@ -46,7 +47,7 @@ export const usePlayer = () => {
   };
 
   const togglePlay = () => {
-    if (!playerRef) return;
+    if (!isActuallyPlayerReady) return;
     setIsPlaying(!isPlaying);
   };
 
@@ -69,27 +70,30 @@ export const usePlayer = () => {
   };
 
   return {
+    playerRef,
+    setPlayerRef,
+    isActuallyPlayerReady,
+    isPlayerReady,
+    setIsPlayerReady,
     playlist,
     currentIndex,
     setCurrentIndex,
     lastIndex,
     isPlaying,
+    setIsPlaying,
     currentVideo,
     setPlaylistAndPlay,
     nextPlay,
     prevPlay,
     togglePlay,
     clearPlaylist,
-    playerRef,
-    setPlayerRef,
     seekTo,
     currentTime,
-    duration,
     setCurrentTime,
+    duration,
     setDuration,
-    handleVolume,
     volume,
     setVolume,
-    setIsPlaying,
+    handleVolume,
   };
 };

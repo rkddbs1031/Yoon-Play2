@@ -16,6 +16,7 @@ interface SearchFieldProps {
   duration?: number;
   useAnimation?: boolean;
   animationType?: AnimationType;
+  color?: string;
 }
 
 const SearchField = ({
@@ -29,6 +30,7 @@ const SearchField = ({
   animationType,
   delay,
   duration,
+  color = '#52527a',
 }: SearchFieldProps) => {
   const textFieldRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
 
@@ -71,7 +73,7 @@ const SearchField = ({
 
   return (
     <form
-      className={`${useAnimation ? animationType : ''} flex items-center gap-2 w-full bg-[#ffffff33] rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto`}
+      className={`${useAnimation ? animationType : ''} flex items-center gap-2 w-full bg-white/30 rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto `}
       onSubmit={handleSubmit}
       style={animationStyles}
     >
@@ -88,7 +90,7 @@ const SearchField = ({
       />
       <button type='submit' className='text-white cursor-pointer' aria-label='검색'>
         <span className='sr-only'>검색</span>
-        <SearchIcon size={16} stroke='#666666' />
+        <SearchIcon size={16} stroke={color} />
       </button>
     </form>
   );

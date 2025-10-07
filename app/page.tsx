@@ -80,7 +80,7 @@ export default function Home() {
   return (
     <section className='flex flex-col w-full items-center justify-center max-w-[720px] w-full mx-auto'>
       <h1
-        className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-bold text-center whitespace-pre-wrap`}
+        className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-[600] text-[#52527a] text-center whitespace-pre-wrap`}
         style={animationStyles}
       >
         {headLine.text}
@@ -95,6 +95,7 @@ export default function Home() {
           animationType={AnimationType.FadeInUp}
           delay={0.6}
           duration={0.6}
+          color='#52527a'
         />
       </div>
 
@@ -103,7 +104,7 @@ export default function Home() {
           className={`result-wrapper flex flex-col items-center w-full gap-10 mt-10 ${AnimationType.FadeInUp}`}
           style={animationStyles}
         >
-          <p className='text-center text-[16px] sm:text-[18px]'>{recommend.description}</p>
+          <p className='text-center text-[16px]'>{recommend.description}</p>
 
           {recommend.list && (
             <>
@@ -122,7 +123,7 @@ export default function Home() {
                 />
               </div>
 
-              <div>
+              <div className='pb-[40px]'>
                 <p className='text-sm mb-4'>원하는 음악이 없으신가요?</p>
                 <button
                   type='button'

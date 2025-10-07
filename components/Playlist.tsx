@@ -6,7 +6,7 @@ import { YoutubeThumbnail } from '@/types/youtube';
 const Card = ({ children, style }: { children: ReactNode; style?: string }) => {
   return (
     <li
-      className={`relative z-10 flex flex-col gap-4 bg-[#ffffff33] hover:bg-white/30 transition-bg duration-400 hover:-translate-y-[10px] p-3 sm:p-4 rounded-2xl shadow-lg shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
+      className={`relative z-10 flex flex-col gap-4 bg-white/30 hover:bg-white/70 transition-all duration-400 hover:-translate-y-[10px] p-4 sm:p-5 rounded-2xl shadow-lg shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
     >
       {children}
     </li>
@@ -35,12 +35,12 @@ const Content = ({ thumbnail, title, channelTitle, onPlay }: ContentProps) => {
         <img src={thumbnail.high.url} alt={title} className='rounded-[8px] block w-full aspect-square object-cover' />
 
         <div
-          className={`absolute inset-0 flex items-center justify-center bg-black/60 rounded-[8px] transition-opacity duration-400 ${
+          className={`absolute inset-0 flex items-center justify-center bg-black/50 rounded-[8px] transition-opacity duration-400 ${
             isHovered ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <span className='px-3 py-1 text-white font-bold '>
-            <PlayIcon color='#ffffff' size={24} />
+          <span>
+            <PlayIcon color='white' size={24} />
           </span>
         </div>
       </div>

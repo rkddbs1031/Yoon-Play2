@@ -13,7 +13,7 @@ interface ListWrapperProps {
 export const ListWrapper = ({ type, title, list, onClick }: ListWrapperProps) => {
   return (
     <Card>
-      <h3 className='font-bold text-[12px]'>{title}</h3>
+      <h3 className='font-[600] text-[12px] text-[#52527a]'>{title}</h3>
       {list && (
         <ul className='flex flex-col sm:flex-row gap-5 sm:gap-4'>
           {list.map(label => (

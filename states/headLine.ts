@@ -43,11 +43,11 @@ export const RANDOM_HEADLINES: RandomHeadLineType[] = [
   },
   {
     type: RecommendationType.Time,
-    text: '아침 커피와 함께 듣기 좋은 음악, 준비해드렸어요 ☕🎶',
+    text: '아침 커피와 함께 듣기 좋은 음악, 들려드릴게요 ☕🎶',
   },
   {
     type: RecommendationType.Time,
-    text: '점심 후 여유롭게 들을 수 있는 음악, 골라봤어요 🍵🎧',
+    text: '점심 후 여유롭게 들을 수 있는 음악, 골라줄게요 🍵🎧',
   },
   {
     type: RecommendationType.Time,
@@ -67,6 +67,6 @@ export const RANDOM_HEADLINES: RandomHeadLineType[] = [
   },
   {
     type: RecommendationType.Activity,
-    text: '운동 중이라면 신나는 플레이리스트를, 집중이 필요하다면 차분한 음악을 추천해드려요 💪🎧',
+    text: '운동 중이라면 신나는 플레이리스트를, 집중이 필요하다면 차분한 음악을 어떠세요? 💪🎧',
   },
 ];

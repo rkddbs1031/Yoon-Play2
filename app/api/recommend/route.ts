@@ -7,11 +7,11 @@ const openai = new OpenAI({
 });
 
 const TYPE_PROMPT_MAP: Record<RecommendationType, string> = {
-  artist: '좋아하는 가수에 맞는 음악을 추천해줘',
-  mood: '사용자의 기분과 상태에 맞는 음악을 추천해줘.',
-  weather: '오늘 날씨에 맞는 음악을 추천해줘.',
-  time: '현재 시간대에 맞는 음악을 추천해줘.',
-  activity: '사용자의 활동에 맞는 음악을 추천해줘.',
+  artist: '좋아하는 가수에 맞는 음악 및 플레이리스트를 추천해줘',
+  mood: '사용자의 기분과 상태에 맞는 음악 및 플레이리스트를 추천해줘.',
+  weather: '오늘 날씨에 맞는 음악 및 플레이리스트를 추천해줘.',
+  time: '현재 시간대에 맞는 음악 및 플레이리스트를 추천해줘.',
+  activity: '사용자의 활동에 맞는 음악 및 플레이리스트를 추천해줘.',
 };
 
 export async function POST(request: NextRequest) {

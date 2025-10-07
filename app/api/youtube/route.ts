@@ -18,6 +18,9 @@ export async function GET(request: NextRequest) {
       ...(query && {
         q: `${query} ${searchType === RecommendationResultType.Genre ? '장르' : ''} 플레이리스트 `,
       }),
+      videoDuration: 'long',
+      order: 'title',
+      fields: 'items(id/videoId, snippet/title, snippet/channelTitle, snippet/thumbnails), nextPageToken',
       ...(pageToken && { pageToken }),
       key: process.env.YOUTUBE_API_KEY || '',
     });

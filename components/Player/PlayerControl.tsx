@@ -200,6 +200,7 @@ const ProgressBar = ({ className }: { className?: string }) => {
   };
 
   const handlePointerDown = (e: PointerEvent) => {
+    e.stopPropagation();
     setIsDragging(true);
     const newTime = getTimeFromPosition(e.clientX);
     updateTime(newTime);
@@ -209,17 +210,22 @@ const ProgressBar = ({ className }: { className?: string }) => {
   };
 
   const handlePointerMove = (e: PointerEvent) => {
+    e.stopPropagation();
+
     if (!isDragging) return;
     const newTime = getTimeFromPosition(e.clientX);
     updateTime(newTime);
   };
 
   const handlePointerUp = (e: PointerEvent) => {
+    e.stopPropagation();
+
     setIsDragging(false);
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     if (isDragging) return;
     const newTime = getTimeFromPosition(e.clientX);
     updateTime(newTime);
@@ -292,11 +298,14 @@ const PlayerVolumeControl = memo(() => {
     setIsHovered(false);
   };
 
+  const handleClickVolumeWrapper = (e: MouseEvent) => e.stopPropagation();
+
   return (
     <div
       className='volume-wrapper flex items-center relative z-10'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleClickVolumeWrapper}
     >
       <div
         className={`absolute right-full top-1/2 -translate-y-1/2 w-[80px] pr-2 ${

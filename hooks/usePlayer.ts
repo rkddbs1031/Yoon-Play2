@@ -1,3 +1,4 @@
+import { MouseEvent } from 'react';
 import { useAtom } from 'jotai';
 
 import {
@@ -34,21 +35,27 @@ export const usePlayer = () => {
     setIsPlaying(true);
   };
 
-  const nextPlay = () => {
+  const nextPlay = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
     if (currentIndex < playlist.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setIsPlaying(true);
     }
   };
 
-  const prevPlay = () => {
+  const prevPlay = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
       setIsPlaying(true);
     }
   };
 
-  const togglePlay = () => {
+  const togglePlay = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
     if (!isActuallyPlayerReady) return;
     setIsPlaying(!isPlaying);
   };

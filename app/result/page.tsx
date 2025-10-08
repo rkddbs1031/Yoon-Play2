@@ -10,9 +10,9 @@ import { AnimationType } from '@/types/animation';
 import { animationStyle } from '@/utils/animation';
 
 import { PlayList } from '@/components/Playlist';
+import PlayerController from '@/components/Player/PlayerController';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
-import { PlayerBar } from '@/components/Player/PlayerBar';
 
 const OBSERVE_OPTIONS = {
   root: null,
@@ -104,7 +104,7 @@ export default function PlayListResult() {
           </>
         )}
       </section>
-      <PlayerBar />
+      <PlayerController />
     </>
   );
 }

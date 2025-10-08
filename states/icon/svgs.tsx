@@ -93,16 +93,16 @@ export const MutedVolumeIcon: FC<IconProps> = ({ size = 24, color = 'currentColo
   return (
     <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path
-        fill-rule='evenodd'
-        clip-rule='evenodd'
+        fillRule='evenodd'
+        clipRule='evenodd'
         d='M10 5L5 9H1V15H5L10 19V5V5Z'
         stroke={color}
-        stroke-width='2'
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
       />
-      <path d='M22 9L16 15' stroke={color} stroke-width='2' stroke-linecap='round' stroke-linejoin='round' />
-      <path d='M16 9L22 15' stroke={color} stroke-width='2' stroke-linecap='round' stroke-linejoin='round' />
+      <path d='M22 9L16 15' stroke={color} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+      <path d='M16 9L22 15' stroke={color} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
     </svg>
   );
 };

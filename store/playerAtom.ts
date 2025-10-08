@@ -27,3 +27,5 @@ export const currentTimeAtom = atom<number>(0);
 export const volumeAtom = atom<number>(50);
 
 export const isHoveredVolumeButton = atom<boolean>(false);
+
+export const isPanelOpen = atom<boolean>(false);

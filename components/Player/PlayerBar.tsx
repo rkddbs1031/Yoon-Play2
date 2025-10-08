@@ -4,10 +4,13 @@ import { usePlayer } from '@/hooks/usePlayer';
 import { PlayerControl } from './PlayerControl';
 
 export const PlayerBar = () => {
-  const { currentVideo } = usePlayer();
+  const { currentVideo, togglePlaylistPanel } = usePlayer();
 
   return (
-    <section className='fixed z-[100] w-full bottom-0 left-0 min-h-[60px] bg-white/60 backdrop-blur-[30px] flex flex-col gap-3 cursor-pointer'>
+    <section
+      className='fixed z-[100] w-full bottom-0 left-0 min-h-[60px] bg-white/60 backdrop-blur-[30px] flex flex-col gap-3 cursor-pointer'
+      onClick={togglePlaylistPanel}
+    >
       <PlayerControl.Frame />
       <PlayerControl.ProgressBar />
 

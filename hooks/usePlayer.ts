@@ -10,6 +10,7 @@ import {
   volumeAtom,
   playerRefAtom,
   isPlayerReadyAtom,
+  isPanelOpen,
 } from '@/store/playerAtom';
 
 export const usePlayer = () => {
@@ -21,6 +22,7 @@ export const usePlayer = () => {
   const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
   const [duration, setDuration] = useAtom(durationAtom);
   const [volume, setVolume] = useAtom(volumeAtom);
+  const [isPlaylistPanelOpen, setIsPlaylistPanelOpen] = useAtom(isPanelOpen);
 
   const currentVideo = playlist[currentIndex] || null;
   const lastIndex = playlist.length - 1;
@@ -69,6 +71,10 @@ export const usePlayer = () => {
     }
   };
 
+  const togglePlaylistPanel = () => {
+    setIsPlaylistPanelOpen(prev => !prev);
+  };
+
   return {
     playerRef,
     setPlayerRef,
@@ -95,5 +101,7 @@ export const usePlayer = () => {
     volume,
     setVolume,
     handleVolume,
+    isPlaylistPanelOpen,
+    togglePlaylistPanel,
   };
 };

@@ -1,40 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
 import { usePlayer } from '@/hooks/usePlayer';
+import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
+
 import { PlayerControl } from './PlayerControl';
 import { MusicInfoWrapper } from './MusicInfo';
 
-const TRANSITION_DURATION = 400;
-
 export const PlayerBar = () => {
   const { currentVideo, togglePlaylistPanel } = usePlayer();
-  const newImageUrl = currentVideo?.thumbnail?.medium?.url || '';
-
-  const [displayImage, setDisplayImage] = useState<string | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-
-  useEffect(() => {
-    if (!newImageUrl || newImageUrl === displayImage) return;
-
-    const img = new Image();
-    img.src = newImageUrl;
-
-    img.onload = () => {
-      setIsTransitioning(true);
-
-      setTimeout(() => {
-        setDisplayImage(newImageUrl);
-        setIsTransitioning(false);
-      }, TRANSITION_DURATION); // 전환 효과 타이밍 조절
-    };
-
-    img.onerror = () => {
-      setDisplayImage(newImageUrl);
-      setIsTransitioning(false);
-    };
-  }, [newImageUrl]);
+  const { displayImage, isTransitioning } = usePlayerBackground(currentVideo?.thumbnail?.medium?.url);
 
   return (
     <section

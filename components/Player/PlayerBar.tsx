@@ -1,18 +1,26 @@
 'use client';
 
+import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { usePlayer } from '@/hooks/usePlayer';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
 
 import { PlayerControl } from './PlayerControl';
 import { MusicInfoWrapper } from './MusicInfo';
 
+const ANIMATION_DURATION = 300;
+
 export const PlayerBar = () => {
-  const { currentVideo, togglePlaylistPanel } = usePlayer();
+  const { currentVideo, isPlaylistPanelOpen, togglePlaylistPanel } = usePlayer();
   const { displayImage, isTransitioning } = usePlayerBackground(currentVideo?.thumbnail?.medium?.url);
+  const { animation } = useAnimatedMount(isPlaylistPanelOpen, {
+    open_transform: 'opacity-0 invisible',
+    closed_transform: 'opacity-100 visible',
+    duration: ANIMATION_DURATION,
+  });
 
   return (
     <section
-      className='fixed z-[100] bottom-3 left-1/2 -translate-x-1/2 max-w-[960px] rounded-[8px] w-[calc(100%-32px)] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 cursor-pointer overflow-hidden'
+      className={`player-bar transition-all duration-${ANIMATION_DURATION} ${animation} fixed z-[100] bottom-3 left-1/2 -translate-x-1/2 max-w-[960px] rounded-[8px] w-[calc(100%-32px)] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 cursor-pointer overflow-hidden`}
       onClick={togglePlaylistPanel}
     >
       {displayImage && (

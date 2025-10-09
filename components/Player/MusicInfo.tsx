@@ -6,7 +6,8 @@ interface MusicInfoWrapperProps {
   titleColor?: string;
   channelTitleColor?: string;
 }
-const DEFUALT_COLOR = '#3d3d68';
+
+const DEFUALT_COLOR = 'text-[#3d3d68]';
 
 export const MusicInfoWrapper = ({
   thumbnail,
@@ -25,8 +26,8 @@ export const MusicInfoWrapper = ({
         <img src={thumbnail} alt={title} className='block w-full h-full object-cover' />
       </div>
       <div className='music-info'>
-        <h4 className={`text-[14px] text-${titleColor} font-[600] mb-[2px] line-clamp-1`}>{title}</h4>
-        <span className={`text-[10px] text-${channelTitleColor} line-clamp-1`}>{channelTitle}</span>
+        <h4 className={`text-[14px] ${titleColor} font-[600] mb-[2px] line-clamp-1`}>{title}</h4>
+        <span className={`text-[10px] ${channelTitleColor} line-clamp-1`}>{channelTitle}</span>
       </div>
     </div>
   );

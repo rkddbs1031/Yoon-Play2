@@ -20,7 +20,9 @@ export const PlayerBar = () => {
 
   return (
     <section
-      className={`player-bar transition-all duration-${ANIMATION_DURATION} ${animation} fixed z-[100] bottom-3 left-1/2 -translate-x-1/2 max-w-[960px] rounded-[8px] w-[calc(100%-32px)] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 cursor-pointer overflow-hidden`}
+      className={`player-bar fixed z-[100] bottom-3 left-1/2 -translate-x-1/2 max-w-[960px] rounded-[8px] w-[calc(100%-32px)] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 overflow-hidden 
+        ${currentVideo ? 'cursor-pointer' : ''} 
+        transition-all duration-${ANIMATION_DURATION} ${animation} `}
       onClick={togglePlaylistPanel}
     >
       {displayImage && (
@@ -34,7 +36,7 @@ export const PlayerBar = () => {
       )}
 
       <div
-        className={`absolute inset-0 transition-all duration-500 ${displayImage ? 'bg-white/20 backdrop-blur-[10px]' : 'bg-white/60 backdrop-blur-[30px]'} `}
+        className={`absolute inset-0 transition-all duration-500 ${displayImage ? 'bg-white/20 backdrop-blur-[10px]' : 'bg-white/60 backdrop-blur-[10px]'} `}
       />
 
       <div className='relative z-10 flex flex-col '>
@@ -47,16 +49,16 @@ export const PlayerBar = () => {
               thumbnail={currentVideo.thumbnail.medium.url}
               title={currentVideo.title}
               channelTitle={currentVideo.channelTitle}
-              titleColor='white'
-              channelTitleColor='white/60'
+              titleColor='text-white'
+              channelTitleColor='text-white/60'
             />
           ) : (
             <div className='w-[50px] h-[50px] rounded-[8px] bg-black/10'></div>
           )}
 
           <div className='control-wrapper flex items-center gap-2'>
-            <PlayerControl.Buttons color='#ffffff' disabledColor={currentVideo ? '#ffffff99' : ''} />
-            <PlayerControl.Volume color='#ffffff' disabledColor={currentVideo ? '#ffffff99' : ''} />
+            <PlayerControl.Buttons color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
+            <PlayerControl.Volume color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
           </div>
         </div>
       </div>

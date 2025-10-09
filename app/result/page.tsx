@@ -10,7 +10,7 @@ import { AnimationType } from '@/types/animation';
 import { animationStyle } from '@/utils/animation';
 
 import { PlayList } from '@/components/Playlist';
-import PlayerController from '@/components/Player/PlayerController';
+import Player from '@/components/Player';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
 
@@ -104,7 +104,7 @@ export default function PlayListResult() {
           </>
         )}
       </section>
-      <PlayerController />
+      <Player />
     </>
   );
 }

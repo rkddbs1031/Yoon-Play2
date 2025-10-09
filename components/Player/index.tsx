@@ -1,7 +1,7 @@
 import { PlayerBar } from './PlayerBar';
 import PlayerPanel from './PlayerPanel';
 
-const PlayerController = () => {
+const Player = () => {
   return (
     <>
       <PlayerBar />
@@ -10,4 +10,4 @@ const PlayerController = () => {
   );
 };
 
-export default PlayerController;
+export default Player;

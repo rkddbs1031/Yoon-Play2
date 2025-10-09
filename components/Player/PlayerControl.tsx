@@ -153,15 +153,15 @@ const PlayerButtons = memo(() => {
 
   return (
     <div
-      className={`${isHovered ? 'opacity-0' : 'opacity-100'} transition-all button-wrapper flex flex-row gap-2 items-center`}
+      className={`${isHovered ? 'opacity-0' : 'opacity-100'} transition-all button-wrapper flex flex-row gap-1 items-center`}
     >
-      <button type='button' onClick={prevPlay} disabled={isPrevButtonDisabled} className={prevCursor}>
+      <button type='button' onClick={prevPlay} disabled={isPrevButtonDisabled} className={`${prevCursor} p-[2px]`}>
         <PrevIcon size={18} color={prevIconColor} />
       </button>
-      <button type='button' onClick={togglePlay} className={toggleCursor}>
+      <button type='button' onClick={togglePlay} className={`${toggleCursor} p-[2px]`}>
         {isPlaying ? <PauseIcon size={18} color={toggleIconColor} /> : <PlayIcon size={18} color={toggleIconColor} />}
       </button>
-      <button type='button' onClick={nextPlay} disabled={isNextButtonDisabled} className={nextCursor}>
+      <button type='button' onClick={nextPlay} disabled={isNextButtonDisabled} className={`${nextCursor} p-[2px]`}>
         <NextIcon size={18} color={nextIconColor} />
       </button>
     </div>
@@ -285,7 +285,7 @@ const PlayerVolumeControl = memo(() => {
     [handleVolume, setVolume],
   );
 
-  const volumeIconColor = isActuallyPlayerReady && volume > 0 ? ACTIVE_COLOR : DISABLED_COLOR;
+  const volumeIconColor = isActuallyPlayerReady ? ACTIVE_COLOR : DISABLED_COLOR;
   const CurrentVolumeIcon = volume === 0 ? MutedVolumeIcon : VolumeIcon;
 
   const handleMouseEnter = () => {
@@ -323,7 +323,7 @@ const PlayerVolumeControl = memo(() => {
         />
       </div>
 
-      <button type='button' className='cursor-pointer z-10 relative' disabled={!isActuallyPlayerReady}>
+      <button type='button' className='cursor-pointer z-10 relative p-[2px]' disabled={!isActuallyPlayerReady}>
         <CurrentVolumeIcon size={18} color={volumeIconColor} />
       </button>
     </div>

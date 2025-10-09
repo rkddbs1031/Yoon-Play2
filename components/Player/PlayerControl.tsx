@@ -135,20 +135,24 @@ const PlayerFrame = () => {
   );
 };
 
-const PlayerButtons = memo(() => {
+interface ColorProps {
+  color?: string;
+  disabledColor?: string;
+}
+const PlayerButtons = memo(({ color, disabledColor }: ColorProps) => {
   const isHovered = useAtomValue(isHoveredVolumeButton);
   const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayer();
 
   const isPrevButtonDisabled = !isActuallyPlayerReady || currentIndex === 0;
-  const prevIconColor = isPrevButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR;
+  const prevIconColor = isPrevButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR;
   const prevCursor = isPrevButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isToggleButtonDisabled = !isActuallyPlayerReady;
-  const toggleIconColor = isToggleButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR; // 토글 버튼 아이콘 색상
+  const toggleIconColor = isToggleButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR; // 토글 버튼 아이콘 색상
   const toggleCursor = isToggleButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isNextButtonDisabled = !isActuallyPlayerReady || currentIndex === lastIndex;
-  const nextIconColor = isNextButtonDisabled ? DISABLED_COLOR : ACTIVE_COLOR;
+  const nextIconColor = isNextButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR;
   const nextCursor = isNextButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   return (
@@ -272,7 +276,7 @@ const ProgressBar = ({ className }: { className?: string }) => {
   );
 };
 
-const PlayerVolumeControl = memo(() => {
+const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
   const [isHovered, setIsHovered] = useAtom(isHoveredVolumeButton);
   const { handleVolume, volume, setVolume, isActuallyPlayerReady } = usePlayer();
 
@@ -285,7 +289,7 @@ const PlayerVolumeControl = memo(() => {
     [handleVolume, setVolume],
   );
 
-  const volumeIconColor = isActuallyPlayerReady ? ACTIVE_COLOR : DISABLED_COLOR;
+  const volumeIconColor = isActuallyPlayerReady ? color || ACTIVE_COLOR : disabledColor || DISABLED_COLOR;
   const CurrentVolumeIcon = volume === 0 ? MutedVolumeIcon : VolumeIcon;
 
   const handleMouseEnter = () => {

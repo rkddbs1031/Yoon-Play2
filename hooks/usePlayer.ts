@@ -79,6 +79,7 @@ export const usePlayer = () => {
   };
 
   const togglePlaylistPanel = () => {
+    if (!currentVideo) return;
     setIsPlaylistPanelOpen(prev => !prev);
   };
 

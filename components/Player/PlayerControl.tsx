@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo, useMemo } from 'react';
+import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo } from 'react';
 import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 import { useAtom, useAtomValue } from 'jotai';
 
@@ -135,11 +135,16 @@ const PlayerFrame = () => {
   );
 };
 
+interface IconButtonSize {
+  size?: number;
+}
+
 interface ColorProps {
   color?: string;
   disabledColor?: string;
 }
-const PlayerButtons = memo(({ color, disabledColor }: ColorProps) => {
+
+const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) => {
   const isHovered = useAtomValue(isHoveredVolumeButton);
   const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayer();
 
@@ -148,7 +153,7 @@ const PlayerButtons = memo(({ color, disabledColor }: ColorProps) => {
   const prevCursor = isPrevButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isToggleButtonDisabled = !isActuallyPlayerReady;
-  const toggleIconColor = isToggleButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR; // 토글 버튼 아이콘 색상
+  const toggleIconColor = isToggleButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR;
   const toggleCursor = isToggleButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   const isNextButtonDisabled = !isActuallyPlayerReady || currentIndex === lastIndex;
@@ -157,16 +162,20 @@ const PlayerButtons = memo(({ color, disabledColor }: ColorProps) => {
 
   return (
     <div
-      className={`${isHovered ? 'opacity-0' : 'opacity-100'} transition-all button-wrapper flex flex-row gap-1 items-center`}
+      className={`${isHovered ? 'opacity-0' : 'opacity-100'} transition-all button-wrapper flex flex-row gap-1 items-center justify-center`}
     >
       <button type='button' onClick={prevPlay} disabled={isPrevButtonDisabled} className={`${prevCursor} p-[2px]`}>
-        <PrevIcon size={18} color={prevIconColor} />
+        <PrevIcon size={size} color={prevIconColor} />
       </button>
       <button type='button' onClick={togglePlay} className={`${toggleCursor} p-[2px]`}>
-        {isPlaying ? <PauseIcon size={18} color={toggleIconColor} /> : <PlayIcon size={18} color={toggleIconColor} />}
+        {isPlaying ? (
+          <PauseIcon size={size} color={toggleIconColor} />
+        ) : (
+          <PlayIcon size={size} color={toggleIconColor} />
+        )}
       </button>
       <button type='button' onClick={nextPlay} disabled={isNextButtonDisabled} className={`${nextCursor} p-[2px]`}>
-        <NextIcon size={18} color={nextIconColor} />
+        <NextIcon size={size} color={nextIconColor} />
       </button>
     </div>
   );
@@ -244,7 +253,7 @@ const ProgressBar = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <div className={`relative w-full ${className || ''}`}>
+    <div className={`progress-bar relative w-full ${className || ''}`}>
       <div
         ref={progressBarRef}
         onClick={handleClick}
@@ -262,7 +271,7 @@ const ProgressBar = ({ className }: { className?: string }) => {
         />
 
         <div
-          className={`thumb absolute top-1/2 w-3 h-3 bg-[#b681e7] rounded-full shadow-lg transition-shadow will-change-transform ${
+          className={`thumb absolute top-1/2 w-[2px] h-3 bg-[#b681e7] rounded-full shadow-lg transition-shadow will-change-transform ${
             isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'
           }`}
           style={{

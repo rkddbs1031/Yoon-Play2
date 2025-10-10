@@ -10,6 +10,9 @@ import { PlayerControl } from './PlayerControl';
 
 const ANIMATION_DURATION = 400;
 
+const ACTIVE_ITEM_BG =
+  'bg-[linear-gradient(180deg,rgb(255_255_255_/_20%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_20%)_100%)]';
+
 const PlayerPanel = () => {
   const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentIndex } = usePlayer();
   const { shouldRender, animation } = useAnimatedMount(isPlaylistPanelOpen, {
@@ -24,11 +27,7 @@ const PlayerPanel = () => {
   const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isPlaylistPanelOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = isPlaylistPanelOpen ? 'hidden' : '';
 
     return () => {
       document.body.style.overflow = '';
@@ -81,7 +80,7 @@ const PlayerPanel = () => {
 
       <div
         ref={containerRef}
-        className='player-panel-container relative z-10 w-full max-w-[750px] mx-auto p-5 md:py-[32px] md:px-[24px]'
+        className='player-panel-container relative z-10 w-full max-w-[750px] mx-auto px-5 py-4 md:py-6 md:px-[24px]'
       >
         <div ref={topRef} className='player-top'>
           <div className='top-button flex justify-between w-full'>
@@ -93,7 +92,7 @@ const PlayerPanel = () => {
             </button>
           </div>
 
-          <div className='thumbnail py-6 sm:py-7 max-w-[360px] w-full mx-auto'>
+          <div className='thumbnail py-5 px-8 sm:py-7 max-w-[360px] w-full mx-auto'>
             <img
               src={currentVideo.thumbnail.medium.url}
               alt={currentVideo.title}
@@ -118,18 +117,30 @@ const PlayerPanel = () => {
             {playlist.map(({ videoId, thumbnail, title, channelTitle }, idx) => (
               <li
                 key={`${videoId}-${idx}`}
-                className={`pt-[10px] pb-[6px] border-t border-white/15 last:border-b last:border-white/20 ${videoId === currentVideo.videoId ? 'is-active bg-[linear-gradient(180deg,rgb(255_255_255_/_25%)_0%,rgb(255_255_255_/_10%)_50%,rgb(255_255_255_/_25%)_100%)]' : ''}`}
+                className='relative border-t border-white/15 last:border-b last:border-white/20'
               >
-                <button type='button' className='w-full cursor-pointer px-2' onClick={() => setCurrentIndex(idx)}>
-                  <MusicInfoWrapper
-                    thumbnail={thumbnail.medium.url}
-                    title={title}
-                    channelTitle={channelTitle}
-                    imageSize={36}
-                    color={{ title: 'text-white', channelTitle: 'text-white/70' }}
-                    fontSize={{ title: 'text-[12px]', channelTitle: 'text-[10px]' }}
-                  />
-                </button>
+                <div
+                  className={`layer absolute inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
+                    videoId === currentVideo.videoId ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+
+                <div className='relative'>
+                  <button
+                    type='button'
+                    className='w-full cursor-pointer px-2 py-[10px]'
+                    onClick={() => setCurrentIndex(idx)}
+                  >
+                    <MusicInfoWrapper
+                      thumbnail={thumbnail.medium.url}
+                      title={title}
+                      channelTitle={channelTitle}
+                      imageSize={36}
+                      color={{ title: 'text-white', channelTitle: 'text-white/70' }}
+                      fontSize={{ title: 'text-[12px]', channelTitle: 'text-[10px]' }}
+                    />
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

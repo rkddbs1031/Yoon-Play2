@@ -37,7 +37,17 @@ export const usePlayer = () => {
   };
 
   const addToPlaylistAndPlay = (item: PlaylistItem) => {
-    setPlaylist(prev => [...prev, item]);
+    setPlaylist(prev => {
+      const hasExisted = prev.some(video => video.videoId === item.videoId);
+
+      if (hasExisted) {
+        setCurrentVideoId(item.videoId); // 이미 있으면 그 곡으로 이동만
+        setIsPlaying(true);
+        return prev;
+      }
+
+      return [...prev, item];
+    });
     setCurrentVideoId(item.videoId);
     setIsPlaying(true);
   };

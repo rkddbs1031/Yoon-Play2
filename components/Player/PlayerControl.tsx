@@ -9,19 +9,20 @@ import { isHoveredVolumeButton } from '@/store/playerAtom';
 
 const PlayerFrame = () => {
   const {
+    currentIndex,
     currentVideo,
+    setCurrentVideoId,
+    lastIndex,
     isPlaying,
     setIsPlaying,
-    setPlayerRef,
     playerRef,
+    setPlayerRef,
     setDuration,
     setCurrentTime,
     volume,
-    lastIndex,
-    currentIndex,
-    setCurrentIndex,
     isActuallyPlayerReady,
     setIsPlayerReady,
+    playlist,
   } = usePlayer();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const localPlayerRef = useRef<YouTubePlayer | null>(null);
@@ -39,7 +40,7 @@ const PlayerFrame = () => {
 
   const handleEnd = () => {
     if (currentIndex < lastIndex) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentVideoId(playlist[currentIndex + 1].videoId);
     } else if (currentIndex === lastIndex) {
       setIsPlaying(false);
     }
@@ -141,7 +142,7 @@ interface IconButtonSize {
 
 interface ColorProps {
   color?: string;
-  disabledColor?: string;
+  disabledColor?: string | null;
 }
 
 const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) => {

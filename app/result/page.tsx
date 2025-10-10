@@ -13,6 +13,7 @@ import { PlayList } from '@/components/Playlist';
 import Player from '@/components/Player';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
+import { YoutubeItem } from '@/types/youtube';
 
 const OBSERVE_OPTIONS = {
   root: null,
@@ -30,21 +31,28 @@ export default function PlayListResult() {
     value,
   });
 
-  const { setPlaylistAndPlay } = usePlayer();
+  const { setPlaylistAndPlay, playlist, addToPlaylistAndPlay } = usePlayer();
 
   const target = useRef<HTMLDivElement | null>(null);
 
-  const handlePlay = (idx: number) => {
-    // 누른 시점의 allItems로 적용
-    const playlistItems: PlaylistItem[] = allItems.map(item => ({
-      videoId: item.id.videoId,
-      title: item.snippet.title,
-      channelTitle: item.snippet.channelTitle,
-      thumbnail: item.snippet.thumbnails,
-    }));
+  const handlePlay = (clickedItem: YoutubeItem) => {
+    if (playlist.length === 0) {
+      const playlistItems: PlaylistItem[] = allItems.map(item => ({
+        videoId: item.id.videoId,
+        title: item.snippet.title,
+        channelTitle: item.snippet.channelTitle,
+        thumbnail: item.snippet.thumbnails,
+      }));
 
-    setPlaylistAndPlay(playlistItems, idx);
-    // setPlaylistAndPlay는 플레이어 플레이리스트 저장과  currentIndex 저장, 재생되게끔 저장!
+      setPlaylistAndPlay(playlistItems, clickedItem.id.videoId);
+    } else {
+      addToPlaylistAndPlay({
+        videoId: clickedItem.id.videoId,
+        title: clickedItem.snippet.title,
+        channelTitle: clickedItem.snippet.channelTitle,
+        thumbnail: clickedItem.snippet.thumbnails,
+      });
+    }
   };
 
   useEffect(() => {
@@ -88,7 +96,7 @@ export default function PlayListResult() {
                       thumbnail={item.snippet.thumbnails}
                       title={item.snippet.title}
                       channelTitle={item.snippet.channelTitle}
-                      onPlay={() => handlePlay(idx)}
+                      onPlay={() => handlePlay(item)}
                     />
                   </PlayList.Card>
                 ))}

@@ -14,7 +14,7 @@ const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_20%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_20%)_100%)]';
 
 const PlayerPanel = () => {
-  const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentIndex } = usePlayer();
+  const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentVideoId } = usePlayer();
   const { shouldRender, animation } = useAnimatedMount(isPlaylistPanelOpen, {
     open_transform: 'translate-y-0',
     closed_transform: 'translate-y-full',
@@ -129,7 +129,7 @@ const PlayerPanel = () => {
                   <button
                     type='button'
                     className='w-full cursor-pointer px-2 py-[10px]'
-                    onClick={() => setCurrentIndex(idx)}
+                    onClick={() => setCurrentVideoId(videoId)}
                   >
                     <MusicInfoWrapper
                       thumbnail={thumbnail.medium.url}

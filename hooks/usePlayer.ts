@@ -3,7 +3,7 @@ import { useAtom } from 'jotai';
 
 import {
   PlaylistItem,
-  currentPlayingIndexState,
+  currentVideoIdAtom,
   currentTimeAtom,
   durationAtom,
   isPlayingState,
@@ -16,7 +16,7 @@ import {
 
 export const usePlayer = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);
-  const [currentIndex, setCurrentIndex] = useAtom(currentPlayingIndexState);
+  const [currentVideoId, setCurrentVideoId] = useAtom(currentVideoIdAtom);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingState);
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
   const [isPlayerReady, setIsPlayerReady] = useAtom(isPlayerReadyAtom);
@@ -25,13 +25,20 @@ export const usePlayer = () => {
   const [volume, setVolume] = useAtom(volumeAtom);
   const [isPlaylistPanelOpen, setIsPlaylistPanelOpen] = useAtom(isPanelOpen);
 
-  const currentVideo = playlist[currentIndex] || null;
+  const currentIndex = playlist.findIndex(item => item.videoId === currentVideoId);
+  const currentVideo = currentIndex !== -1 ? playlist[currentIndex] : null;
   const lastIndex = playlist.length - 1;
   const isActuallyPlayerReady = playerRef !== null && isPlayerReady; // 실제 플레이어 조작 가능 상태
 
-  const setPlaylistAndPlay = (items: PlaylistItem[], startIndex: number) => {
+  const setPlaylistAndPlay = (items: PlaylistItem[], videoId: string) => {
     setPlaylist(items);
-    setCurrentIndex(startIndex);
+    setCurrentVideoId(videoId);
+    setIsPlaying(true);
+  };
+
+  const addToPlaylistAndPlay = (item: PlaylistItem) => {
+    setPlaylist(prev => [...prev, item]);
+    setCurrentVideoId(item.videoId);
     setIsPlaying(true);
   };
 
@@ -39,7 +46,7 @@ export const usePlayer = () => {
     e.stopPropagation();
 
     if (currentIndex < playlist.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentVideoId(playlist[currentIndex + 1].videoId);
       setIsPlaying(true);
     }
   };
@@ -48,7 +55,7 @@ export const usePlayer = () => {
     e.stopPropagation();
 
     if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+      setCurrentVideoId(playlist[currentIndex - 1].videoId);
       setIsPlaying(true);
     }
   };
@@ -62,7 +69,7 @@ export const usePlayer = () => {
 
   const clearPlaylist = () => {
     setPlaylist([]);
-    setCurrentIndex(0);
+    setCurrentVideoId(null);
     setIsPlaying(false);
   };
 
@@ -91,12 +98,14 @@ export const usePlayer = () => {
     setIsPlayerReady,
     playlist,
     currentIndex,
-    setCurrentIndex,
+    currentVideoId,
+    setCurrentVideoId,
     lastIndex,
     isPlaying,
     setIsPlaying,
     currentVideo,
     setPlaylistAndPlay,
+    addToPlaylistAndPlay,
     nextPlay,
     prevPlay,
     togglePlay,

@@ -11,7 +11,7 @@ import { PlayerControl } from './PlayerControl';
 const ANIMATION_DURATION = 400;
 
 const PlayerPanel = () => {
-  const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel } = usePlayer();
+  const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentIndex } = usePlayer();
   const { shouldRender, animation } = useAnimatedMount(isPlaylistPanelOpen, {
     open_transform: 'translate-y-0',
     closed_transform: 'translate-y-full',
@@ -120,7 +120,7 @@ const PlayerPanel = () => {
                 key={`${videoId}-${idx}`}
                 className={`pt-[10px] pb-[6px] border-t border-white/15 last:border-b last:border-white/20 ${videoId === currentVideo.videoId ? 'is-active bg-[linear-gradient(180deg,rgb(255_255_255_/_25%)_0%,rgb(255_255_255_/_10%)_50%,rgb(255_255_255_/_25%)_100%)]' : ''}`}
               >
-                <button type='button' className='w-full cursor-pointer px-2'>
+                <button type='button' className='w-full cursor-pointer px-2' onClick={() => setCurrentIndex(idx)}>
                   <MusicInfoWrapper
                     thumbnail={thumbnail.medium.url}
                     title={title}

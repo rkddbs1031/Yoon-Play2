@@ -49,8 +49,7 @@ export const PlayerBar = () => {
               thumbnail={currentVideo.thumbnail.medium.url}
               title={currentVideo.title}
               channelTitle={currentVideo.channelTitle}
-              titleColor='text-white'
-              channelTitleColor='text-white/60'
+              color={{ title: 'text-white', channelTitle: 'text-white/60' }}
             />
           ) : (
             <div className='w-[50px] h-[50px] rounded-[8px] bg-black/10'></div>

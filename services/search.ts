@@ -21,6 +21,8 @@ export const useYoutubeSearchQuery = ({ type, value }: YouTubeSearchProps) => {
   });
 };
 
+const MAX_PAGE_COUNT = 4;
+
 export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => {
   return useInfiniteQuery({
     queryKey: ['recommend-youtube-search', type, value],
@@ -35,9 +37,13 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
       return data;
     },
     initialPageParam: undefined as string | undefined,
-    getNextPageParam: lastPage => lastPage.nextPageToken,
+    getNextPageParam: (lastPage, allPages) => {
+      if (allPages.length >= MAX_PAGE_COUNT) return undefined;
+      return lastPage.nextPageToken;
+    },
     enabled: !!value && !!type,
     staleTime: 60 * 1000, // 1분
+    gcTime: 1000 * 60 * 30, // cacheTime
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });

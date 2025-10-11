@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { RecommendationResultType } from '@/types/recommend';
+import { MOCK } from '@/constants/mock';
 
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3/search';
 
@@ -19,7 +20,9 @@ export async function GET(request: NextRequest) {
         q: `${query} ${searchType === RecommendationResultType.Genre ? '장르' : ''} 플레이리스트 `,
       }),
       videoDuration: 'long',
-      order: 'title',
+      order: 'relevance',
+      regionCode: 'KR',
+      relevanceLanguage: 'ko',
       fields: 'items(id/videoId, snippet/title, snippet/channelTitle, snippet/thumbnails), nextPageToken',
       ...(pageToken && { pageToken }),
       key: process.env.YOUTUBE_API_KEY || '',
@@ -34,6 +37,7 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json();
     return NextResponse.json(data);
+    // return NextResponse.json(MOCK);
   } catch (error: any) {
     console.error('Youtube API 오류:', error);
 

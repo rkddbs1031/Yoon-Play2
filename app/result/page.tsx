@@ -9,7 +9,7 @@ import { PlaylistItem } from '@/store/playerAtom';
 import { AnimationType } from '@/types/animation';
 import { animationStyle } from '@/utils/animation';
 
-import { PlayList } from '@/components/Playlist';
+import { PlayListCard } from '@/components/Playlist';
 import Player from '@/components/Player';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
@@ -91,14 +91,13 @@ export default function PlayListResult() {
             >
               <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-x-6 sm:gap-y-8 auto-rows-fr'>
                 {allItems.map((item, idx) => (
-                  <PlayList.Card key={`${item.id.videoId}-${idx}`}>
-                    <PlayList.Content
-                      thumbnail={item.snippet.thumbnails}
-                      title={item.snippet.title}
-                      channelTitle={item.snippet.channelTitle}
-                      onPlay={() => handlePlay(item)}
-                    />
-                  </PlayList.Card>
+                  <PlayListCard
+                    key={`${item.id.videoId}-${idx}`}
+                    thumbnail={item.snippet.thumbnails}
+                    title={item.snippet.title}
+                    channelTitle={item.snippet.channelTitle}
+                    onPlay={() => handlePlay(item)}
+                  />
                 ))}
                 {isFetchingNextPage && (
                   <>

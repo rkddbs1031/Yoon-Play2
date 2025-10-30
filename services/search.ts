@@ -43,7 +43,7 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
     },
     enabled: !!value && !!type,
     staleTime: 60 * 1000, // 1분
-    gcTime: 1000 * 60 * 30, // cacheTime
+    gcTime: 1000 * 60 * 60, // cacheTime
     retry: 2,
     retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });

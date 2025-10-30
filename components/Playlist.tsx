@@ -1,9 +1,11 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
+import Image from 'next/image';
 
 import { PlayIcon } from '@/states/icon/svgs';
 import { YoutubeThumbnail } from '@/types/youtube';
 
 interface ContentProps {
+  idx: number;
   style?: string;
   thumbnail: YoutubeThumbnail;
   title: string;
@@ -11,25 +13,33 @@ interface ContentProps {
   onPlay: () => void;
 }
 
-export const PlayListCard = ({ style, thumbnail, title, channelTitle, onPlay }: ContentProps) => {
+export const PlayListCard = ({ idx, style, thumbnail, title, channelTitle, onPlay }: ContentProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <li
-      className={`relative z-10 flex flex-col gap-4 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-[10px] p-4 sm:p-5 rounded-2xl  shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
+      className={`relative z-10 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-[10px] p-4 sm:p-5 rounded-2xl  shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button type='button' className='flex flex-col w-full items-start gap-2 cursor-pointer' onClick={onPlay}>
-        <div className='relative w-full overflow-hidden rounded-[8px]'>
-          <img src={thumbnail.medium.url} alt={title} className='block w-full object-cover' />
+        <div className='relative w-full aspect-[16/9] overflow-hidden rounded-[8px]'>
+          <Image
+            src={thumbnail.medium.url}
+            alt={title}
+            fill
+            className='object-cover transition-all duration-500'
+            sizes='(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw'
+            quality={75}
+            priority={idx < 20}
+          />
 
           <div
             className={`absolute inset-0 flex items-center justify-center bg-[linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.000),rgba(0,0,0,0.000))] rounded-[8px] transition-opacity duration-400 ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <span className='absolute right-[10px] bottom-[10px] bg-black/0 rounded-full p-2'>
+            <span className='absolute right-[10px] bottom-[10px] bg-black/60 rounded-full p-2'>
               <PlayIcon color='white' size={18} />
             </span>
           </div>

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 import { usePlayer } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
@@ -93,11 +94,17 @@ const PlayerPanel = () => {
           </div>
 
           <div className='thumbnail py-5 px-8 sm:py-7 max-w-[360px] w-full mx-auto'>
-            <img
-              src={currentVideo.thumbnail.medium.url}
-              alt={currentVideo.title}
-              className='block w-full rounded-[8px]'
-            />
+            <div className='relative w-full aspect-[16/9] overflow-hidden rounded-[8px]'>
+              <Image
+                src={currentVideo.thumbnail.medium.url}
+                alt={currentVideo.title}
+                fill
+                className='object-cover rounded-[8px]'
+                sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 360px'
+                quality={80}
+                priority
+              />
+            </div>
           </div>
 
           <div className='player-controls flex flex-col gap-5'>

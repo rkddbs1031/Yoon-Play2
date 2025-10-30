@@ -93,6 +93,7 @@ export default function PlayListResult() {
                 {allItems.map((item, idx) => (
                   <PlayListCard
                     key={`${item.id.videoId}-${idx}`}
+                    idx={idx}
                     thumbnail={item.snippet.thumbnails}
                     title={item.snippet.title}
                     channelTitle={item.snippet.channelTitle}
@@ -106,7 +107,7 @@ export default function PlayListResult() {
                 )}
               </ul>
 
-              <div ref={target} className='h-px'></div>
+              <div ref={target} className='h-[50px]'></div>
             </div>
           </>
         )}

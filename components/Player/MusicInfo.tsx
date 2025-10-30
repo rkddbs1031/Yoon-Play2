@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 interface ColorAndFontSize {
   title: string;
   channelTitle: string;
@@ -30,7 +32,16 @@ export const MusicInfoWrapper = ({
         className='thumbnail rounded-[8px] overflow-hidden flex-shrink-0'
         style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
       >
-        <img src={thumbnail} alt={title} className='block w-full h-full object-cover' />
+        <Image
+          src={thumbnail}
+          alt={title}
+          width={imageSize}
+          height={imageSize}
+          className='object-cover w-full h-full'
+          sizes={`${imageSize}px`}
+          quality={75}
+          priority
+        />
       </div>
       <div className='music-info'>
         <span className={`${fontSize.title} ${color.title} font-[600] mb-[2px] line-clamp-1`}>{title}</span>

@@ -10,7 +10,6 @@ import { AnimationType } from '@/types/animation';
 import { animationStyle } from '@/utils/animation';
 
 import { PlayListCard } from '@/components/Playlist';
-import Player from '@/components/Player';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
 import { YoutubeItem } from '@/types/youtube';
@@ -112,7 +111,6 @@ export default function PlayListResult() {
           </>
         )}
       </section>
-      <Player />
     </>
   );
 }

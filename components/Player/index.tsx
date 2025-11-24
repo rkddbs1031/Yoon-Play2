@@ -1,3 +1,7 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 import { PlayerBar } from './PlayerBar';
 import PlayerPanel from './PlayerPanel';
 
@@ -10,4 +14,11 @@ const Player = () => {
   );
 };
 
-export default Player;
+const PlayerWrapper = () => {
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+
+  return !isHome ? <Player /> : null;
+};
+
+export default PlayerWrapper;

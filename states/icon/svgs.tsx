@@ -148,3 +148,43 @@ export const MoreVerticalIcon: FC<IconProps> = ({ size = 24, color = 'currentCol
     </svg>
   );
 };
+
+export const YoonLogoIcon: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
+  return (
+    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        d='M12 3.75C8.43559 3.75 5.75 6.2048 5.75 9V10.5123C5.83223 10.5042 5.91563 10.5 6 10.5H8C8.82843 10.5 9.5 11.1716 9.5 12V17C9.5 17.8284 8.82843 18.5 8 18.5H6C4.61929 18.5 3.5 17.3807 3.5 16V13C3.5 12.3007 3.78716 11.6684 4.25 11.2146V9C4.25 5.16778 7.83242 2.25 12 2.25C16.1676 2.25 19.75 5.16778 19.75 9V11.2146C20.2128 11.6684 20.5 12.3007 20.5 13V16C20.5 17.3807 19.3807 18.5 18 18.5H16C15.1716 18.5 14.5 17.8284 14.5 17V12C14.5 11.1716 15.1716 10.5 16 10.5H18C18.0844 10.5 18.1678 10.5042 18.25 10.5123V9C18.25 6.2048 15.5644 3.75 12 3.75Z'
+        fill={color}
+      ></path>
+    </svg>
+  );
+};
+
+export const ExploreIcon: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
+  return (
+    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M14.3851 15.4458C11.7348 17.5685 7.85538 17.4014 5.3986 14.9446C2.76256 12.3086 2.76256 8.0347 5.3986 5.39866C8.03464 2.76262 12.3085 2.76262 14.9445 5.39866C17.4013 7.85544 17.5684 11.7349 15.4457 14.3851L20.6014 19.5408C20.8943 19.8337 20.8943 20.3085 20.6014 20.6014C20.3085 20.8943 19.8336 20.8943 19.5407 20.6014L14.3851 15.4458ZM6.45926 13.8839C4.40901 11.8337 4.40901 8.50957 6.45926 6.45932C8.50951 4.40907 11.8336 4.40907 13.8839 6.45932C15.9326 8.50807 15.9341 11.8288 13.8884 13.8794C13.8869 13.8809 13.8854 13.8824 13.8839 13.8839C13.8824 13.8854 13.8809 13.8869 13.8794 13.8884C11.8288 15.9342 8.50801 15.9327 6.45926 13.8839Z'
+        fill={color}
+      ></path>
+    </svg>
+  );
+};
+
+export const Libraryicon: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
+  return (
+    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z'
+        stroke={color}
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+};

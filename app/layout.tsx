@@ -3,7 +3,9 @@ import localFont from 'next/font/local';
 
 import { ReactQueryProvider } from './providers/ReactQueryProvider';
 
+import { NavigationDrawer } from '@/components/NavigationDrawer';
 import PlayerWrapper from '@/components/Player';
+
 import '../styles/globals.css';
 
 const pretendard = localFont({
@@ -27,7 +29,10 @@ export default function RootLayout({
     <html lang='en' className={`${pretendard.variable}`}>
       <body className={`${pretendard.className}`}>
         <ReactQueryProvider>
-          <main className='p-5 md:py-[32px] md:px-[24px] min-h-screen w-full'>{children}</main>
+          <main className='md:ml-[130px] px-6 py-15 md:p-5 min-h-screen w-full md:w-[calc(100%-130px)]'>
+            {children}
+          </main>
+          <NavigationDrawer />
           <PlayerWrapper />
         </ReactQueryProvider>
       </body>

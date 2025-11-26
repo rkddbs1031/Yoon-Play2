@@ -20,7 +20,7 @@ export const PlayerBar = () => {
 
   return (
     <section
-      className={`player-bar fixed z-[888] bottom-3 left-1/2 -translate-x-1/2 max-w-[960px] rounded-[8px] w-[calc(100%-32px)] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 overflow-hidden 
+      className={`player-bar fixed z-[888] left-1/2 lg:left-[calc(50%+65px)] bottom-3 -translate-x-1/2  w-[calc(100%-32px)] md:max-w-[768px] lg:max-w-[960px] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 overflow-hidden rounded-[8px]
         ${currentVideo ? 'cursor-pointer' : ''} 
         transition-all duration-${ANIMATION_DURATION} ${animation} `}
       onClick={togglePlaylistPanel}

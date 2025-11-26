@@ -88,7 +88,7 @@ export default function PlayListResult() {
               className={`list-wrapper ${AnimationType.FadeInUp}`}
               style={animationStyle({ useAnimation: true, delay: 0.5, duration: 0.6 })}
             >
-              <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-6 sm:gap-x-6 sm:gap-y-8 auto-rows-fr'>
+              <ul className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8 auto-rows-fr'>
                 {allItems.map((item, idx) => (
                   <PlayListCard
                     key={`${item.id.videoId}-${idx}`}

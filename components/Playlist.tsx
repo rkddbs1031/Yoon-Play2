@@ -18,7 +18,7 @@ export const PlayListCard = ({ idx, style, thumbnail, title, channelTitle, onPla
 
   return (
     <li
-      className={`relative z-10 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-[10px] p-4 sm:p-5 rounded-2xl  shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
+      className={`relative z-10 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-[10px] p-3 rounded-2xl shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >

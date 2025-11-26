@@ -67,7 +67,7 @@ const PlayerPanel = () => {
 
   return (
     <section
-      className={`player-panel fixed top-0 left-0 w-full h-full transition-all duration-${ANIMATION_DURATION} ${animation} ease-in-out bg-[linear-gradient(to_bottom,black,white)] backdrop-blur-[0px]`}
+      className={`player-panel fixed z-[999] top-0 left-0 w-full h-full transition-all duration-${ANIMATION_DURATION} ${animation} ease-in-out bg-[linear-gradient(to_bottom,black,white)] backdrop-blur-[0px]`}
     >
       {displayImage && (
         <div className={`background-image absolute h-full w-full`}>

@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { JSX } from 'react';
+import React, { JSX, useEffect } from 'react';
+import { useAtom } from 'jotai';
 
-import { YoonLogoIcon, HomeIcon, ExploreIcon, Libraryicon } from '@/states/icon/svgs';
+import { YoonLogoIcon, HomeIcon, ExploreIcon, Libraryicon, CloseIcon } from '@/states/icon/svgs';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { isSidebarOpenAtom } from '@/store/sidebarAtom';
 
 interface NavMenu {
   href: string;
@@ -30,9 +33,7 @@ const navMenu: NavMenu[] = [
   },
 ];
 
-const LNB = () => {
-  const pathname = usePathname();
-
+const LNB = React.memo(() => {
   return (
     <nav className='mt-12'>
       <ul className='flex flex-col gap-8'>
@@ -44,7 +45,9 @@ const LNB = () => {
       </ul>
     </nav>
   );
-};
+});
+
+LNB.displayName = 'LNB';
 
 interface NavLinkProps {
   href: string;
@@ -52,7 +55,7 @@ interface NavLinkProps {
   icon: JSX.Element | ((active: boolean) => JSX.Element);
 }
 
-const NavLink = ({ href, label, icon }: NavLinkProps) => {
+const NavLink = React.memo(({ href, label, icon }: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = (href === '/' && pathname === '/') || (href !== '/' && pathname.startsWith(href));
 
@@ -75,11 +78,29 @@ const NavLink = ({ href, label, icon }: NavLinkProps) => {
       <span className='text-xs'>{label}</span>
     </Link>
   );
-};
+});
 
-function Sidebar() {
+NavLink.displayName = 'NavLink';
+
+export default function Sidebar() {
+  const [isOpen, setIsOpen] = useAtom(isSidebarOpenAtom);
+  const isMobile = useMediaQuery('(max-width: 768px)');
+  const sidebarLeft = isMobile ? (isOpen ? 'left-0' : '-left-[100%]') : 'left-0';
+  const sidebarBg = isMobile ? 'bg-white/55' : 'bg-white/35';
+
+  useEffect(() => {
+    if (!isMobile) {
+      setIsOpen(true);
+      return;
+    }
+
+    setIsOpen(false);
+  }, [isMobile]);
+
   return (
-    <aside className='fixed w-[130px] h-full bg-white/40 backdrop-blur-[10px] pt-10 flex flex-col items-center gap-5 text-center'>
+    <aside
+      className={`fixed z-[777] w-[130px] top-0 ${sidebarLeft} transition-all duration-500 ease-in-out h-full ${sidebarBg} backdrop-blur-[15px] pt-10 flex flex-col items-center gap-5 text-center`}
+    >
       <h2 className='flex flex-col items-center gap-1'>
         <div className='bg-white/70 w-8 h-8 rounded-full flex items-center justify-center'>
           <YoonLogoIcon color='#52527a' />
@@ -87,8 +108,18 @@ function Sidebar() {
         <span className='text-[12px] font-[600]'>Yoon-Play2</span>
       </h2>
       <LNB />
+
+      {isMobile && (
+        <div className='close-button absolute top-[10px] right-[10px]'>
+          <button
+            type='button'
+            className='flex justify-center items-center w-6 h-6 hover:bg-white/30 duration-300 rounded-full cursor-pointer'
+            onClick={() => setIsOpen(false)}
+          >
+            <CloseIcon size={12} />
+          </button>
+        </div>
+      )}
     </aside>
   );
 }
-
-export default Sidebar;

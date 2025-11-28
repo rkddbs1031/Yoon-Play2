@@ -219,3 +219,37 @@ export const CloseIcon: FC<IconProps> = ({ size = 24, color = 'currentColor' }) 
     </svg>
   );
 };
+
+export const LikeIcon: FC<IconProps> = ({ size = 24, color = 'currentColor', fill = 'currentColor' }) => {
+  return (
+    <svg width={size} height={size} viewBox='0 0 24 24' fill={fill} xmlns='http://www.w3.org/2000/svg'>
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M20.84 4.61C19.8085 3.57799 18.4091 2.99817 16.95 2.99817C15.4909 2.99817 14.0915 3.57799 13.06 4.61L12 5.67L10.94 4.61C8.79161 2.46161 5.30838 2.46161 3.16 4.61C1.01161 6.75839 1.01161 10.2416 3.16 12.39L4.22 13.45L12 21.23L19.78 13.45L20.84 12.39C21.872 11.3585 22.4518 9.95914 22.4518 8.5C22.4518 7.04086 21.872 5.64152 20.84 4.61Z'
+        stroke={color}
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+    </svg>
+  );
+};
+
+export const AddPlaylistIcon: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
+  return (
+    <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z'
+        stroke={color}
+        strokeWidth='2'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+      />
+      <path d='M12 8V16' stroke={color} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+      <path d='M8 12H16' stroke={color} strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+    </svg>
+  );
+};

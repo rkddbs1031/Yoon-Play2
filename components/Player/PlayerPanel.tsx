@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 import { usePlayer } from '@/hooks/usePlayer';
@@ -6,13 +6,10 @@ import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
 import { DownIcon, MoreVerticalIcon } from '@/states/icon/svgs';
 
-import { MusicInfoWrapper } from './MusicInfo';
 import { PlayerControl } from './PlayerControl';
+import { PlayerQueueItem } from './PlayerQueueItem';
 
 const ANIMATION_DURATION = 400;
-
-const ACTIVE_ITEM_BG =
-  'bg-[linear-gradient(180deg,rgb(255_255_255_/_20%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_20%)_100%)]';
 
 const PlayerPanel = () => {
   const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentVideoId } = usePlayer();
@@ -121,34 +118,15 @@ const PlayerPanel = () => {
 
         <div className='player-queue overflow-y-auto' style={{ height: queueHeight }}>
           <ul>
-            {playlist.map(({ videoId, thumbnail, title, channelTitle }, idx) => (
-              <li
-                key={`${videoId}-${idx}`}
-                className='relative border-t border-white/15 last:border-b last:border-white/20'
-              >
-                <div
-                  className={`layer absolute inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
-                    videoId === currentVideo.videoId ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-
-                <div className='relative'>
-                  <button
-                    type='button'
-                    className='w-full cursor-pointer px-2 py-[10px]'
-                    onClick={() => setCurrentVideoId(videoId)}
-                  >
-                    <MusicInfoWrapper
-                      thumbnail={thumbnail.medium.url}
-                      title={title}
-                      channelTitle={channelTitle}
-                      imageSize={36}
-                      color={{ title: 'text-white', channelTitle: 'text-white/70' }}
-                      fontSize={{ title: 'text-[12px]', channelTitle: 'text-[10px]' }}
-                    />
-                  </button>
-                </div>
-              </li>
+            {playlist.map(({ videoId, thumbnail, title, channelTitle }) => (
+              <PlayerQueueItem
+                key={videoId}
+                thumbnailUrl={thumbnail.medium.url}
+                title={title}
+                channelTitle={channelTitle}
+                isActive={videoId === currentVideo.videoId}
+                onClick={() => setCurrentVideoId(videoId)}
+              />
             ))}
           </ul>
         </div>
@@ -156,4 +134,5 @@ const PlayerPanel = () => {
     </section>
   );
 };
+
 export default PlayerPanel;

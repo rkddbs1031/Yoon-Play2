@@ -1,34 +1,35 @@
 import { MouseEvent } from 'react';
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import {
-  PlaylistItem,
   currentVideoIdAtom,
-  currentTimeAtom,
-  durationAtom,
   isPlayingState,
-  playlistState,
-  volumeAtom,
   playerRefAtom,
   isPlayerReadyAtom,
+  currentTimeAtom,
+  durationAtom,
+  volumeAtom,
+  playlistState,
+  PlaylistItem,
   isPanelOpen,
+  currentIndexAtom,
+  currentVideoAtom,
+  lastIndexAtom,
 } from '@/store/playerAtom';
 
-export const usePlayer = () => {
+export const usePlayerCore = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);
   const [currentVideoId, setCurrentVideoId] = useAtom(currentVideoIdAtom);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingState);
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
   const [isPlayerReady, setIsPlayerReady] = useAtom(isPlayerReadyAtom);
-  const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
-  const [duration, setDuration] = useAtom(durationAtom);
-  const [volume, setVolume] = useAtom(volumeAtom);
   const [isPlaylistPanelOpen, setIsPlaylistPanelOpen] = useAtom(isPanelOpen);
 
-  const currentIndex = playlist.findIndex(item => item.videoId === currentVideoId);
-  const currentVideo = currentIndex !== -1 ? playlist[currentIndex] : null;
-  const lastIndex = playlist.length - 1;
-  const isActuallyPlayerReady = playerRef !== null && isPlayerReady; // 실제 플레이어 조작 가능 상태
+  const currentIndex = useAtomValue(currentIndexAtom);
+  const currentVideo = useAtomValue(currentVideoAtom);
+  const lastIndex = useAtomValue(lastIndexAtom);
+
+  const isActuallyPlayerReady = playerRef !== null && isPlayerReady;
 
   const setPlaylistAndPlay = (items: PlaylistItem[], videoId: string) => {
     setPlaylist(items);
@@ -41,7 +42,7 @@ export const usePlayer = () => {
       const hasExisted = prev.some(video => video.videoId === item.videoId);
 
       if (hasExisted) {
-        setCurrentVideoId(item.videoId); // 이미 있으면 그 곡으로 이동만
+        setCurrentVideoId(item.videoId);
         setIsPlaying(true);
         return prev;
       }
@@ -83,18 +84,6 @@ export const usePlayer = () => {
     setIsPlaying(false);
   };
 
-  const handleVolume = (volume: number) => {
-    if (playerRef) {
-      playerRef.setVolume(volume); // 0-100
-    }
-  };
-
-  const seekTo = (seconds: number) => {
-    if (playerRef) {
-      playerRef.seekTo(seconds, true);
-    }
-  };
-
   const togglePlaylistPanel = () => {
     if (!currentVideo) return;
     setIsPlaylistPanelOpen(prev => !prev);
@@ -106,13 +95,13 @@ export const usePlayer = () => {
     isActuallyPlayerReady,
     isPlayerReady,
     setIsPlayerReady,
-    playlist,
+    isPlaying,
+    setIsPlaying,
     currentIndex,
     currentVideoId,
     setCurrentVideoId,
+    playlist,
     lastIndex,
-    isPlaying,
-    setIsPlaying,
     currentVideo,
     setPlaylistAndPlay,
     addToPlaylistAndPlay,
@@ -120,15 +109,57 @@ export const usePlayer = () => {
     prevPlay,
     togglePlay,
     clearPlaylist,
-    seekTo,
+    isPlaylistPanelOpen,
+    togglePlaylistPanel,
+  };
+};
+
+export const usePlayerTime = () => {
+  const [currentTime, setCurrentTime] = useAtom(currentTimeAtom);
+  const [duration, setDuration] = useAtom(durationAtom);
+  const playerRef = useAtomValue(playerRefAtom);
+
+  const seekTo = (seconds: number) => {
+    if (playerRef) {
+      playerRef.seekTo(seconds, true);
+    }
+  };
+
+  return {
     currentTime,
     setCurrentTime,
     duration,
     setDuration,
+    playerRef,
+    seekTo,
+  };
+};
+
+export const usePlayerVolume = () => {
+  const [volume, setVolume] = useAtom(volumeAtom);
+  const playerRef = useAtomValue(playerRefAtom);
+
+  const handleVolume = (volume: number) => {
+    if (playerRef) {
+      playerRef.setVolume(volume); // 0-100
+    }
+  };
+
+  return {
     volume,
     setVolume,
     handleVolume,
-    isPlaylistPanelOpen,
-    togglePlaylistPanel,
+  };
+};
+
+export const usePlayer = () => {
+  const core = usePlayerCore();
+  const time = usePlayerTime();
+  const volumeCtrl = usePlayerVolume();
+
+  return {
+    ...core,
+    ...time,
+    ...volumeCtrl,
   };
 };

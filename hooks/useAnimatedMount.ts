@@ -13,7 +13,7 @@ export const useAnimatedMount = (isOpen: boolean, { open_transform, closed_trans
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
-      setTimeout(() => setAnimation(open_transform), 10);
+      setTimeout(() => setAnimation(open_transform), 100);
     } else {
       setAnimation(closed_transform);
       const timer = setTimeout(() => setShouldRender(false), duration);

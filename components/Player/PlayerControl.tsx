@@ -3,9 +3,9 @@ import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 import { useAtom, useAtomValue } from 'jotai';
 
 import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
-import { usePlayer } from '@/hooks/usePlayer';
+import { usePlayer, usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
-import { isHoveredVolumeButton } from '@/store/playerAtom';
+import { isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/playerAtom';
 
 const PlayerFrame = () => {
   const {
@@ -147,7 +147,7 @@ interface ColorProps {
 
 const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) => {
   const isHovered = useAtomValue(isHoveredVolumeButton);
-  const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayer();
+  const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayerCore();
 
   const isPrevButtonDisabled = !isActuallyPlayerReady || currentIndex === 0;
   const prevIconColor = isPrevButtonDisabled ? disabledColor || DISABLED_COLOR : color || ACTIVE_COLOR;
@@ -183,7 +183,7 @@ const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize 
 });
 
 const ProgressBar = ({ className }: { className?: string }) => {
-  const { duration, currentTime, playerRef, setCurrentTime } = usePlayer();
+  const { duration, currentTime, playerRef, setCurrentTime } = usePlayerTime();
   const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -288,7 +288,8 @@ const ProgressBar = ({ className }: { className?: string }) => {
 
 const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
   const [isHovered, setIsHovered] = useAtom(isHoveredVolumeButton);
-  const { handleVolume, volume, setVolume, isActuallyPlayerReady } = usePlayer();
+  const { handleVolume, volume, setVolume } = usePlayerVolume();
+  const isActuallyPlayerReady = useAtomValue(isPlayerReadyAtom);
 
   const handleVolumeChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

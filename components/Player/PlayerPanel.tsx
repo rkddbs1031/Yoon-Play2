@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { useAtomValue } from 'jotai';
 
-import { usePlayer } from '@/hooks/usePlayer';
+import { usePlayerCore } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
 import { DownIcon, MoreVerticalIcon } from '@/states/icon/svgs';
+import { currentVideoAtom } from '@/store/playerAtom';
 
 import { PlayerControl } from './PlayerControl';
 import { PlayerQueueItem } from './PlayerQueueItem';
@@ -12,7 +14,9 @@ import { PlayerQueueItem } from './PlayerQueueItem';
 const ANIMATION_DURATION = 400;
 
 const PlayerPanel = () => {
-  const { isPlaylistPanelOpen, playlist, currentVideo, togglePlaylistPanel, setCurrentVideoId } = usePlayer();
+  const { isPlaylistPanelOpen, playlist, togglePlaylistPanel, setCurrentVideoId } = usePlayerCore();
+  const currentVideo = useAtomValue(currentVideoAtom);
+
   const { shouldRender, animation } = useAnimatedMount(isPlaylistPanelOpen, {
     open_transform: 'translate-y-0',
     closed_transform: 'translate-y-full',

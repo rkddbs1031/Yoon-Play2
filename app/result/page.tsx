@@ -4,11 +4,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 import { usePlayer } from '@/hooks/usePlayer';
+import { AnimationType } from '@/constants/animation';
 import { useYoutubeInfiniteQuery } from '@/services/search';
-import { animationStyle } from '@/utils/animation';
-import { AnimationType } from '@/types/animation';
 import { YoutubeItem } from '@/types/youtube';
 import { PlaylistItem } from '@/types/playlist';
+import { animationStyle } from '@/utils/animation';
 
 import { PlayListCard } from '@/components/Playlist';
 import LoadingSpinner from '@/components/Loading';

@@ -1,4 +1,4 @@
-import { RecommendationType } from '@/types/recommend';
+import { RecommendationType } from '@/constants/recommend';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 

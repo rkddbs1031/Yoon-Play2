@@ -1,9 +1,9 @@
 import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
 
+import { AnimationType } from '@/constants/animation';
+import { TextFieldType } from '@/constants/textFiled';
 import { SearchIcon } from '@/states/icon/svgs';
 import { animationStyle } from '@/utils/animation';
-import { AnimationType } from '@/types/animation';
-import { TextFieldType } from '@/types/textFiled';
 
 interface SearchFieldProps {
   fieldType: TextFieldType;

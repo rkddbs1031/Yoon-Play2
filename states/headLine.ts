@@ -1,4 +1,5 @@
-import { RandomHeadLineType, RecommendationType } from '@/types/recommend';
+import { RecommendationType } from '@/constants/recommend';
+import { RandomHeadLineType } from '@/types/recommend';
 
 export const RANDOM_HEADLINES: RandomHeadLineType[] = [
   {

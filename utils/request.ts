@@ -1,5 +1,6 @@
-import { FetchMethod } from '@/types/fetch';
 import axios, { AxiosRequestConfig } from 'axios';
+
+import { FetchMethod } from '@/constants/fetch';
 
 const requestURL = process.env.NEXT_PUBLIC_API;
 

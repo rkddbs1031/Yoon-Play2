@@ -1,5 +1,6 @@
-import { FetchMethod } from '@/types/fetch';
-import { Recommendation, RecommendationType } from '@/types/recommend';
+import { FetchMethod } from '@/constants/fetch';
+import { RecommendationType } from '@/constants/recommend';
+import { Recommendation } from '@/types/recommend';
 import { fetcher } from '@/utils/request';
 
 export const RECOMMEND_API_KEY = '/api/recommend';

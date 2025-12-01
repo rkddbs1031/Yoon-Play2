@@ -1,4 +1,4 @@
-import { RecommendationResultType } from '@/types/recommend';
+import { RecommendationResultType } from '@/constants/recommend';
 
 import Button from './Button';
 import { Card } from './Card';

@@ -2,14 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { useAtomValue } from 'jotai';
 
+import { useLike } from '@/hooks/useLike';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
-import { DownIcon, MoreVerticalIcon } from '@/states/icon/svgs';
+import { DownIcon, LikeIcon, MoreVerticalIcon } from '@/states/icon/svgs';
 import { currentVideoAtom } from '@/store/playerAtom';
 
 import { PlayerControl } from './PlayerControl';
 import { PlayerQueueItem } from './PlayerQueueItem';
+import PlayerDropdown from './PlayerDropdown';
 
 const ANIMATION_DURATION = 400;
 
@@ -23,10 +25,27 @@ const PlayerPanel = () => {
     duration: ANIMATION_DURATION,
   });
   const { displayImage } = usePlayerBackground(currentVideo?.thumbnail?.medium?.url);
-
   const [queueHeight, setQueueHeight] = useState<string>('auto');
   const containerRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleMoreBtn = () => setIsDropdownOpen(prev => !prev);
+  const handleCloseDropdown = () => setIsDropdownOpen(false);
+
+  const { isLiked, toggleLike } = useLike();
+  const isLikedCurrent = currentVideo ? isLiked(currentVideo.videoId) : false;
+
+  const handleToggleLike = () => {
+    if (!currentVideo) return;
+    const result = toggleLike(currentVideo); // add | remove
+    console.log(`TODO:${result}`);
+  };
+
+  const handleAddToPlaylist = () => {
+    console.log('handleAddToPlaylist');
+  };
 
   useEffect(() => {
     document.body.style.overflow = isPlaylistPanelOpen ? 'hidden' : '';
@@ -89,9 +108,16 @@ const PlayerPanel = () => {
             <button type='button' onClick={togglePlaylistPanel} className='down-btn cursor-pointer'>
               <DownIcon color='white' size={20} />
             </button>
-            <button type='button' className='more-btn cursor-pointer'>
+            <button type='button' className='more-btn cursor-pointer' onClick={toggleMoreBtn}>
               <MoreVerticalIcon color='white' size={20} />
             </button>
+            <PlayerDropdown
+              isOpen={isDropdownOpen}
+              isLiked={isLikedCurrent}
+              onAddToPlaylist={handleAddToPlaylist}
+              onToggleLike={handleToggleLike}
+              onClose={handleCloseDropdown}
+            />
           </div>
 
           <div className='thumbnail py-5 px-8 sm:py-7 max-w-[360px] w-full mx-auto'>
@@ -109,9 +135,16 @@ const PlayerPanel = () => {
           </div>
 
           <div className='player-controls flex flex-col gap-5'>
-            <div className='music-info flex flex-col gap-[2px]'>
-              <h3 className={`text-[14px] text-white font-[600]`}>{currentVideo.title}</h3>
-              <span className={`text-[10px] text-white/60 `}>{currentVideo.channelTitle}</span>
+            <div className='music-info flex gap-2 justify-between items-center'>
+              <div className='music-player-and-title flex flex-col gap-1'>
+                <h3 className={`text-[14px] text-white font-[600]`}>{currentVideo.title}</h3>
+                <span className={`text-[10px] text-white/60 `}>{currentVideo.channelTitle}</span>
+              </div>
+              <div className='like'>
+                <button type='button' onClick={handleToggleLike} className='cursor-pointer'>
+                  <LikeIcon fill={isLikedCurrent ? '#12b886' : 'none'} size={20} color='#12b886' />
+                </button>
+              </div>
             </div>
             <PlayerControl.ProgressBar />
             <div className='player-control-buttons mb-6'>

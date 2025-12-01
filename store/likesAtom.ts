@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 
+import { LikeStatus } from '@/constants/LikeStatus';
 import { PlaylistItem } from '@/types/playlist';
-import { LikeStatus } from '@/constants/playlistStatus';
 
 export const likedPlaylistAtom = atom<PlaylistItem[]>([]);
 

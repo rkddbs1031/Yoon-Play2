@@ -5,14 +5,14 @@ import { useSearchParams } from 'next/navigation';
 
 import { usePlayer } from '@/hooks/usePlayer';
 import { useYoutubeInfiniteQuery } from '@/services/search';
-import { PlaylistItem } from '@/store/playerAtom';
-import { AnimationType } from '@/types/animation';
 import { animationStyle } from '@/utils/animation';
+import { AnimationType } from '@/types/animation';
+import { YoutubeItem } from '@/types/youtube';
+import { PlaylistItem } from '@/types/playlist';
 
 import { PlayListCard } from '@/components/Playlist';
 import LoadingSpinner from '@/components/Loading';
 import { Skeleton } from '@/components/Skeleton';
-import { YoutubeItem } from '@/types/youtube';
 
 const OBSERVE_OPTIONS = {
   root: null,

@@ -10,12 +10,12 @@ import {
   durationAtom,
   volumeAtom,
   playlistState,
-  PlaylistItem,
   isPanelOpen,
   currentIndexAtom,
   currentVideoAtom,
   lastIndexAtom,
 } from '@/store/playerAtom';
+import { PlaylistItem } from '@/types/playlist';
 
 export const usePlayerCore = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);

@@ -1,14 +1,7 @@
 import { atom } from 'jotai';
 import { YouTubePlayer } from 'react-youtube';
 
-import { YoutubeThumbnail } from '@/types/youtube';
-
-export interface PlaylistItem {
-  videoId: string;
-  title: string;
-  channelTitle: string;
-  thumbnail: YoutubeThumbnail;
-}
+import { PlaylistItem } from '@/types/playlist';
 
 export const isPlayerReadyAtom = atom(false);
 

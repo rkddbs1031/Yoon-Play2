@@ -18,7 +18,7 @@ export const toggleLikePlaylistAtom = atom(
 
       return { status: LikeStatus.Remove };
     } else {
-      set(likedPlaylistAtom, [...prev, item]);
+      set(likedPlaylistAtom, [item, ...prev]);
 
       return { status: LikeStatus.Add };
     }

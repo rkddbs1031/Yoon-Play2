@@ -24,7 +24,7 @@ export const MusicInfoWrapper = ({
   color = { title: DEFUALT_COLOR, channelTitle: DEFUALT_COLOR },
   fontSize = { title: DEFAULT_TITLE_SIZE, channelTitle: DEFAULT_CHANNEL_TITLE_SIZE },
 }: MusicInfoWrapperProps) => {
-  const { videoId, title, channelTitle, thumbnail } = item;
+  const { title, channelTitle, thumbnail } = item;
 
   return (
     <div className='music-info-wrapper flex gap-2 items-center text-left'>

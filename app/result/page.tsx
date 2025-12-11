@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-import { usePlayer } from '@/hooks/usePlayer';
+import { usePlayerCore } from '@/hooks/usePlayer';
 import { AnimationType } from '@/constants/animation';
 import { useYoutubeInfiniteQuery } from '@/services/search';
 import { YoutubeItem } from '@/types/youtube';
@@ -30,7 +30,7 @@ export default function PlayListResult() {
     value,
   });
 
-  const { setPlaylistAndPlay, playlist, addToPlaylistAndPlay } = usePlayer();
+  const { setPlaylistAndPlay, playlist, addToPlaylistAndPlay } = usePlayerCore();
 
   const target = useRef<HTMLDivElement | null>(null);
 

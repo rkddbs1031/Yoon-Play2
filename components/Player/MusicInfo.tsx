@@ -1,3 +1,5 @@
+import { PlaylistItem } from '@/types/playlist';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
 import Image from 'next/image';
 
 interface ColorAndFontSize {
@@ -6,9 +8,7 @@ interface ColorAndFontSize {
 }
 
 interface MusicInfoWrapperProps {
-  thumbnail: string;
-  title: string;
-  channelTitle: string;
+  item: PlaylistItem;
   imageSize?: number;
   color?: ColorAndFontSize;
   fontSize?: ColorAndFontSize;
@@ -19,13 +19,13 @@ const DEFAULT_TITLE_SIZE = 'text-[14px]';
 const DEFAULT_CHANNEL_TITLE_SIZE = 'text-[10px]';
 
 export const MusicInfoWrapper = ({
-  thumbnail,
-  title,
-  channelTitle,
+  item,
   imageSize = 50,
   color = { title: DEFUALT_COLOR, channelTitle: DEFUALT_COLOR },
   fontSize = { title: DEFAULT_TITLE_SIZE, channelTitle: DEFAULT_CHANNEL_TITLE_SIZE },
 }: MusicInfoWrapperProps) => {
+  const { videoId, title, channelTitle, thumbnail } = item;
+
   return (
     <div className='music-info-wrapper flex gap-2 items-center text-left'>
       <div
@@ -33,7 +33,7 @@ export const MusicInfoWrapper = ({
         style={{ width: `${imageSize}px`, height: `${imageSize}px` }}
       >
         <Image
-          src={thumbnail}
+          src={formatThumbnailUrl({ thumbnail, size: 'small' })}
           alt={title}
           width={imageSize}
           height={imageSize}

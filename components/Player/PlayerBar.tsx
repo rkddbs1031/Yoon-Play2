@@ -46,12 +46,7 @@ export const PlayerBar = () => {
 
         <div className='flex items-center gap-3 px-[10px] py-3 justify-between'>
           {currentVideo ? (
-            <MusicInfoWrapper
-              thumbnail={formatThumbnailUrl({ thumbnail: currentVideo.thumbnail, size: 'medium' })}
-              title={currentVideo.title}
-              channelTitle={currentVideo.channelTitle}
-              color={{ title: 'text-white', channelTitle: 'text-white/60' }}
-            />
+            <MusicInfoWrapper item={currentVideo} color={{ title: 'text-white', channelTitle: 'text-white/60' }} />
           ) : (
             <div className='w-[50px] h-[50px] rounded-[8px] bg-black/10'></div>
           )}

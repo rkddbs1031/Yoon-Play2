@@ -8,6 +8,7 @@ import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
 import { DownIcon, LikeIcon, MoreVerticalIcon } from '@/states/icon/svgs';
 import { currentVideoAtom } from '@/store/playerAtom';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
 
 import { PlayerControl } from './PlayerControl';
 import { PlayerQueueItem } from './PlayerQueueItem';
@@ -24,7 +25,9 @@ const PlayerPanel = () => {
     closed_transform: 'translate-y-full',
     duration: ANIMATION_DURATION,
   });
-  const { displayImage } = usePlayerBackground(currentVideo?.thumbnail?.medium?.url);
+  const backgroundImage = formatThumbnailUrl({ thumbnail: currentVideo?.thumbnail, size: 'small' });
+
+  const { displayImage: overlayBG } = usePlayerBackground(backgroundImage);
   const [queueHeight, setQueueHeight] = useState<string>('auto');
   const containerRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -89,11 +92,11 @@ const PlayerPanel = () => {
     <section
       className={`player-panel fixed z-[999] top-0 left-0 w-full h-full transition-all duration-${ANIMATION_DURATION} ${animation} ease-in-out bg-[linear-gradient(to_bottom,black,white)] backdrop-blur-[0px]`}
     >
-      {displayImage && (
+      {overlayBG && (
         <div className={`background-image absolute h-full w-full`}>
           <div
             className={`background-thumbnail h-[50vh] transition-opacity duration-${TRANSITION_DURATION} ease-in-out bg-cover bg-center bg-no-repeat blur-[30px] `}
-            style={{ backgroundImage: `url(${displayImage})` }}
+            style={{ backgroundImage: `url(${overlayBG})` }}
           />
         </div>
       )}
@@ -123,7 +126,7 @@ const PlayerPanel = () => {
           <div className='thumbnail py-5 px-8 sm:py-7 max-w-[360px] w-full mx-auto'>
             <div className='relative w-full aspect-[16/9] overflow-hidden rounded-[8px]'>
               <Image
-                src={currentVideo.thumbnail.medium.url}
+                src={formatThumbnailUrl({ thumbnail: currentVideo.thumbnail, size: 'large' })}
                 alt={currentVideo.title}
                 fill
                 className='object-cover rounded-[8px]'
@@ -158,7 +161,8 @@ const PlayerPanel = () => {
             {playlist.map(({ videoId, thumbnail, title, channelTitle }) => (
               <PlayerQueueItem
                 key={videoId}
-                thumbnailUrl={thumbnail.medium.url}
+                videoId={videoId}
+                thumbnail={thumbnail}
                 title={title}
                 channelTitle={channelTitle}
                 isActive={videoId === currentVideo.videoId}

@@ -6,12 +6,15 @@ import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackg
 
 import { PlayerControl } from './PlayerControl';
 import { MusicInfoWrapper } from './MusicInfo';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
 
 const ANIMATION_DURATION = 300;
 
 export const PlayerBar = () => {
   const { currentVideo, isPlaylistPanelOpen, togglePlaylistPanel } = usePlayer();
-  const { displayImage, isTransitioning } = usePlayerBackground(currentVideo?.thumbnail?.medium?.url);
+  const backgroundImage = formatThumbnailUrl({ thumbnail: currentVideo?.thumbnail, size: 'small' });
+  const { displayImage: overlayBG, isTransitioning } = usePlayerBackground(backgroundImage);
+
   const { animation } = useAnimatedMount(isPlaylistPanelOpen, {
     open_transform: 'opacity-0 invisible',
     closed_transform: 'opacity-100 visible',
@@ -25,20 +28,18 @@ export const PlayerBar = () => {
         transition-all duration-${ANIMATION_DURATION} ${animation} `}
       onClick={togglePlaylistPanel}
     >
-      {displayImage && (
+      {overlayBG && (
         <div
           className={`absolute inset-0 bg-cover bg-center transform scale-[1.1] filter blur-[10px] brightness-[0.8] 
             transition-opacity duration-${TRANSITION_DURATION} ease-in-out
             ${isTransitioning ? 'opacity-50' : 'opacity-100'}
           `}
-          style={{ backgroundImage: `url(${displayImage})` }}
+          style={{ backgroundImage: `url(${overlayBG})` }}
         />
       )}
-
       <div
-        className={`absolute inset-0 transition-all duration-500 ${displayImage ? 'bg-white/20 backdrop-blur-[10px]' : 'bg-white/60 backdrop-blur-[10px]'} `}
+        className={`absolute inset-0 transition-all duration-500 ${overlayBG ? 'bg-white/20 backdrop-blur-[10px]' : 'bg-white/60 backdrop-blur-[10px]'} `}
       />
-
       <div className='relative z-10 flex flex-col '>
         <PlayerControl.Frame />
         {currentVideo && <PlayerControl.ProgressBar />}
@@ -46,7 +47,7 @@ export const PlayerBar = () => {
         <div className='flex items-center gap-3 px-[10px] py-3 justify-between'>
           {currentVideo ? (
             <MusicInfoWrapper
-              thumbnail={currentVideo.thumbnail.medium.url}
+              thumbnail={formatThumbnailUrl({ thumbnail: currentVideo.thumbnail, size: 'medium' })}
               title={currentVideo.title}
               channelTitle={currentVideo.channelTitle}
               color={{ title: 'text-white', channelTitle: 'text-white/60' }}

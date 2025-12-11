@@ -38,7 +38,7 @@ export const MusicInfoWrapper = ({
           width={imageSize}
           height={imageSize}
           className='object-cover w-full h-full'
-          sizes={`${imageSize}px`}
+          sizes={`${imageSize * 2}px`}
           quality={75}
           priority
         />

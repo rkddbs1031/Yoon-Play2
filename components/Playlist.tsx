@@ -3,6 +3,7 @@ import Image from 'next/image';
 
 import { PlayIcon } from '@/states/icon/svgs';
 import { YoutubeThumbnail } from '@/types/youtube';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
 
 interface ContentProps {
   idx: number;
@@ -18,14 +19,14 @@ export const PlayListCard = ({ idx, style, thumbnail, title, channelTitle, onPla
 
   return (
     <li
-      className={`relative z-10 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-[10px] p-3 rounded-2xl shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
+      className={`relative z-10 bg-white/30 hover:bg-white/50 transition-all duration-400 hover:-translate-y-1 p-3 rounded-2xl shadow-[0px_2px_20px_rgba(0,0,0,0.08)] backdrop-blur-xl w-full cursor-pointer ${style}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <button type='button' className='flex flex-col w-full items-start gap-2 cursor-pointer' onClick={onPlay}>
         <div className='relative w-full aspect-[16/9] overflow-hidden rounded-[8px]'>
           <Image
-            src={thumbnail.medium.url}
+            src={formatThumbnailUrl({ thumbnail, size: 'medium' })}
             alt={title}
             fill
             className='object-cover transition-all duration-500'
@@ -35,7 +36,7 @@ export const PlayListCard = ({ idx, style, thumbnail, title, channelTitle, onPla
           />
 
           <div
-            className={`absolute inset-0 flex items-center justify-center bg-[linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.000),rgba(0,0,0,0.000))] rounded-[8px] transition-opacity duration-400 ${
+            className={`absolute inset-0 flex items-center justify-center bg-[linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0),rgba(0,0,0,0.2))] rounded-[8px] transition-opacity duration-400 ${
               isHovered ? 'opacity-100' : 'opacity-0'
             }`}
           >

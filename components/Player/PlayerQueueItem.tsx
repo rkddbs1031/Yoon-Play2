@@ -2,11 +2,15 @@ import React from 'react';
 
 import { MusicInfoWrapper } from './MusicInfo';
 
+import { YoutubeThumbnail } from '@/types/youtube';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
+
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_20%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_20%)_100%)]';
 
 interface PlayerQueueItemProps {
-  thumbnailUrl: string;
+  videoId: string;
+  thumbnail: YoutubeThumbnail;
   title: string;
   channelTitle: string;
   isActive: boolean;
@@ -14,7 +18,7 @@ interface PlayerQueueItemProps {
 }
 
 export const PlayerQueueItem = React.memo(
-  ({ thumbnailUrl, title, channelTitle, isActive, onClick }: PlayerQueueItemProps) => {
+  ({ videoId, thumbnail, title, channelTitle, isActive, onClick }: PlayerQueueItemProps) => {
     return (
       <li className='relative border-t border-white/15 last:border-b last:border-white/20'>
         <div
@@ -22,10 +26,10 @@ export const PlayerQueueItem = React.memo(
             isActive ? 'opacity-100' : 'opacity-0'
           }`}
         />
-        <div className='relative'>
+        <div className='relative flex'>
           <button type='button' className='w-full cursor-pointer px-2 py-[10px]' onClick={onClick}>
             <MusicInfoWrapper
-              thumbnail={thumbnailUrl}
+              thumbnail={formatThumbnailUrl({ thumbnail, size: 'small' })}
               title={title}
               channelTitle={channelTitle}
               imageSize={36}

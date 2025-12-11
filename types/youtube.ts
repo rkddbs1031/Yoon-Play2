@@ -42,3 +42,5 @@ export interface YouTubeSearchList {
   };
   items: YoutubeItem[];
 }
+
+export type ThumbnailSize = 'small' | 'medium' | 'large';

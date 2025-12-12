@@ -8,7 +8,7 @@ import { LibraryListType, LibraryType } from '@/constants/library';
 import { likedPlaylistAtom } from '@/store/likesAtom';
 import { animationStyle } from '@/utils/animation';
 
-import { LibraryListItem } from '@/components/Library/List';
+import { LibraryListItem } from '@/components/Library/LibraryListItem';
 
 export default function Library() {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);

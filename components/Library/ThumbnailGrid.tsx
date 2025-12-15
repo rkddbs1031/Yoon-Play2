@@ -28,7 +28,7 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
   if (count === 1) {
     return (
       <div className='thumbnail relative w-full aspect-square rounded-[8px] overflow-hidden '>
-        <Image src={thumbnails[0]} alt='썸네일' fill className='object-cover' />
+        <Image src={thumbnails[0]} alt='썸네일' fill className='object-cover' sizes='(max-width: 640px) 50vw, 200px' />
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
     <div className='thumbnail relative w-full aspect-square rounded-[8px] overflow-hidden grid grid-cols-2 grid-rows-2'>
       {tiles.map((src, idx) => (
         <div key={`${src}-${idx}`} className='relative w-full h-full'>
-          <Image src={src} alt={`썸네일-${idx}`} fill className='object-cover' />
+          <Image src={src} alt={`썸네일-${idx}`} fill className='object-cover' sizes='(max-width: 640px) 50vw, 200px' />
         </div>
       ))}
     </div>

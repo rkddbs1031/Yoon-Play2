@@ -30,6 +30,7 @@ const PlayerPanel = () => {
 
   const { displayImage: overlayBG } = usePlayerBackground(backgroundImage);
   const [queueHeight, setQueueHeight] = useState<string>('auto');
+  const [topHeight, setTopHeight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
@@ -66,6 +67,7 @@ const PlayerPanel = () => {
       const paddingTop = parseFloat(containerStyle.paddingTop);
       const paddingBottom = parseFloat(containerStyle.paddingBottom);
 
+      setTopHeight(topHeight);
       setQueueHeight(`calc(100vh - ${topHeight + paddingTop + paddingBottom}px)`);
     }
   }, []);
@@ -94,14 +96,14 @@ const PlayerPanel = () => {
       className={`player-panel fixed z-[999] top-0 left-0 w-full h-full transition-all duration-${ANIMATION_DURATION} ${animation} ease-in-out bg-[linear-gradient(to_bottom,black,white)] backdrop-blur-[0px]`}
     >
       {overlayBG && (
-        <div className={`background-image absolute h-full w-full`}>
+        <div className={`background-image absolute w-full`} style={{ height: topHeight - 30 }}>
           <div
-            className={`background-thumbnail h-[50vh] transition-opacity duration-${TRANSITION_DURATION} ease-in-out bg-cover bg-center bg-no-repeat blur-[30px] `}
+            className={`background-thumbnail h-full transition-opacity duration-${TRANSITION_DURATION} ease-in-out bg-cover bg-center bg-no-repeat blur-[30px] `}
             style={{ backgroundImage: `url(${overlayBG})` }}
           />
         </div>
       )}
-      <div className='overlay background-gradient absolute top-0 left-0 transition-all duration-500 bg-[linear-gradient(to_bottom,transparent_80%,rgb(0_0_0_/_30%)_100%)]  backdrop-blur-[30px] w-full h-full'></div>
+      <div className='overlay absolute bottom-0 left-0 transition-all duration-500 bg-[linear-gradient(to_bottom,transparent_20%,rgb(0_0_0_/_40%)_100%)]  backdrop-blur-[30px] w-full h-full'></div>
 
       <div
         ref={containerRef}
@@ -141,12 +143,12 @@ const PlayerPanel = () => {
           <div className='player-controls flex flex-col gap-5'>
             <div className='music-info flex gap-2 justify-between items-center'>
               <div className='music-player-and-title flex flex-col gap-1'>
-                <h3 className={`text-[14px] text-white font-[600]`}>{currentVideo.title}</h3>
+                <h3 className={`text-[14px] text-[#f2f2f2] font-[600]`}>{currentVideo.title}</h3>
                 <span className={`text-[10px] text-white/60 `}>{currentVideo.channelTitle}</span>
               </div>
               <div className='like'>
                 <button type='button' onClick={handleToggleLike} className='cursor-pointer'>
-                  <LikeIcon fill={isLikedCurrent ? '#12b886' : 'none'} size={20} color='#12b886' />
+                  <LikeIcon fill={isLikedCurrent ? '#5E9F94' : 'none'} size={20} color='#5E9F94' />
                 </button>
               </div>
             </div>

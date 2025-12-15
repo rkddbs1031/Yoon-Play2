@@ -24,11 +24,11 @@ interface HeaderProps {
 
 PlaylistView.Header = function Header({ title, thumbnails, count, type }: HeaderProps) {
   return (
-    <div className='playlist-view-header'>
-      <div className='thumbnail-container max-w-[200px] mx-auto mb-[10px]'>
+    <div className='playlist-view-header mb-[50px]]'>
+      <div className='thumbnail-container max-w-[200px] mx-auto mb-6'>
         <ThumbnailGrid thumbnails={thumbnails} />
       </div>
-      <h1 className='text-lg sm:text-xl font-[600] text-[#52527a] text-center whitespace-pre-wrap mb-1'>{title}</h1>
+      <h1 className='text-lg sm:text-xl font-[600] text-[#52527a] text-center whitespace-pre-wrap mb-2'>{title}</h1>
       <div className='subtitle flex justify-center items-center text-xs sm:text-[12px] text-[#5f5f7c] line-clamp-1'>
         {type === LibraryType.Playlist && (
           <span className="relative mr-3 after:absolute after:content-['·'] after:mx-1">재생목록</span>

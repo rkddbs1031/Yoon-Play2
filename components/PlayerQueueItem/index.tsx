@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
+import { QueueContext } from '@/types/queue';
 
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
@@ -12,13 +13,14 @@ const ACTIVE_ITEM_BG =
 interface PlayerQueueItemProps {
   item: PlaylistItem;
   isActive: boolean;
+  context: QueueContext;
   onClick: () => void;
   showLikeButton?: boolean;
   showDotButton?: boolean;
 }
 
 export const PlayerQueueItem = React.memo(
-  ({ item, isActive, onClick, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
+  ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     return (
       <>
         <div
@@ -39,7 +41,7 @@ export const PlayerQueueItem = React.memo(
 
           {showLikeButton && <QueueItemLikeButton item={item} />}
 
-          {showDotButton && <QueueItemDotMenu item={item} isActive={isActive} />}
+          {showDotButton && <QueueItemDotMenu item={item} isActive={isActive} context={context} />}
         </div>
       </>
     );

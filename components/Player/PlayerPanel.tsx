@@ -13,6 +13,7 @@ import { formatThumbnailUrl } from '@/utils/thumbnail';
 import { PlayerControl } from './PlayerControl';
 import { PlayerQueueItem } from '../PlayerQueueItem';
 import PlayerDropdown from './PlayerDropdown';
+import { QueueContext } from '@/types/queue';
 
 const ANIMATION_DURATION = 400;
 
@@ -164,6 +165,7 @@ const PlayerPanel = () => {
                   item={item}
                   isActive={item.videoId === currentVideo.videoId}
                   onClick={() => setCurrentVideoId(item.videoId)}
+                  context={QueueContext.CurrentQueue}
                 />
               </li>
             ))}

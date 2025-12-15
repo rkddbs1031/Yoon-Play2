@@ -2,6 +2,7 @@ import { JSX, ReactNode } from 'react';
 
 import { AddPlaylistIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';
+import Portal from '../Portal';
 
 const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element }> = {
   [QueueContext.CurrentQueue]: {
@@ -21,30 +22,40 @@ const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element }> = {
 };
 
 interface QueueItemPopoverProps {
-  isActive: boolean;
   context: QueueContext;
+  position: { top: number; left: number };
   onAction: (action: QueueContext) => void;
 }
 
-export default function QueueItemPopover({ isActive, context, onAction }: QueueItemPopoverProps) {
-  const handleClick = () => console.log('handleClick');
+export default function QueueItemPopover({ context, position, onAction }: QueueItemPopoverProps) {
   const menu = MENU_MAP[context];
 
-  return (
-    <div className='absolute right-6 -top-2 z-[10000] w-[155px] bg-white/70 backdrop-blur-sm rounded-[5px]'>
-      <MenuItem onClick={handleClick}>
-        <AddPlaylistIcon size={18} />
-        <span className='text-sm'>재생목록에 저장</span>
-      </MenuItem>
+  const handleClick = () => console.log('TODO: 재생목록에 저장');
 
-      <MenuItem onClick={() => onAction(context)}>
-        {menu.icon}
-        <span className='text-sm'>
-          {menu.label}
-          {context}
-        </span>
-      </MenuItem>
-    </div>
+  return (
+    <Portal>
+      <div
+        className='queue-item-popover fixed  w-[155px] z-[10000] border bg-white/70 backdrop-blur-sm rounded-[5px] bg-red'
+        style={{
+          top: position.top,
+          left: position.left - 160,
+        }}
+        onClick={e => e.stopPropagation()}
+      >
+        <MenuItem onClick={handleClick}>
+          <AddPlaylistIcon size={18} />
+          <span className='text-sm'>재생목록에 저장</span>
+        </MenuItem>
+
+        <MenuItem onClick={() => onAction(context)}>
+          {menu.icon}
+          <span className='text-sm'>
+            {menu.label}
+            {context}
+          </span>
+        </MenuItem>
+      </div>
+    </Portal>
   );
 }
 

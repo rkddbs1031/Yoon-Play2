@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, MouseEvent } from 'react';
 
 import { MoreHorizontal, MoreVerticalIcon } from '@/states/icon/svgs';
 import { PlaylistItem } from '@/types/playlist';
@@ -9,33 +9,43 @@ import { usePlayerCore } from '@/hooks/usePlayer';
 
 interface QueueItemDotMenuProps {
   item: PlaylistItem;
-  isActive: boolean;
   context: QueueContext;
 }
 
-export const QueueItemDotMenu = React.memo(({ item, isActive, context }: QueueItemDotMenuProps) => {
+export const QueueItemDotMenu = React.memo(({ item, context }: QueueItemDotMenuProps) => {
   const dotMenuRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const { removePlaylist } = usePlayerCore();
+  const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
 
-  const handleClickDotMenu = () => setIsOpen(prev => !prev);
+  const handleClickDotMenu = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    setPopoverPosition({
+      top: rect.top,
+      left: rect.left,
+    });
+
+    setIsOpen(prev => !prev);
+  };
 
   useEffect(() => {
     if (!isOpen) return;
 
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dotMenuRef.current && !dotMenuRef.current.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
+    const handleClickOutside = () => setIsOpen(false);
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, [isOpen]);
+
+  const { removePlaylist } = usePlayerCore();
 
   const handleRemoveCurrentPlaylist = () => removePlaylist(item);
 
-  const handleUnLike = () => console.log('TODO: handleUnLike');
+  const handleUnLike = () => {
+    console.log('handleUnLike');
+  };
 
   const handleRemoveUserPlaylist = () => console.log('TODO: handleRemoveUserPlaylist');
 
@@ -56,7 +66,9 @@ export const QueueItemDotMenu = React.memo(({ item, isActive, context }: QueueIt
         <MoreVerticalIcon size={16} />
       </button>
 
-      {isOpen && <QueueItemPopover isActive={isActive} onAction={handleAction} context={context} />}
+      {isOpen && popoverPosition && (
+        <QueueItemPopover context={context} position={popoverPosition} onAction={handleAction} />
+      )}
     </div>
   );
 });

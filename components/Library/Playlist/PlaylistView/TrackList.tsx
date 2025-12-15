@@ -6,14 +6,16 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { currentVideoAtom } from '@/store/playerAtom';
 import { PlaylistItem } from '@/types/playlist';
+import { QueueContext } from '@/types/queue';
 
 import { PlayerQueueItem } from '@/components/PlayerQueueItem';
 
 interface TrackListProps {
   tracks: PlaylistItem[];
+  context: QueueContext;
 }
 
-export default function TrackList({ tracks }: TrackListProps) {
+export default function TrackList({ tracks, context }: TrackListProps) {
   const currentVideo = useAtomValue(currentVideoAtom);
   const parentRef = useRef<HTMLDivElement | null>(null);
 
@@ -27,7 +29,7 @@ export default function TrackList({ tracks }: TrackListProps) {
   const virtualItems = rowVirtualizer.getVirtualItems();
 
   const handleClick = () => {
-    console.log('TODO: handleClick');
+    console.log('TODO: handleClick TrackList');
   };
 
   return (
@@ -44,12 +46,17 @@ export default function TrackList({ tracks }: TrackListProps) {
           return (
             <li
               key={track.videoId}
-              className={`${index + 1} absolute left-0 top-0 w-full border-t border-white/15 last:border-b last:border-white/20`}
+              className={`${index + 1} absolute left-0 top-0 z-[1] w-full border-t border-white/15 last:border-b last:border-white/20`}
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
               }}
             >
-              <PlayerQueueItem item={track} isActive={track.videoId === currentVideo?.videoId} onClick={handleClick} />
+              <PlayerQueueItem
+                item={track}
+                isActive={track.videoId === currentVideo?.videoId}
+                onClick={handleClick}
+                context={context}
+              />
             </li>
           );
         })}

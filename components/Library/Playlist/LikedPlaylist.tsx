@@ -2,6 +2,7 @@ import { useAtomValue } from 'jotai';
 import PlaylistView from './PlaylistView';
 import { likedPlaylistAtom } from '@/store/likesAtom';
 import { LibraryType } from '@/constants/library';
+import { QueueContext } from '@/types/queue';
 
 export default function LikedPlaylist() {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);
@@ -12,7 +13,7 @@ export default function LikedPlaylist() {
   return (
     <PlaylistView>
       <PlaylistView.Header title='좋아요한 목록' thumbnails={thumbnails} count={likedCount} type={LibraryType.Like} />
-      <PlaylistView.TrackList tracks={likedPlaylist} />
+      <PlaylistView.TrackList tracks={likedPlaylist} context={QueueContext.LikedList} />
     </PlaylistView>
   );
 }

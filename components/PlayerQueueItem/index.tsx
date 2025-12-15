@@ -23,11 +23,13 @@ export const PlayerQueueItem = React.memo(
   ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     return (
       <>
-        <div
-          className={`layer absolute inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
-            isActive ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+        {context === QueueContext.CurrentQueue && (
+          <div
+            className={`layer absolute pointer-events-none inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
+              isActive ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
 
         <div className='relative flex gap-2 items-center px-2 py-[10px]'>
           <button type='button' className='w-full cursor-pointer' onClick={onClick}>
@@ -41,7 +43,7 @@ export const PlayerQueueItem = React.memo(
 
           {showLikeButton && <QueueItemLikeButton item={item} />}
 
-          {showDotButton && <QueueItemDotMenu item={item} isActive={isActive} context={context} />}
+          {showDotButton && <QueueItemDotMenu item={item} context={context} />}
         </div>
       </>
     );

@@ -11,9 +11,10 @@ import QueueItemPopover from './QueueItemPopover';
 interface QueueItemDotMenuProps {
   item: PlaylistItem;
   context: QueueContext;
+  color: string;
 }
 
-export const QueueItemDotMenu = React.memo(({ item, context }: QueueItemDotMenuProps) => {
+export const QueueItemDotMenu = React.memo(({ item, context, color }: QueueItemDotMenuProps) => {
   const dotMenuRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
@@ -60,9 +61,9 @@ export const QueueItemDotMenu = React.memo(({ item, context }: QueueItemDotMenuP
   };
 
   return (
-    <div ref={dotMenuRef} className='relative flex items-center justify-center pl-1' onClick={e => e.stopPropagation()}>
+    <div ref={dotMenuRef} className='relative flex items-center justify-center' onClick={e => e.stopPropagation()}>
       <button type='button' onClick={handleClickDotMenu} className='cursor-pointer'>
-        <MoreVerticalIcon size={16} />
+        <MoreVerticalIcon size={16} color={color} />
       </button>
 
       {isOpen && popoverPosition && (

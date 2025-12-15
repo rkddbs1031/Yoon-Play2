@@ -46,7 +46,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
           return (
             <li
               key={track.videoId}
-              className={`${index + 1} absolute left-0 top-0 z-[1] w-full border-t border-white/15 last:border-b last:border-white/20`}
+              className={`${index + 1} absolute left-0 top-0 w-full border-t border-[#66666610] last:border-b last:border-white/20`}
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
               }}

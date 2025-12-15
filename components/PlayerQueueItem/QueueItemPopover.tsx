@@ -4,20 +4,26 @@ import { AddPlaylistIcon, TrashIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';
 import Portal from '../Portal';
 
-const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element }> = {
+const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element; color: string; background: string }> = {
   [QueueContext.CurrentQueue]: {
     label: '현재 재생목록에서 삭제',
-    icon: <TrashIcon size={18} />,
+    icon: <TrashIcon size={15} />,
+    color: '#394970',
+    background: 'bg-white/70 backdrop-blur-sm',
   },
 
   [QueueContext.LikedList]: {
     label: '좋아요 목록에서 삭제',
-    icon: <TrashIcon size={18} />,
+    icon: <TrashIcon size={15} />,
+    color: 'text-[#52527a]',
+    background: 'bg-[#F4F2FB]/90 backdrop-blur-md rounded-[5px] shadow-[0_8px_24px_rgba(46,51,79,0.12)]',
   },
 
   [QueueContext.Playlist]: {
     label: '이 재생목록에서 삭제',
-    icon: <TrashIcon size={18} />,
+    icon: <TrashIcon size={15} />,
+    color: 'text-[#52527a]',
+    background: 'bg-[#F4F2FB]/90 backdrop-blur-md rounded-[5px] shadow-[0_8px_24px_rgba(46,51,79,0.12)]',
   },
 };
 
@@ -28,28 +34,28 @@ interface QueueItemPopoverProps {
 }
 
 export default function QueueItemPopover({ context, position, onAction }: QueueItemPopoverProps) {
-  const menu = MENU_MAP[context];
+  const styleByContext = MENU_MAP[context];
 
   const handleClick = () => console.log('TODO: 재생목록에 저장');
 
   return (
     <Portal>
       <div
-        className='queue-item-popover fixed w-[170px] z-[10000] border bg-white/70 backdrop-blur-sm rounded-[5px] bg-red'
+        className={`queue-item-popover fixed w-[180px] z-[999] rounded-[5px] ${styleByContext.background}`}
         style={{
           top: position.top,
-          left: position.left - 174,
+          left: position.left - 180,
         }}
         onClick={e => e.stopPropagation()}
       >
         <MenuItem onClick={handleClick}>
-          <AddPlaylistIcon size={18} />
-          <span className='text-sm'>재생목록에 저장</span>
+          <AddPlaylistIcon size={15} />
+          <span className={`text-sm ${styleByContext.color}`}>재생목록에 저장</span>
         </MenuItem>
 
         <MenuItem onClick={() => onAction(context)}>
-          {menu.icon}
-          <span className='text-sm'>{menu.label}</span>
+          {styleByContext.icon}
+          <span className={`text-sm ${styleByContext.color}`}>{styleByContext.label}</span>
         </MenuItem>
       </div>
     </Portal>

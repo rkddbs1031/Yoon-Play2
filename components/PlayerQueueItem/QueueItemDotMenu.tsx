@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState, MouseEvent } from 'react';
 
-import { MoreHorizontal, MoreVerticalIcon } from '@/states/icon/svgs';
+import { MoreVerticalIcon } from '@/states/icon/svgs';
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
+import { useLike } from '@/hooks/useLike';
+import { usePlayerCore } from '@/hooks/usePlayer';
 
 import QueueItemPopover from './QueueItemPopover';
-import { usePlayerCore } from '@/hooks/usePlayer';
 
 interface QueueItemDotMenuProps {
   item: PlaylistItem;
@@ -40,12 +41,10 @@ export const QueueItemDotMenu = React.memo(({ item, context }: QueueItemDotMenuP
   }, [isOpen]);
 
   const { removePlaylist } = usePlayerCore();
-
   const handleRemoveCurrentPlaylist = () => removePlaylist(item);
 
-  const handleUnLike = () => {
-    console.log('handleUnLike');
-  };
+  const { toggleLike } = useLike();
+  const handleUnLike = () => toggleLike(item);
 
   const handleRemoveUserPlaylist = () => console.log('TODO: handleRemoveUserPlaylist');
 

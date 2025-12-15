@@ -24,7 +24,7 @@ export const PlayerQueueItem = React.memo(
     const handleToggleLike = () => toggleLike(item);
 
     return (
-      <li className='relative border-t border-white/15 last:border-b last:border-white/20'>
+      <>
         <div
           className={`layer absolute inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
             isActive ? 'opacity-100' : 'opacity-0'
@@ -46,7 +46,7 @@ export const PlayerQueueItem = React.memo(
             </button>
           )}
         </div>
-      </li>
+      </>
     );
   },
 );

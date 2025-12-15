@@ -159,12 +159,13 @@ const PlayerPanel = () => {
         <div className='player-queue overflow-y-auto' style={{ height: queueHeight }}>
           <ul>
             {playlist.map(item => (
-              <PlayerQueueItem
-                key={item.videoId}
-                item={item}
-                isActive={item.videoId === currentVideo.videoId}
-                onClick={() => setCurrentVideoId(item.videoId)}
-              />
+              <li key={item.videoId} className='relative border-t border-white/15 last:border-b last:border-white/20'>
+                <PlayerQueueItem
+                  item={item}
+                  isActive={item.videoId === currentVideo.videoId}
+                  onClick={() => setCurrentVideoId(item.videoId)}
+                />
+              </li>
             ))}
           </ul>
         </div>

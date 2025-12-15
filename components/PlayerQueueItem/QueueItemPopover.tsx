@@ -1,23 +1,23 @@
 import { JSX, ReactNode } from 'react';
 
-import { AddPlaylistIcon } from '@/states/icon/svgs';
+import { AddPlaylistIcon, TrashIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';
 import Portal from '../Portal';
 
 const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element }> = {
   [QueueContext.CurrentQueue]: {
     label: '현재 재생목록에서 삭제',
-    icon: <AddPlaylistIcon size={18} />,
+    icon: <TrashIcon size={18} />,
   },
 
   [QueueContext.LikedList]: {
     label: '좋아요 목록에서 삭제',
-    icon: <AddPlaylistIcon size={18} />,
+    icon: <TrashIcon size={18} />,
   },
 
   [QueueContext.Playlist]: {
     label: '이 재생목록에서 삭제',
-    icon: <AddPlaylistIcon size={18} />,
+    icon: <TrashIcon size={18} />,
   },
 };
 
@@ -35,10 +35,10 @@ export default function QueueItemPopover({ context, position, onAction }: QueueI
   return (
     <Portal>
       <div
-        className='queue-item-popover fixed  w-[155px] z-[10000] border bg-white/70 backdrop-blur-sm rounded-[5px] bg-red'
+        className='queue-item-popover fixed w-[170px] z-[10000] border bg-white/70 backdrop-blur-sm rounded-[5px] bg-red'
         style={{
           top: position.top,
-          left: position.left - 160,
+          left: position.left - 174,
         }}
         onClick={e => e.stopPropagation()}
       >
@@ -49,10 +49,7 @@ export default function QueueItemPopover({ context, position, onAction }: QueueI
 
         <MenuItem onClick={() => onAction(context)}>
           {menu.icon}
-          <span className='text-sm'>
-            {menu.label}
-            {context}
-          </span>
+          <span className='text-sm'>{menu.label}</span>
         </MenuItem>
       </div>
     </Portal>

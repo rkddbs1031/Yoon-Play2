@@ -1,12 +1,13 @@
 'use client';
 
-import { PlayerQueueItem } from '@/components/Player/PlayerQueueItem';
-import { useItemHeight } from '@/hooks/useItemHeight';
+import { useRef } from 'react';
+import { useAtomValue } from 'jotai';
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 import { currentVideoAtom } from '@/store/playerAtom';
 import { PlaylistItem } from '@/types/playlist';
-import { useVirtualizer } from '@tanstack/react-virtual';
-import { useAtomValue } from 'jotai';
-import { useRef } from 'react';
+
+import { PlayerQueueItem } from '@/components/PlayerQueueItem';
 
 interface TrackListProps {
   tracks: PlaylistItem[];

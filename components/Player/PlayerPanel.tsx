@@ -11,7 +11,7 @@ import { currentVideoAtom } from '@/store/playerAtom';
 import { formatThumbnailUrl } from '@/utils/thumbnail';
 
 import { PlayerControl } from './PlayerControl';
-import { PlayerQueueItem } from './PlayerQueueItem';
+import { PlayerQueueItem } from '../PlayerQueueItem';
 import PlayerDropdown from './PlayerDropdown';
 
 const ANIMATION_DURATION = 400;

@@ -254,7 +254,7 @@ export const AddPlaylistIcon: FC<IconProps> = ({ size = 24, color = 'currentColo
   );
 };
 
-export const moreHorizontal: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
+export const MoreHorizontal: FC<IconProps> = ({ size = 24, color = 'currentColor' }) => {
   return (
     <svg width={size} height={size} viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
       <path

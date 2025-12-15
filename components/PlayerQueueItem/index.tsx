@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { MusicInfoWrapper } from './MusicInfo';
-
 import { PlaylistItem } from '@/types/playlist';
-import { useLike } from '@/hooks/useLike';
-import { LikeIcon } from '@/states/icon/svgs';
+
+import { MusicInfoWrapper } from '../Player/MusicInfo';
+import { QueueItemLikeButton } from './QueueItemLikeButton';
+import { QueueItemDotMenu } from './QueueItemDotMenu';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_20%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_20%)_100%)]';
@@ -14,15 +14,11 @@ interface PlayerQueueItemProps {
   isActive: boolean;
   onClick: () => void;
   showLikeButton?: boolean;
+  showDotButton?: boolean;
 }
 
 export const PlayerQueueItem = React.memo(
-  ({ item, isActive, onClick, showLikeButton = false }: PlayerQueueItemProps) => {
-    const { isLiked, toggleLike } = useLike();
-    const isLikedCurrent = item.videoId ? isLiked(item.videoId) : false;
-
-    const handleToggleLike = () => toggleLike(item);
-
+  ({ item, isActive, onClick, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     return (
       <>
         <div
@@ -30,6 +26,7 @@ export const PlayerQueueItem = React.memo(
             isActive ? 'opacity-100' : 'opacity-0'
           }`}
         />
+
         <div className='relative flex gap-2 items-center px-2 py-[10px]'>
           <button type='button' className='w-full cursor-pointer' onClick={onClick}>
             <MusicInfoWrapper
@@ -40,15 +37,11 @@ export const PlayerQueueItem = React.memo(
             />
           </button>
 
-          {showLikeButton && (
-            <button type='button' onClick={handleToggleLike} className='cursor-pointer'>
-              <LikeIcon fill={isLikedCurrent ? 'currentColor' : 'none'} size={14} />
-            </button>
-          )}
+          {showLikeButton && <QueueItemLikeButton item={item} />}
+
+          {showDotButton && <QueueItemDotMenu item={item} isActive={isActive} />}
         </div>
       </>
     );
   },
 );
-
-PlayerQueueItem.displayName = 'PlayerQueueItem';

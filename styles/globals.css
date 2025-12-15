@@ -4,13 +4,8 @@
 :root {
   --background: #000000;
 
-  /* --gradient2: linear-gradient(135deg, #0a0a0a 0%, #2d0b4f 50%, #8a2be2 100%); */
-  /* --gradient2: linear-gradient(-225deg, #b8b0ea 0%, #f4e5f7 48%, #d4f1f4 100%); */
-  /* --gradient2: linear-gradient(-225deg, #9d8df1 0%, #f2e5f8 48%, #b4f0e8 100%); */
-  /* --gradient2: linear-gradient(-225deg, #c4b8f3 0%, #f8f0fc 48%, #e0f5f1 100%); */
-  /* --gradient2: linear-gradient(-225deg, #c4b8f3 0%, #f8f0fc 40%, #d5f8f2 100%); */
-
-  --gradient: linear-gradient(-225deg, #a8a0e8 0%, #efe9f5 48%, #d8ede9 100%);
+  /* --gradient: linear-gradient(-225deg, #a8a0e8 0%, #efe9f5 48%, #d8ede9 100%); */
+  --gradient: linear-gradient(-225deg, #ece8fc 0%, #efe9f5 35%, #d3ebe6 100%);
   --foreground: #171717;
   --title: #52527a;
   --text: #394970; /* (조금 더 연함, 아래 색상에서 80%) */

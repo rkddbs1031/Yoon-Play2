@@ -53,6 +53,33 @@ export const usePlayerCore = () => {
     setIsPlaying(true);
   };
 
+  const removePlaylist = (item: PlaylistItem) => {
+    setPlaylist(prev => {
+      const removeIndex = prev.findIndex(v => v.videoId === item.videoId);
+
+      if (removeIndex === -1) return prev;
+
+      const nextPlaylist = prev.filter(v => v.videoId !== item.videoId);
+
+      // 현재 재생 중인 곡을 삭제한 경우
+      if (item.videoId === currentVideoId) {
+        if (nextPlaylist.length === 0) {
+          setCurrentVideoId(null);
+          setIsPlaying(false);
+          return nextPlaylist;
+        }
+
+        // 다음 곡 우선, 없으면 이전 곡.
+        const nextIndex = removeIndex < nextPlaylist.length ? removeIndex : removeIndex - 1;
+
+        setCurrentVideoId(nextPlaylist[nextIndex].videoId);
+        setIsPlaying(true);
+      }
+
+      return nextPlaylist;
+    });
+  };
+
   const nextPlay = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
 
@@ -105,6 +132,7 @@ export const usePlayerCore = () => {
     currentVideo,
     setPlaylistAndPlay,
     addToPlaylistAndPlay,
+    removePlaylist,
     nextPlay,
     prevPlay,
     togglePlay,

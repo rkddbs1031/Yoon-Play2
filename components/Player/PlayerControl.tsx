@@ -261,24 +261,25 @@ const ProgressBar = ({ className }: { className?: string }) => {
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
-        className='h-[3px] hover:h-[6px] transition-all delay-[0.2] bg-[#e5e4e3] cursor-pointer relative overflow-hidden touch-none'
+        className='h-[3px] hover:h-[6px] transition-all delay-[0.2] bg-[rgba(255,255,255,0.6)] cursor-pointer relative overflow-hidden touch-none'
       >
         <div
           className='progress absolute inset-0 h-full origin-left will-change-transform'
           style={{
             transform: `scaleX(${progress / 100})`,
-            background: 'linear-gradient(90deg, #6b5cf0 0%, #d4b8f3 70%, #b681e7 100%)',
+            background: `linear-gradient(90deg, #5E9F94 0%, #78B7AC 65%, #A9D8CF 100%)`,
           }}
         />
 
         <div
-          className={`thumb absolute top-1/2 w-[2px] h-3 bg-[#b681e7] rounded-full shadow-lg transition-shadow will-change-transform ${
+          className={`thumb absolute top-1/2 w-[2px] h-3 rounded-full shadow-lg transition-shadow will-change-transform ${
             isDragging ? 'cursor-grabbing scale-110' : 'cursor-grab'
           }`}
           style={{
             left: `${progress}%`,
             transform: 'translate(-50%, -50%)',
-            boxShadow: '0 0 8px rgba(168, 160, 232, 0.6)',
+            backgroundColor: '#5E9F94',
+            boxShadow: '0 0 8px rgba(94,159,148,0.45)',
           }}
         />
       </div>

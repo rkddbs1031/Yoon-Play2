@@ -15,7 +15,7 @@ interface TrackListProps {
 }
 
 export default function TrackList({ tracks, context }: TrackListProps) {
-  const { currentVideoId, setPlaylistAndPlay } = usePlayerCore();
+  const { currentVideoId, setPlayerListFromContext, setPlaylistSource } = usePlayerCore();
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -27,9 +27,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
-  const handleClick = (item: PlaylistItem) => {
-    setPlaylistAndPlay(tracks, item.videoId);
-  };
+  const handlePlay = (clickedItem: PlaylistItem) => setPlayerListFromContext(tracks, clickedItem);
 
   return (
     <div
@@ -53,7 +51,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
               <PlayerQueueItem
                 item={track}
                 isActive={track.videoId === currentVideoId}
-                onClick={() => handleClick(track)}
+                onClick={() => handlePlay(track)}
                 context={context}
               />
             </li>

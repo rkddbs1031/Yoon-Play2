@@ -30,28 +30,25 @@ export default function PlayListResult() {
     value,
   });
 
-  const { setPlaylistAndPlay, playlist, addToPlaylistAndPlay } = usePlayerCore();
+  const { setPlayerListFromSearch, setPlaylistSource } = usePlayerCore();
 
   const target = useRef<HTMLDivElement | null>(null);
 
-  const handlePlay = (clickedItem: YoutubeItem) => {
-    if (playlist.length === 0) {
-      const playlistItems: PlaylistItem[] = allItems.map(item => ({
-        videoId: item.id.videoId,
-        title: item.snippet.title,
-        channelTitle: item.snippet.channelTitle,
-        thumbnail: item.snippet.thumbnails,
-      }));
+  const allItems = useMemo(() => {
+    return data?.pages.flatMap(page => page.items) ?? [];
+  }, [data?.pages]);
 
-      setPlaylistAndPlay(playlistItems, clickedItem.id.videoId);
-    } else {
-      addToPlaylistAndPlay({
-        videoId: clickedItem.id.videoId,
-        title: clickedItem.snippet.title,
-        channelTitle: clickedItem.snippet.channelTitle,
-        thumbnail: clickedItem.snippet.thumbnails,
-      });
-    }
+  const formatPlaylistItem = (item: YoutubeItem): PlaylistItem => ({
+    videoId: item.id.videoId,
+    title: item.snippet.title,
+    channelTitle: item.snippet.channelTitle,
+    thumbnail: item.snippet.thumbnails,
+  });
+
+  const handlePlay = (clickedItem: YoutubeItem) => {
+    const playlistItems: PlaylistItem[] = allItems.map(formatPlaylistItem);
+    const clicked: PlaylistItem = formatPlaylistItem(clickedItem);
+    setPlayerListFromSearch(playlistItems, clicked);
   };
 
   useEffect(() => {
@@ -66,10 +63,6 @@ export default function PlayListResult() {
     observer.observe(target.current);
     return () => observer.disconnect();
   }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const allItems = useMemo(() => {
-    return data?.pages.flatMap(page => page.items) ?? [];
-  }, [data?.pages]);
 
   return (
     <>

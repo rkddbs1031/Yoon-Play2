@@ -6,3 +6,8 @@ export interface PlaylistItem {
   channelTitle: string;
   thumbnail: YoutubeThumbnail;
 }
+
+export enum PlaylistSource {
+  Context = 'CONTEXT',
+  Search = 'SEARCH',
+}

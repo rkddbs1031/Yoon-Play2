@@ -1,13 +1,15 @@
 import { atom } from 'jotai';
 import { YouTubePlayer } from 'react-youtube';
 
-import { PlaylistItem } from '@/types/playlist';
+import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 
 export const isPlayerReadyAtom = atom(false);
 
 export const playerRefAtom = atom<YouTubePlayer | null>(null);
 
 export const playlistState = atom<PlaylistItem[]>([]);
+
+export const playlistSourceAtom = atom<PlaylistSource | null>(null);
 
 export const isPlayingState = atom<boolean>(false);
 

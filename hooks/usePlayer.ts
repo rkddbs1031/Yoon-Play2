@@ -14,11 +14,13 @@ import {
   currentIndexAtom,
   currentVideoAtom,
   lastIndexAtom,
+  playlistSourceAtom,
 } from '@/store/playerAtom';
-import { PlaylistItem } from '@/types/playlist';
+import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 
 export const usePlayerCore = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);
+  const [playlistSource, setPlaylistSource] = useAtom(playlistSourceAtom);
   const [currentVideoId, setCurrentVideoId] = useAtom(currentVideoIdAtom);
   const [isPlaying, setIsPlaying] = useAtom(isPlayingState);
   const [playerRef, setPlayerRef] = useAtom(playerRefAtom);
@@ -31,25 +33,24 @@ export const usePlayerCore = () => {
 
   const isActuallyPlayerReady = playerRef !== null && isPlayerReady;
 
-  const setPlaylistAndPlay = (items: PlaylistItem[], videoId: string) => {
-    setPlaylist(items);
-    setCurrentVideoId(videoId);
+  const setPlayerListFromSearch = (items: PlaylistItem[], clickedItem: PlaylistItem) => {
+    setPlaylist(prev => {
+      // 첫 검색 -> 전체 교체
+      if (playlistSource !== PlaylistSource.Search) return items;
+
+      const hasExisted = prev.some(p => p.videoId === clickedItem.videoId);
+      return hasExisted ? prev : [...prev, clickedItem];
+    });
+
+    setPlaylistSource(PlaylistSource.Search);
+    setCurrentVideoId(clickedItem.videoId);
     setIsPlaying(true);
   };
 
-  const addToPlaylistAndPlay = (item: PlaylistItem) => {
-    setPlaylist(prev => {
-      const hasExisted = prev.some(video => video.videoId === item.videoId);
-
-      if (hasExisted) {
-        setCurrentVideoId(item.videoId);
-        setIsPlaying(true);
-        return prev;
-      }
-
-      return [...prev, item];
-    });
-    setCurrentVideoId(item.videoId);
+  const setPlayerListFromContext = (items: PlaylistItem[], clickedItem: PlaylistItem) => {
+    setPlaylist(items);
+    setPlaylistSource(PlaylistSource.Context);
+    setCurrentVideoId(clickedItem.videoId);
     setIsPlaying(true);
   };
 
@@ -130,8 +131,8 @@ export const usePlayerCore = () => {
     playlist,
     lastIndex,
     currentVideo,
-    setPlaylistAndPlay,
-    addToPlaylistAndPlay,
+    setPlayerListFromSearch,
+    setPlayerListFromContext,
     removePlaylist,
     nextPlay,
     prevPlay,
@@ -139,6 +140,8 @@ export const usePlayerCore = () => {
     clearPlaylist,
     isPlaylistPanelOpen,
     togglePlaylistPanel,
+    playlistSource,
+    setPlaylistSource,
   };
 };
 

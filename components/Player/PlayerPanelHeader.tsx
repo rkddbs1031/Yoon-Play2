@@ -59,7 +59,6 @@ export const PlayerPanelHeader = forwardRef<HTMLDivElement, PlayerPanelHeaderPro
               fill
               className='object-cover rounded-[8px]'
               sizes='(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 360px'
-              quality={80}
               priority
             />
           </div>

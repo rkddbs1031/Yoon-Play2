@@ -1,12 +1,11 @@
 'use client';
 
 import { useRef } from 'react';
-import { useAtomValue } from 'jotai';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-import { currentVideoAtom } from '@/store/playerAtom';
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
+import { usePlayerCore } from '@/hooks/usePlayer';
 
 import { PlayerQueueItem } from '@/components/PlayerQueueItem';
 
@@ -16,7 +15,7 @@ interface TrackListProps {
 }
 
 export default function TrackList({ tracks, context }: TrackListProps) {
-  const currentVideo = useAtomValue(currentVideoAtom);
+  const { currentVideoId, setPlaylistAndPlay } = usePlayerCore();
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const rowVirtualizer = useVirtualizer({
@@ -28,8 +27,8 @@ export default function TrackList({ tracks, context }: TrackListProps) {
 
   const virtualItems = rowVirtualizer.getVirtualItems();
 
-  const handleClick = () => {
-    console.log('TODO: handleClick TrackList');
+  const handleClick = (item: PlaylistItem) => {
+    setPlaylistAndPlay(tracks, item.videoId);
   };
 
   return (
@@ -53,8 +52,8 @@ export default function TrackList({ tracks, context }: TrackListProps) {
             >
               <PlayerQueueItem
                 item={track}
-                isActive={track.videoId === currentVideo?.videoId}
-                onClick={handleClick}
+                isActive={track.videoId === currentVideoId}
+                onClick={() => handleClick(track)}
                 context={context}
               />
             </li>

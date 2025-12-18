@@ -1,4 +1,4 @@
-import { MouseEvent } from 'react';
+import { MouseEvent, useEffect } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 
 import {
@@ -18,6 +18,8 @@ import {
 } from '@/store/playerAtom';
 import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 
+import * as playerStateDB from '@/lib/indexedDB/playerStateDB';
+
 export const usePlayerCore = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);
   const [playlistSource, setPlaylistSource] = useAtom(playlistSourceAtom);
@@ -32,6 +34,31 @@ export const usePlayerCore = () => {
   const lastIndex = useAtomValue(lastIndexAtom);
 
   const isActuallyPlayerReady = playerRef !== null && isPlayerReady;
+
+  const restorePlayerState = async () => {
+    const savedState = await playerStateDB.getPlayerState();
+    if (!savedState) return;
+
+    setPlaylist(savedState.playlist);
+    setPlaylistSource(savedState.playlistSource);
+    setCurrentVideoId(savedState.currentVideoId);
+  };
+
+  useEffect(() => {
+    restorePlayerState();
+  }, []);
+
+  // 상태 변경 시 자동 저장
+  useEffect(() => {
+    if (!playlistSource) return;
+    if (playlist.length === 0 && !currentVideoId) return;
+
+    playerStateDB.savePlayerState({
+      playlist,
+      currentVideoId,
+      playlistSource,
+    });
+  }, [playlist, currentVideoId, playlistSource]);
 
   const setPlayerListFromSearch = (items: PlaylistItem[], clickedItem: PlaylistItem) => {
     setPlaylist(prev => {
@@ -57,7 +84,6 @@ export const usePlayerCore = () => {
   const removePlaylist = (item: PlaylistItem) => {
     setPlaylist(prev => {
       const removeIndex = prev.findIndex(v => v.videoId === item.videoId);
-
       if (removeIndex === -1) return prev;
 
       const nextPlaylist = prev.filter(v => v.videoId !== item.videoId);

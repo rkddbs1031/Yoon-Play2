@@ -12,7 +12,11 @@ interface PlaylistViewProps {
 }
 
 function PlaylistView({ children }: PlaylistViewProps) {
-  return <section id='playlist-view w-full max-w-[960px]'>{children}</section>;
+  return (
+    <section id='playlist-view' className='max-w-[960px] mx-auto'>
+      {children}
+    </section>
+  );
 }
 
 interface HeaderProps {
@@ -25,7 +29,7 @@ interface HeaderProps {
 PlaylistView.Header = function Header({ title, thumbnails, count, type }: HeaderProps) {
   return (
     <div className='playlist-view-header mb-[50px]]'>
-      <div className='thumbnail-container max-w-[200px] mx-auto mb-6'>
+      <div className='thumbnail-container max-w-[180px] mx-auto mb-6'>
         <ThumbnailGrid thumbnails={thumbnails} />
       </div>
       <h1 className='text-lg sm:text-xl font-[600] text-[#52527a] text-center whitespace-pre-wrap mb-2'>{title}</h1>

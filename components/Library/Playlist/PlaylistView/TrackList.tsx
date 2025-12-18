@@ -32,8 +32,8 @@ export default function TrackList({ tracks, context }: TrackListProps) {
   return (
     <div
       ref={parentRef}
-      className='playlist-track-list-container overflow-auto mt-[50px]'
-      style={{ height: 'calc(100vh - 400px - 80px)' }}
+      className='playlist-track-list-container overflow-auto mt-8'
+      style={{ height: 'calc(100vh - 380px - 80px)' }}
     >
       <ul className='playlist-track-list relative w-full' style={{ height: `${rowVirtualizer.getTotalSize()}px` }}>
         {virtualItems.map(virtualRow => {

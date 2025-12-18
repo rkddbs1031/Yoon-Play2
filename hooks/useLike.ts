@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 
 import { LikeStatus } from '@/constants/like';
@@ -12,9 +12,24 @@ export const useLike = () => {
   const setLikedPlaylist = useSetAtom(likedPlaylistAtom);
   const isLikedSelector = useAtomValue(isLikedSelectorAtom);
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const restoreLikedPlaylist = async () => {
+    setIsLoading(true);
+
+    try {
+      const result = await likedDB.getLikedPlaylist();
+      setLikedPlaylist(result ?? []);
+    } catch (error) {
+      console.error('Failed to restore liked playlist', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    likedDB.getLikedPlaylist().then(setLikedPlaylist);
-  }, [setLikedPlaylist]);
+    restoreLikedPlaylist();
+  }, []);
 
   const handleToggleLike = async (item: PlaylistItem) => {
     const result = toggleLike(item);
@@ -30,5 +45,5 @@ export const useLike = () => {
 
   const isLiked = (videoId: string) => isLikedSelector(videoId);
 
-  return { isLiked, toggleLike: handleToggleLike };
+  return { isLiked, toggleLike: handleToggleLike, isLoading };
 };

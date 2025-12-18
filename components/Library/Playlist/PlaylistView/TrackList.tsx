@@ -15,7 +15,7 @@ interface TrackListProps {
 }
 
 export default function TrackList({ tracks, context }: TrackListProps) {
-  const { currentVideoId, setPlayerListFromContext, setPlaylistSource } = usePlayerCore();
+  const { currentVideoId, setPlayerListFromContext } = usePlayerCore();
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   const rowVirtualizer = useVirtualizer({

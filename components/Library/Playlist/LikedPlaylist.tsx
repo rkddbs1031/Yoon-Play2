@@ -1,8 +1,10 @@
 import { useAtomValue } from 'jotai';
-import PlaylistView from './PlaylistView';
+
 import { likedPlaylistAtom } from '@/store/likesAtom';
 import { LibraryType } from '@/constants/library';
 import { QueueContext } from '@/types/queue';
+
+import PlaylistView from './PlaylistView';
 
 export default function LikedPlaylist() {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);

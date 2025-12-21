@@ -7,6 +7,7 @@ import { AnimationType } from '@/constants/animation';
 import { LibraryListType, LibraryType } from '@/constants/library';
 import { likedPlaylistAtom } from '@/store/likesAtom';
 import { animationStyle } from '@/utils/animation';
+import { getPlaylistThumbnails } from '@/utils/thumbnail';
 import { useLike } from '@/hooks/useLike';
 
 import { LibraryListItem } from '@/components/Library/LibraryListItem';
@@ -16,7 +17,7 @@ export default function Library() {
   const { isLoading: isLikedLoading } = useLike();
   const likedPlaylist = useAtomValue(likedPlaylistAtom);
   const likedCount = likedPlaylist.length;
-  const likedThumbnails = likedPlaylist.slice(0, 4).map(p => p.thumbnail.medium.url);
+  const likedThumbnails = getPlaylistThumbnails(likedPlaylist);
 
   const router = useRouter();
 

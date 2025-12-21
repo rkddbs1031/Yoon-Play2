@@ -3,13 +3,13 @@ import { useAtomValue } from 'jotai';
 import { likedPlaylistAtom } from '@/store/likesAtom';
 import { LibraryType } from '@/constants/library';
 import { QueueContext } from '@/types/queue';
+import { getPlaylistThumbnails } from '@/utils/thumbnail';
 
 import PlaylistView from './PlaylistView';
 
 export default function LikedPlaylist() {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);
-
-  const thumbnails = likedPlaylist.slice(0, 4).map(p => p.thumbnail.medium.url);
+  const thumbnails = getPlaylistThumbnails(likedPlaylist);
   const likedCount = likedPlaylist.length;
 
   return (

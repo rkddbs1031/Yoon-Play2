@@ -1,6 +1,7 @@
 import { YouTubeSearchList } from '@/types/youtube';
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
+import { error } from 'console';
 
 interface YouTubeSearchProps {
   type: string | null;
@@ -42,9 +43,10 @@ export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => 
       return lastPage.nextPageToken;
     },
     enabled: !!value && !!type,
-    staleTime: 60 * 1000, // 1분
-    gcTime: 1000 * 60 * 60, // cacheTime
-    retry: 2,
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    staleTime: 60 * 1000 * 5, // 5분
+    gcTime: 1000 * 60 * 10, //  = cacheTime
+    refetchOnWindowFocus: false,
+    retry: 3, // 요청 실패시 몇번까지 재시도할지
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 5000), // 얼마나 더 기다렸다가 재시도할지
   });
 };

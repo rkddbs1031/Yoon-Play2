@@ -1,8 +1,8 @@
 'use client';
 
+import { memo, JSX, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { JSX, useEffect } from 'react';
 import { useAtom } from 'jotai';
 
 import { YoonLogoIcon, HomeIcon, ExploreIcon, Libraryicon, CloseIcon } from '@/states/icon/svgs';
@@ -33,7 +33,7 @@ const navMenu: NavMenu[] = [
   },
 ];
 
-const LNB = React.memo(() => {
+const LNB = memo(() => {
   return (
     <nav className='mt-12'>
       <ul className='flex flex-col gap-8'>
@@ -55,7 +55,7 @@ interface NavLinkProps {
   icon: JSX.Element | ((active: boolean) => JSX.Element);
 }
 
-const NavLink = React.memo(({ href, label, icon }: NavLinkProps) => {
+const NavLink = memo(({ href, label, icon }: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = (href === '/' && pathname === '/') || (href !== '/' && pathname.startsWith(href));
 

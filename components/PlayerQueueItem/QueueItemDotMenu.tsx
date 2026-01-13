@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent, memo } from 'react';
 
 import { MoreVerticalIcon } from '@/states/icon/svgs';
 import { PlaylistItem } from '@/types/playlist';
@@ -14,7 +14,7 @@ interface QueueItemDotMenuProps {
   color: string;
 }
 
-export const QueueItemDotMenu = React.memo(({ item, context, color }: QueueItemDotMenuProps) => {
+export const QueueItemDotMenu = memo(({ item, context, color }: QueueItemDotMenuProps) => {
   const dotMenuRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);

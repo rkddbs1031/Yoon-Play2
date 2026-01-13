@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
@@ -44,7 +44,7 @@ const COLOR_BY_CONTEXT: Record<
   },
 };
 
-export const PlayerQueueItem = React.memo(
+export const PlayerQueueItem = memo(
   ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 

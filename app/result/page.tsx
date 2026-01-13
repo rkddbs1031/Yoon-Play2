@@ -30,7 +30,7 @@ export default function PlayListResult() {
     value,
   });
 
-  const { setPlayerListFromSearch, setPlaylistSource } = usePlayerCore();
+  const { setPlayerListFromSearch } = usePlayerCore();
 
   const target = useRef<HTMLDivElement | null>(null);
 

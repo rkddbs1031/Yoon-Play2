@@ -1,6 +1,3 @@
-import { useCallback } from 'react';
-import Image from 'next/image';
-
 import { LibraryType } from '@/constants/library';
 import ThumbnailGrid from './ThumbnailGrid';
 

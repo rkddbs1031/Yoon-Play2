@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { useLike } from '@/hooks/useLike';
@@ -8,7 +8,7 @@ interface QueueItemLikeButtonProps {
   item: PlaylistItem;
 }
 
-export const QueueItemLikeButton = React.memo(({ item }: QueueItemLikeButtonProps) => {
+export const QueueItemLikeButton = memo(({ item }: QueueItemLikeButtonProps) => {
   const { isLiked, toggleLike } = useLike();
   const isLikedCurrent = item.videoId ? isLiked(item.videoId) : false;
 

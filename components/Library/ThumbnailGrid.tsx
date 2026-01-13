@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 import Image from 'next/image';
 
 interface ThumbnailGridProps {
@@ -8,7 +8,7 @@ interface ThumbnailGridProps {
 export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
   const count = thumbnails.length;
 
-  const getTileImages = useCallback(() => {
+  const tiles = useMemo(() => {
     if (count === 1) return thumbnails;
     if (count === 2) {
       const [a, b] = thumbnails;
@@ -22,8 +22,6 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
 
     return thumbnails;
   }, [thumbnails]);
-
-  const tiles = getTileImages();
 
   if (count === 1) {
     return (

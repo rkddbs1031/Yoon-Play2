@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 
 import { LibraryListType } from '@/constants/library';
-import LikedPlaylist from '@/components/Library/Playlist/LikedPlaylist';
+import LikedPlaylist from './_components/LikedPlaylist';
 
 export default function LibraryPlaylist() {
   const searchParams = useSearchParams();

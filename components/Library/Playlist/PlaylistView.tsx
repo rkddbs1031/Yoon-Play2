@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 import { LibraryType } from '@/constants/library';
 
-import ThumbnailGrid from '../../ThumbnailGrid';
+import ThumbnailGrid from '../ThumbnailGrid';
 import TrackList from './TrackList';
 
 interface PlaylistViewProps {

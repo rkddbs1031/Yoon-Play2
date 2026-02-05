@@ -5,7 +5,7 @@ import { LibraryType } from '@/constants/library';
 import { QueueContext } from '@/types/queue';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';
 
-import PlaylistView from './PlaylistView';
+import PlaylistView from '@/components/Library/Playlist/PlaylistView';
 
 export default function LikedPlaylist() {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);

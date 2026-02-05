@@ -42,8 +42,7 @@ const PlayerPanel = () => {
 
   const handleToggleLike = () => {
     if (!currentVideo) return;
-    const result = toggleLike(currentVideo); // add | remove
-    console.log(`TODO:${result}`);
+    toggleLike(currentVideo); // add | remove
   };
 
   const handleAddToPlaylist = () => console.log('handleAddToPlaylist');

@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 
 import { LikeStatus } from '@/constants/like';
-import { toggleLikePlaylistAtom, isLikedSelectorAtom, likedPlaylistAtom } from '@/store/likesAtom';
+import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/likesAtom';
 import { PlaylistItem } from '@/types/playlist';
 
 import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 
 export const useLike = () => {
-  const toggleLike = useSetAtom(toggleLikePlaylistAtom);
   const setLikedPlaylist = useSetAtom(likedPlaylistAtom);
   const isLikedSelector = useAtomValue(isLikedSelectorAtom);
 
@@ -32,15 +31,20 @@ export const useLike = () => {
   }, []);
 
   const handleToggleLike = async (item: PlaylistItem) => {
-    const result = toggleLike(item);
+    const liked = await likedDB.isLikedItem(item.videoId);
 
-    if (result.status === LikeStatus.Add) {
-      await likedDB.addLikedItem(item);
-    } else {
+    if (liked) {
       await likedDB.deleteLikedItem(item.videoId);
+    } else {
+      await likedDB.addLikedItem(item);
     }
 
-    return result;
+    const updated = await likedDB.getLikedPlaylist();
+    setLikedPlaylist(updated);
+
+    return {
+      status: liked ? LikeStatus.Remove : LikeStatus.Add,
+    };
   };
 
   const isLiked = (videoId: string) => isLikedSelector(videoId);

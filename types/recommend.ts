@@ -1,6 +1,6 @@
 import { RecommendationType } from '@/constants/recommend';
 
-interface List {
+export interface List {
   genre: string[];
   playlist: string[];
 }

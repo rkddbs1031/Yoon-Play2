@@ -6,14 +6,13 @@ import { useRouter } from 'next/navigation';
 import { RandomHeadLineType, Recommendation } from '@/types/recommend';
 import { AnimationType } from '@/constants/animation';
 import { RecommendationResultType } from '@/constants/recommend';
-import { TextFieldType } from '@/constants/textFiled';
 import { animationStyle } from '@/utils/animation';
 import { useRecommendationSearch } from '@/services/recommend';
 import { RANDOM_HEADLINES } from '@/states/headLine';
 
-import SearchField from '@/components/SearchField';
 import LoadingSpinner from '@/components/Loading';
 import { ListWrapper } from '@/components/ListWrapper';
+import MainIntro from './_components/MainIntro';
 
 const INIT_RECOMMEND = {
   description: '',
@@ -21,15 +20,18 @@ const INIT_RECOMMEND = {
 };
 
 export default function Main() {
-  const [showIntro, setShowIntro] = useState(false);
-  const [headLine, setHeadline] = useState<RandomHeadLineType>({ type: null, text: '' });
+  const [headline, setHeadline] = useState<RandomHeadLineType>({ type: null, text: '' });
   const [searchValue, setSearchValue] = useState('');
   const [recommend, setRecommend] = useState<Recommendation>(INIT_RECOMMEND);
-  const [showResults, setShowResults] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const { mutate: searchRecommendation, isPending, error } = useRecommendationSearch();
   const router = useRouter();
+
+  useEffect(() => {
+    const { type, text } = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
+    setHeadline({ type, text });
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.currentTarget;
@@ -37,17 +39,15 @@ export default function Main() {
   };
 
   const handleSubmit = () => {
-    if (!searchValue && !headLine.type) return;
+    if (!searchValue && !headline.type) return;
 
     searchRecommendation(
-      { value: searchValue, type: headLine.type },
+      { value: searchValue, type: headline.type },
       {
         onSuccess: ({ data }) => {
           const { description, list } = data;
           setRecommend({ description, list });
-          setShowResults(true);
           setErrorMessage(null);
-          setSearchValue('');
         },
         onError: (err: any) => {
           if (err?.response) {
@@ -66,48 +66,25 @@ export default function Main() {
 
   const handleReset = () => {
     setRecommend(INIT_RECOMMEND);
-    setShowResults(prev => !prev);
+    setSearchValue('');
   };
 
-  const isSuccess = !isPending && showResults;
-
-  useEffect(() => {
-    const { type, text } = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
-    setHeadline({ type, text });
-
-    setShowIntro(true);
-  }, []);
+  const showIntro = !(!isPending && recommend.list !== null);
 
   return (
     <section className='flex flex-col w-full items-center justify-center max-w-[720px] w-full mx-auto'>
-      {showIntro && !isSuccess && (
-        <>
-          <h1
-            className={`${AnimationType.FadeInUp} mt-10 text-lg sm:text-xl font-[600] text-[#52527a] text-center whitespace-pre-wrap`}
-            style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
-          >
-            {headLine.text}
-          </h1>
-          <div className='w-full mt-[60px]'>
-            <SearchField
-              fieldType={TextFieldType.Textarea}
-              value={searchValue}
-              onChange={handleChange}
-              onSubmit={handleSubmit}
-              useAnimation={true}
-              animationType={AnimationType.FadeInUp}
-              delay={0.6}
-              duration={0.6}
-              color='#52527a'
-            />
-          </div>
-        </>
-      )}
+      <MainIntro
+        isVisible={showIntro}
+        headline={headline.text}
+        searchValue={searchValue}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
 
-      {isSuccess && (
+      {!showIntro && (
         <div
           className={`result-wrapper flex flex-col items-center w-full gap-10 mt-5 ${AnimationType.FadeInUp}`}
-          style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
+          style={animationStyle({ useAnimation: true, delay: 0.8, duration: 0.6 })}
         >
           <p className='text-center text-[16px]'>{recommend.description}</p>
           {recommend.list && (

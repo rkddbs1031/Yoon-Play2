@@ -5,7 +5,7 @@ import { FetchMethod } from '@/constants/fetch';
 const requestURL = process.env.NEXT_PUBLIC_API;
 
 export const fetcher = async <T>(queryKey: string, axiosConfig?: AxiosRequestConfig) => {
-  const { data, status } = await axios<T>({
+  const { data } = await axios<T>({
     url: `${requestURL}${queryKey}`,
     method: axiosConfig?.method ?? FetchMethod.POST,
     headers: {
@@ -15,5 +15,5 @@ export const fetcher = async <T>(queryKey: string, axiosConfig?: AxiosRequestCon
     ...axiosConfig,
   });
 
-  return { data, status };
+  return data;
 };

@@ -42,7 +42,7 @@ export default function Main() {
     searchRecommendation(
       { value: searchValue, type: headline.type },
       {
-        onSuccess: ({ data }) => {
+        onSuccess: data => {
           const { description, list } = data;
           setRecommend({ description, list });
           setErrorMessage(null);

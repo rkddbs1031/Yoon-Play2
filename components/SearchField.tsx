@@ -1,9 +1,7 @@
-import { ChangeEvent, FormEvent, KeyboardEvent, useEffect, useMemo, useRef } from 'react';
+import { CSSProperties, ChangeEvent, FormEvent, KeyboardEvent, useEffect, useRef } from 'react';
 
-import { AnimationType } from '@/constants/animation';
 import { TextFieldType } from '@/constants/textFiled';
 import { SearchIcon } from '@/states/icon/svgs';
-import { animationStyle } from '@/utils/animation';
 
 interface SearchFieldProps {
   fieldType: TextFieldType;
@@ -12,11 +10,9 @@ interface SearchFieldProps {
   onSubmit?: () => void;
   placeholder?: string;
   disabled?: boolean;
-  delay?: number;
-  duration?: number;
-  useAnimation?: boolean;
-  animationType?: AnimationType;
   color?: string;
+  className?: string;
+  style?: CSSProperties;
 }
 
 const SearchField = ({
@@ -26,11 +22,9 @@ const SearchField = ({
   disabled = false,
   onChange,
   onSubmit,
-  useAnimation = false,
-  animationType,
-  delay,
-  duration,
   color = '#52527a',
+  className,
+  style,
 }: SearchFieldProps) => {
   const textFieldRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
 
@@ -46,10 +40,6 @@ const SearchField = ({
       textFieldRef.current.focus();
     }
   }, []);
-
-  const animationStyles = useMemo(() => {
-    return animationStyle({ useAnimation, delay, duration });
-  }, [useAnimation, delay, duration]);
 
   const handleResizeHeight = () => {
     const fieldRefCurrent = textFieldRef.current;
@@ -73,9 +63,9 @@ const SearchField = ({
 
   return (
     <form
-      className={`${useAnimation ? animationType : ''} flex items-center gap-2 w-full bg-white/30 rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto `}
+      className={`flex items-center gap-2 w-full bg-white/30 rounded-[24px] overflow-hidden py-3 px-4 shadow-[0_4px_20px_rgba(0, 0, 0, 0.08)] backdrop-blur-xl shadow-lg mx-auto ${className}`}
       onSubmit={handleSubmit}
-      style={animationStyles}
+      style={style || undefined}
     >
       <TextFieldComponent
         ref={textFieldRef}

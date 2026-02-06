@@ -1,8 +1,9 @@
 'use client';
 
-import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
+import { usePlaylist } from '@/hooks/usePlaylist';
 import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
 import { PlusIcon, CloseIcon } from '@/states/icon/svgs';
+import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
 
 interface PlaylistAddModalProps {
   onClose: () => void;
@@ -10,6 +11,7 @@ interface PlaylistAddModalProps {
 
 // 재생목록 추가 모달 - 1단
 export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
+  const { playlists, isLoading } = usePlaylist();
   const { openModal } = usePlaylistCreateModal();
 
   return (
@@ -24,12 +26,22 @@ export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
           </button>
         </div>
 
-        <div className='p-4 border-b border-[#66666610] pb-[64px]'>
-          <span className='text-xs '>모든 재생목록</span>
-
-          <ul className='mt-2'>
-            <li>1</li>
-            <li>2</li>
+        <div className='border-b py-4 border-[#66666610] pb-[64px]'>
+          <span className='text-xs px-4'>모든 재생목록</span>
+          <ul className='mt-1'>
+            {!isLoading &&
+              playlists.map(playlist => (
+                <li key={playlist.id}>
+                  <button
+                    type='button'
+                    onClick={() => console.log('todo!')}
+                    className='w-full flex flex-col items-start gap-1 py-2 px-4 cursor-pointer transition-bg duration-300 hover:bg-white/25                    '
+                  >
+                    <span className='text-sm text-[#394970] line-clamp-1'>{playlist.title}</span>
+                    <span className='text-xs text-[#5f5f7c] line-clamp-1'>{playlist.trackCount}곡</span>
+                  </button>
+                </li>
+              ))}
           </ul>
         </div>
 

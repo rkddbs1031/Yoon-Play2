@@ -7,6 +7,7 @@ import { NavigationDrawer } from '@/components/NavigationDrawer';
 import PlayerWrapper from '@/components/Player';
 
 import '../styles/globals.css';
+import ModalRoot from '@/components/ModalRoot';
 
 const pretendard = localFont({
   src: '../static/fonts/PretendardVariable.woff2',
@@ -34,6 +35,7 @@ export default function RootLayout({
             <PlayerWrapper />
           </main>
           <NavigationDrawer />
+          <ModalRoot />
         </ReactQueryProvider>
       </body>
     </html>

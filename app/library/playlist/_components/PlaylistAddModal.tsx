@@ -1,18 +1,22 @@
 'use client';
 
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
+import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
 import { PlusIcon, CloseIcon } from '@/states/icon/svgs';
 
 interface PlaylistAddModalProps {
   onClose: () => void;
 }
 
+// 재생목록 추가 모달 - 1단
 export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
+  const { openModal } = usePlaylistCreateModal();
+
   return (
     <ModalPortal>
       <ModalOverlay onClose={onClose} />
 
-      <ModalContent className={'relative max-w-[480px] mx-4 '}>
+      <ModalContent className={'relative max-w-[320px] mx-4 '}>
         <div className='p-4 border-b border-[#66666610] flex items-center justify-between'>
           <h2 className='font-[500]'>재생목록 저장</h2>
           <button type='button' onClick={onClose} className='cursor-pointer border-none bg-none outline-none'>
@@ -30,7 +34,10 @@ export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
         </div>
 
         <div className='absolute bottom-4 right-4'>
-          <button className='flex gap-1 items-center bg-[currentColor]/90 rounded-full py-1 pl-2 pr-4 cursor-pointer'>
+          <button
+            className='flex gap-1 items-center bg-[currentColor]/90 rounded-full py-1 pl-2 pr-4 cursor-pointer'
+            onClick={openModal}
+          >
             <PlusIcon size={20} color='white' />
             <span className='text-xs text-white'>새 재생목록</span>
           </button>

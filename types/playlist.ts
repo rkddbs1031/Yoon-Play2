@@ -11,3 +11,11 @@ export enum PlaylistSource {
   Context = 'CONTEXT',
   Search = 'SEARCH',
 }
+
+export interface PlaylistDB {
+  id: string;
+  title: string;
+  createdAt: number;
+  updatedAt: number;
+  trackCount: number;
+}

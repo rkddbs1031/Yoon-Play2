@@ -1,20 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
 import { FieldWrapper, InputError, TextInput } from '@/components/Input';
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
 
-interface PlaylistCreateModalProps {
-  onClose: () => void;
-  onCreate: (title: string, description: string | undefined) => void;
-}
+const INIT_TITLE = {
+  value: '',
+  error: null,
+};
 
 // 새 재생목록 추가 모달 - 2단
-export default function PlaylistCreateModal({ onClose, onCreate }: PlaylistCreateModalProps) {
-  const [title, setTitle] = useState<{ value: string; error: InputError | null }>({
-    value: '',
-    error: null,
-  });
+export default function PlaylistCreateModal() {
+  const { isOpen, closeModal } = usePlaylistCreateModal();
+
+  const [title, setTitle] = useState<{ value: string; error: InputError | null }>(INIT_TITLE);
   const [description, setDescription] = useState('');
 
   const handleCreate = () => {
@@ -23,43 +23,49 @@ export default function PlaylistCreateModal({ onClose, onCreate }: PlaylistCreat
       return;
     }
 
-    onCreate(title.value.trim(), description.trim() || undefined);
-    onClose();
+    // TODO:! onCreate(title.value.trim(), description.trim() || undefined);
+
+    setTitle(INIT_TITLE);
+    setDescription('');
+    closeModal();
   };
+
+  if (!isOpen) return null;
 
   return (
     <ModalPortal>
-      <ModalOverlay onClose={onClose} />
+      <ModalOverlay onClose={closeModal} />
       <ModalContent zIndex={12000} className='max-w-[420px] mx-4'>
         <div className='p-4 border-b border-[#66666610]'>
           <h2 className='font-[500]'>새 재생목록 만들기</h2>
         </div>
-        <div className='p-4 space-y-3'>
-          <FieldWrapper id='title' label='제목' required error={title.error}>
+        <div className='p-4 pt-5 space-y-4'>
+          <FieldWrapper id='title' label='제목' required error={title.error} labelClassName='text-xs'>
             <TextInput
               id='title'
               value={title.value}
               onChange={value => setTitle({ value, error: null })}
-              placeholder='제목을 입력해주세요'
+              className='text-sm border-b border-[currentColor]/10 rounded-none'
             />
           </FieldWrapper>
 
-          <FieldWrapper id='description' label='설명'>
+          <FieldWrapper id='description' label='설명' labelClassName='text-xs'>
             <TextInput
               id='description'
               value={description}
               onChange={setDescription}
-              placeholder='설명을 입력해주세요'
+              className='text-sm border-b border-[currentColor]/10 rounded-none'
             />
           </FieldWrapper>
         </div>
 
-        <div className='p-4 flex justify-end gap-2 border-t border-[#66666610]'>
-          <button onClick={onClose} className='text-sm'>
+        <div className='p-4 flex justify-end gap-3'>
+          <button onClick={closeModal} className='text-xs cursor-pointer'>
             취소
           </button>
-          <button onClick={handleCreate} className='text-sm bg-[currentColor]/90 rounded-full text-white px-4 py-2'>
-            만들기
+
+          <button onClick={handleCreate} className='text-xs bg-[currentColor]/90 rounded-full px-4 py-2 cursor-pointer'>
+            <span className='text-white'>만들기</span>
           </button>
         </div>
       </ModalContent>

@@ -18,6 +18,7 @@ export default function ModalContent({
 }: ModalContentProps) {
   return (
     <div
+      id='modal-content'
       className='fixed inset-0 flex items-center justify-center'
       style={{ zIndex }}
       onClick={e => e.stopPropagation()}

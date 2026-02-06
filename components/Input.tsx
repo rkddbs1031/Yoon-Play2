@@ -9,13 +9,22 @@ interface FieldWrapperProps {
   error?: InputError | null;
   children: React.ReactNode;
   className?: string;
+  labelClassName?: string;
 }
 
-export function FieldWrapper({ id, label, required, error, children, className = '' }: FieldWrapperProps) {
+export function FieldWrapper({
+  id,
+  label,
+  required,
+  error,
+  children,
+  className = '',
+  labelClassName,
+}: FieldWrapperProps) {
   return (
     <div className={className}>
-      <Label id={id} label={label} required={required} />
-      <div className='flex flex-col gap-[2px] mt-2'>
+      <Label id={id} label={label} required={required} className={labelClassName} />
+      <div className='flex flex-col gap-[2px]'>
         {children}
         {error && <span className='text-xs text-red-500'>{error.message}</span>}
       </div>
@@ -27,11 +36,12 @@ interface LabelProps {
   id: string;
   label: string;
   required?: boolean;
+  className?: string;
 }
 
-export function Label({ id, label, required = false }: LabelProps) {
+export function Label({ id, label, required = false, className = '' }: LabelProps) {
   return (
-    <label htmlFor={id} className='block text-sm font-medium text-gray-700'>
+    <label htmlFor={id} className={`block text-sm font-medium ${className}`}>
       {label} {required && <span className='text-red-500'>*</span>}
     </label>
   );
@@ -65,7 +75,8 @@ export function BaseInput<T extends string | number>({
       value={value}
       disabled={isDisabled}
       onChange={e => onChange?.(type === 'number' ? (Number(e.target.value) as T) : (e.target.value as T))}
-      className={`w-full px-3 py-2', 'border border-gray-300 rounded-lg focus:outline-none ${className}`}
+      className={`w-full py-2 rounded-lg focus:outline-none ${className}`}
+      //  px-3
       {...rest}
     />
   );

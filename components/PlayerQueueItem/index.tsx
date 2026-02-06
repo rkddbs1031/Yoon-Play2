@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
@@ -6,6 +6,7 @@ import { QueueContext } from '@/types/queue';
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
 import { QueueItemDotMenu } from './QueueItemDotMenu';
+import PlaylistAddModal from '@/app/library/playlist/_components/PlaylistAddModal';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_15%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_15%)_100%)]';
@@ -48,6 +49,10 @@ export const PlayerQueueItem = memo(
   ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 
+    const [isPlaylistAddModalOpen, setIsPlaylistAddModalOpen] = useState(false);
+
+    const handleToggleModal = () => setIsPlaylistAddModalOpen(prev => !prev);
+
     return (
       <>
         {context === QueueContext.CurrentQueue && (
@@ -70,8 +75,12 @@ export const PlayerQueueItem = memo(
 
           {showLikeButton && <QueueItemLikeButton item={item} />}
 
-          {showDotButton && <QueueItemDotMenu item={item} context={context} color={dotColor} />}
+          {showDotButton && (
+            <QueueItemDotMenu item={item} context={context} color={dotColor} onAddToPlaylist={handleToggleModal} />
+          )}
         </div>
+
+        {isPlaylistAddModalOpen && <PlaylistAddModal onClose={handleToggleModal} />}
       </>
     );
   },

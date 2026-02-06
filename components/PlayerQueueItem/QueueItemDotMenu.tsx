@@ -12,9 +12,10 @@ interface QueueItemDotMenuProps {
   item: PlaylistItem;
   context: QueueContext;
   color: string;
+  onAddToPlaylist: () => void;
 }
 
-export const QueueItemDotMenu = memo(({ item, context, color }: QueueItemDotMenuProps) => {
+export const QueueItemDotMenu = memo(({ item, context, color, onAddToPlaylist }: QueueItemDotMenuProps) => {
   const dotMenuRef = useRef<HTMLDivElement | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [popoverPosition, setPopoverPosition] = useState<{ top: number; left: number } | null>(null);
@@ -67,7 +68,15 @@ export const QueueItemDotMenu = memo(({ item, context, color }: QueueItemDotMenu
       </button>
 
       {isOpen && popoverPosition && (
-        <QueueItemPopover context={context} position={popoverPosition} onAction={handleAction} />
+        <QueueItemPopover
+          context={context}
+          position={popoverPosition}
+          onAction={handleAction}
+          onAddToPlaylist={() => {
+            setIsOpen(false);
+            onAddToPlaylist();
+          }}
+        />
       )}
     </div>
   );

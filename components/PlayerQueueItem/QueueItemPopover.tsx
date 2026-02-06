@@ -1,4 +1,4 @@
-import { JSX, ReactNode } from 'react';
+import { JSX, ReactNode, useState } from 'react';
 
 import { AddPlaylistIcon, TrashIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';
@@ -31,12 +31,11 @@ interface QueueItemPopoverProps {
   context: QueueContext;
   position: { top: number; left: number };
   onAction: (action: QueueContext) => void;
+  onAddToPlaylist: () => void;
 }
 
-export default function QueueItemPopover({ context, position, onAction }: QueueItemPopoverProps) {
+export default function QueueItemPopover({ context, position, onAction, onAddToPlaylist }: QueueItemPopoverProps) {
   const styleByContext = MENU_MAP[context];
-
-  const handleClick = () => console.log('TODO: 재생목록에 저장');
 
   return (
     <Portal>
@@ -48,7 +47,7 @@ export default function QueueItemPopover({ context, position, onAction }: QueueI
         }}
         onClick={e => e.stopPropagation()}
       >
-        <MenuItem onClick={handleClick}>
+        <MenuItem onClick={onAddToPlaylist}>
           <AddPlaylistIcon size={15} />
           <span className={`text-sm ${styleByContext.color}`}>재생목록에 저장</span>
         </MenuItem>

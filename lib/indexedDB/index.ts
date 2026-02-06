@@ -83,19 +83,20 @@ playlistTracks
 let dbPromise: Promise<IDBPDatabase<PlayerDBSchema>> | null = null;
 
 const DB_NAME = 'player-db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 export const LIKED_PLAYLIST_ID = '__liked__';
 
 export const getPlayerDB = () => {
   if (!dbPromise) {
     dbPromise = openDB<PlayerDBSchema>(DB_NAME, DB_VERSION, {
-      upgrade(db, oldVersion) {
+      upgrade(db, oldVersion, newVersion, transaction) {
         /**
-         * v1 → v2 마이그레이션
+         * v1 → v2 마이그레이션 (스토어 구조 변경)
          */
         if (oldVersion < 2) {
-          const legacyDb = db as any; // upgrade에서만 legacy store 접근
-          // 레거시 스토어 제거 (있을 때만)
+          const legacyDb = db as any;
+
+          // 레거시 스토어 제거
           if (legacyDb.objectStoreNames.contains('likedPlaylist')) {
             legacyDb.deleteObjectStore('likedPlaylist');
           }
@@ -115,10 +116,10 @@ export const getPlayerDB = () => {
               keyPath: 'id',
             });
 
-            // 시스템 플레이리스트: 좋아요
+            // 시스템 플레이리스트: 좋아요한 플레이리스트
             playlistStore.put({
               id: LIKED_PLAYLIST_ID,
-              title: '좋아요',
+              title: '좋아요한 플레이리스트',
               createdAt: Date.now(),
               updatedAt: Date.now(),
             });
@@ -126,18 +127,30 @@ export const getPlayerDB = () => {
 
           // playlistTracks
           if (!db.objectStoreNames.contains('playlistTracks')) {
-            const relationStore = db.createObjectStore('playlistTracks', {
-              keyPath: 'id', // `${playlistId}:${trackId}`
-            });
-
+            const relationStore = db.createObjectStore('playlistTracks', { keyPath: 'id' });
             relationStore.createIndex('by-playlist', 'playlistId');
             relationStore.createIndex('by-track', 'trackId');
           }
 
-          // playerState (기존 유지)
+          // playerState
           if (!db.objectStoreNames.contains('playerState')) {
             db.createObjectStore('playerState');
           }
+        }
+
+        /**
+         * v2 → v3 마이그레이션
+         * (데이터 수정 only)
+         */
+        if (oldVersion < 3) {
+          const playlistStore = transaction.objectStore('playlists');
+
+          playlistStore.put({
+            id: LIKED_PLAYLIST_ID,
+            title: '좋아요한 플레이리스트',
+            updatedAt: Date.now(),
+            createdAt: Date.now(),
+          });
         }
       },
     });

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
 import { FieldWrapper, InputError, TextInput } from '@/components/Input';
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
+import { usePlaylist } from '@/hooks/usePlaylist';
 
 const INIT_TITLE = {
   value: '',
@@ -13,6 +14,7 @@ const INIT_TITLE = {
 // 새 재생목록 추가 모달 - 2단
 export default function PlaylistCreateModal() {
   const { isOpen, closeModal } = usePlaylistCreateModal();
+  const { targetTrack, onCreatePlaylist } = usePlaylist();
 
   const [title, setTitle] = useState<{ value: string; error: InputError | null }>(INIT_TITLE);
   const [description, setDescription] = useState('');
@@ -23,7 +25,11 @@ export default function PlaylistCreateModal() {
       return;
     }
 
-    // TODO:! onCreate(title.value.trim(), description.trim() || undefined);
+    onCreatePlaylist({
+      title: title.value.trim(),
+      description: description.trim() || undefined,
+      initialTrack: targetTrack || undefined,
+    });
 
     setTitle(INIT_TITLE);
     setDescription('');

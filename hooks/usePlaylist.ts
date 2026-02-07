@@ -1,13 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useAtom } from 'jotai';
 
 import * as playlistDB from '@/lib/indexedDB/playlistDB';
-import { PlaylistDB } from '@/types/playlist';
+import { PlaylistDB, PlaylistItem } from '@/types/playlist';
+import { playlistTargetTrackAtom } from '@/store/playlist/atoms';
 
 export const usePlaylist = () => {
   const [playlists, setPlaylists] = useState<PlaylistDB[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [targetTrack, setTargetTrack] = useAtom(playlistTargetTrackAtom);
 
   const fetchPlaylists = async () => {
     setIsLoading(true);
@@ -25,9 +28,34 @@ export const usePlaylist = () => {
     fetchPlaylists();
   }, []);
 
+  const handleCreatePlaylist = async ({
+    title,
+    description,
+    initialTrack,
+  }: {
+    title: string;
+    description?: string;
+    initialTrack?: PlaylistItem;
+  }) => {
+    await playlistDB.createPlaylist({
+      title,
+      description,
+      initialTrack,
+    });
+
+    await fetchPlaylists(); // 생성 후 목록 재조회
+    setTargetTrack(null);
+  };
+
   return {
     playlists,
     isLoading,
     refetch: fetchPlaylists,
+
+    targetTrack,
+    setPlaylistTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
+    clearPlaylistTargetTrack: () => setTargetTrack(null),
+
+    onCreatePlaylist: handleCreatePlaylist,
   };
 };

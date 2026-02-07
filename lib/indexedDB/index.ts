@@ -37,9 +37,9 @@ export interface PlayerDBSchema extends DBSchema {
   └─ "playlist-B" //B라는 재생목록명(폴더)를 가진 목록 <- user가 생성
   */
   playlists: {
-    key: string; // playlistId (uuid)
+    key: string;
     value: {
-      id: string;
+      id: string; // playlistId (uuid)
       title: string;
       description?: string;
       createdAt: number;
@@ -53,9 +53,9 @@ export interface PlayerDBSchema extends DBSchema {
    * - 다대다 관계
    */
   playlistTracks: {
-    key: string; // `${playlistId}:${trackId}`
+    key: string;
     value: {
-      id: string;
+      id: string; // `${playlistId}:${trackId}`
       playlistId: string; // FK : 어느 재생목록에 속했는지
       trackId: string; // tracks.key 참조
       order: number;

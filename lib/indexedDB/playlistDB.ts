@@ -1,3 +1,4 @@
+import { PlaylistItem } from '@/types/playlist';
 import { LIKED_PLAYLIST_ID, getPlayerDB } from '.';
 
 export const getPlaylists = async () => {
@@ -20,4 +21,48 @@ export const getPlaylists = async () => {
   const rest = playlistsWithCount.filter(p => p.id !== LIKED_PLAYLIST_ID).sort((a, b) => b.createdAt - a.createdAt);
 
   return liked ? [liked, ...rest] : rest;
+};
+
+interface CreatePlaylistProps {
+  title: string;
+  description?: string | undefined;
+  initialTrack?: PlaylistItem;
+}
+// 개인 플레이리스트(재생목록 = 폴더) 추가
+export const createPlaylist = async ({ title, description, initialTrack }: CreatePlaylistProps) => {
+  const db = await getPlayerDB();
+  const now = Date.now();
+
+  const playlistId = crypto.randomUUID();
+
+  const playlist = {
+    id: playlistId,
+    title,
+    description,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  const tx = db.transaction(['playlists', 'tracks', 'playlistTracks'], 'readwrite');
+  await tx.objectStore('playlists').put(playlist); // 재생목록 생성
+
+  // 선택된 트랙 있다면,
+  if (initialTrack) {
+    await tx.objectStore('tracks').put(initialTrack); // track에 음악 저장.
+
+    // 새성한 재생목록(폴더)에 음악 추가
+
+    const relationId = `${playlistId}:${initialTrack.videoId}`;
+    await tx.objectStore('playlistTracks').put({
+      id: relationId,
+      playlistId, // FK : 어느 재생목록에 속했는지
+      trackId: initialTrack.videoId, // tracks.key 참조
+      order: 0,
+      addedAt: now,
+    });
+  }
+
+  await tx.done;
+
+  return playlist;
 };

@@ -2,6 +2,7 @@ import { memo, useState } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
+import { usePlaylist } from '@/hooks/usePlaylist';
 
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
@@ -50,8 +51,16 @@ export const PlayerQueueItem = memo(
     const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 
     const [isPlaylistAddModalOpen, setIsPlaylistAddModalOpen] = useState(false);
+    const { setPlaylistTargetTrack, clearPlaylistTargetTrack } = usePlaylist();
 
-    const handleToggleModal = () => setIsPlaylistAddModalOpen(prev => !prev);
+    const handleToggleModal = () => {
+      if (isPlaylistAddModalOpen) {
+        clearPlaylistTargetTrack();
+      } else {
+        setPlaylistTargetTrack(item);
+      }
+      setIsPlaylistAddModalOpen(prev => !prev);
+    };
 
     return (
       <>

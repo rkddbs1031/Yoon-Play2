@@ -1,5 +1,5 @@
 import { PlaylistItem } from '@/types/playlist';
-import { LIKED_PLAYLIST_ID, getPlayerDB } from '.';
+import { LIKED_PLAYLIST_ID, USER_PLAYLIST_ID, getPlayerDB } from '.';
 
 export const getPlaylists = async () => {
   const db = await getPlayerDB();
@@ -33,7 +33,7 @@ export const createPlaylist = async ({ title, description, initialTrack }: Creat
   const db = await getPlayerDB();
   const now = Date.now();
 
-  const playlistId = crypto.randomUUID();
+  const playlistId = `${USER_PLAYLIST_ID}${crypto.randomUUID()}`;
 
   const playlist = {
     id: playlistId,

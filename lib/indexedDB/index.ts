@@ -8,7 +8,7 @@ export interface PlayerDBSchema extends DBSchema {
   playerState: {
     key: string;
     value: {
-      playlist: string[]; // 🔹 trackId 배열로 변경
+      playlist: string[]; // trackId 배열로 변경
       currentVideoId: string | null;
       playlistSource: PlaylistSource;
       // playlist: PlaylistItem[];
@@ -33,13 +33,12 @@ export interface PlayerDBSchema extends DBSchema {
   /* 예시 
   playlists
   ├─ "__liked__" // 좋아요 목록
-  ├─ "playlist-A" // A라는 재생목록명(폴더)를 가진 목록 <- user가 생성
-  └─ "playlist-B" //B라는 재생목록명(폴더)를 가진 목록 <- user가 생성
+  ├─ "__playlist__uuid" // <- user가 생성
   */
   playlists: {
     key: string;
     value: {
-      id: string; // playlistId (uuid)
+      id: string; // playlistId (uuid) // __liked__ || __playlist__{uuid}
       title: string;
       description?: string;
       createdAt: number;
@@ -86,6 +85,7 @@ let dbPromise: Promise<IDBPDatabase<PlayerDBSchema>> | null = null;
 const DB_NAME = 'player-db';
 const DB_VERSION = 4;
 export const LIKED_PLAYLIST_ID = '__liked__';
+export const USER_PLAYLIST_ID = '__playlist__';
 
 export const getPlayerDB = () => {
   if (!dbPromise) {
@@ -158,4 +158,37 @@ export const getPlayerDB = () => {
   }
 
   return dbPromise;
+};
+
+export const validateAndRepairDB = async () => {
+  const db = await getPlayerDB();
+
+  const liked = await db.get('playlists', LIKED_PLAYLIST_ID);
+
+  if (!liked) {
+    // console.warn('좋아요 플레이리스트가 없습니다. 복구 중...');
+
+    await db.put('playlists', {
+      id: LIKED_PLAYLIST_ID,
+      title: '좋아요한 플레이리스트',
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    // console.log('좋아요 플레이리스트 복구 완료');
+  }
+
+  const allPlaylistTracks = await db.getAll('playlistTracks');
+  const allPlaylists = await db.getAll('playlists');
+  const playlistIds = new Set(allPlaylists.map(p => p.id));
+
+  const orphanTracks = allPlaylistTracks.filter(track => !playlistIds.has(track.playlistId));
+
+  if (orphanTracks.length > 0) {
+    // console.warn(`⚠️ 고아 트랙 ${orphanTracks.length}개 발견. 정리 중...`);
+
+    await Promise.all(orphanTracks.map(track => db.delete('playlistTracks', track.id)));
+
+    // console.log('✅ 고아 트랙 정리 완료');
+  }
 };

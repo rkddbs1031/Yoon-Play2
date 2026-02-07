@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import { ReactQueryProvider } from './providers/ReactQueryProvider';
+import { DBProvider } from './providers/DBProvider';
 
 import { NavigationDrawer } from '@/components/NavigationDrawer';
 import PlayerWrapper from '@/components/Player';
@@ -29,14 +30,16 @@ export default function RootLayout({
   return (
     <html lang='en' className={`${pretendard.variable}`}>
       <body className={`${pretendard.className}`}>
-        <ReactQueryProvider>
-          <main className='md:ml-[130px] px-6 py-15 md:p-5 min-h-screen w-full md:w-[calc(100%-130px)]'>
-            {children}
-            <PlayerWrapper />
-          </main>
-          <NavigationDrawer />
-          <ModalRoot />
-        </ReactQueryProvider>
+        <DBProvider>
+          <ReactQueryProvider>
+            <main className='md:ml-[130px] px-6 py-15 md:p-5 min-h-screen w-full md:w-[calc(100%-130px)]'>
+              {children}
+              <PlayerWrapper />
+            </main>
+            <NavigationDrawer />
+            <ModalRoot />
+          </ReactQueryProvider>
+        </DBProvider>
       </body>
     </html>
   );

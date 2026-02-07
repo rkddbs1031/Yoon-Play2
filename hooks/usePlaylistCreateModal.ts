@@ -1,19 +1,18 @@
 import { useAtom } from 'jotai';
-import { playlistCreateModalAtom } from '@/store/playlistModalAtom';
+import { playlistCreateModalAtom } from '@/store/ui/modalAtom';
 
 export const usePlaylistCreateModal = () => {
-  const [state, setState] = useAtom(playlistCreateModalAtom);
+  const [isOpen, setIsOpen] = useAtom(playlistCreateModalAtom);
 
   return {
-    isOpen: state.isOpen,
+    isOpen,
 
     openModal: () => {
-      setState({ isOpen: true });
-      // TODO: 추가할 트랙이 있는가 없는가?
+      setIsOpen(true);
     },
 
     closeModal: () => {
-      setState({ isOpen: false });
+      setIsOpen(false);
     },
   };
 };

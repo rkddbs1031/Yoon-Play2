@@ -41,6 +41,7 @@ export interface PlayerDBSchema extends DBSchema {
     value: {
       id: string;
       title: string;
+      description?: string;
       createdAt: number;
       updatedAt: number;
     };
@@ -83,7 +84,7 @@ playlistTracks
 let dbPromise: Promise<IDBPDatabase<PlayerDBSchema>> | null = null;
 
 const DB_NAME = 'player-db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 export const LIKED_PLAYLIST_ID = '__liked__';
 
 export const getPlayerDB = () => {
@@ -140,7 +141,7 @@ export const getPlayerDB = () => {
 
         /**
          * v2 → v3 마이그레이션
-         * (데이터 수정 only)
+         * (좋아요 플레이리스트 title 변경)
          */
         if (oldVersion < 3) {
           const playlistStore = transaction.objectStore('playlists');

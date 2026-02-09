@@ -18,7 +18,7 @@ export const getPlaylists = async () => {
   );
 
   const liked = playlistsWithCount.find(p => p.id === LIKED_PLAYLIST_ID);
-  const rest = playlistsWithCount.filter(p => p.id !== LIKED_PLAYLIST_ID).sort((a, b) => b.createdAt - a.createdAt);
+  const rest = playlistsWithCount.filter(p => p.id !== LIKED_PLAYLIST_ID).sort((a, b) => b.updatedAt - a.updatedAt);
 
   return liked ? [liked, ...rest] : rest;
 };

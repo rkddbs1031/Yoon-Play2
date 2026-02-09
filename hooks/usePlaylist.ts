@@ -1,56 +1,26 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useAtom } from 'jotai';
 
-import * as playlistDB from '@/lib/indexedDB/playlistDB';
-import { PlaylistDB, PlaylistItem } from '@/types/playlist';
+import { PlaylistItem } from '@/types/playlist';
 import { playlistTargetTrackAtom } from '@/store/playlist/atoms';
+import { useCreatePlaylistMutation, usePlaylistsQuery } from '@/services/playlists';
 
 export const usePlaylist = () => {
-  const [playlists, setPlaylists] = useState<PlaylistDB[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [targetTrack, setTargetTrack] = useAtom(playlistTargetTrackAtom);
 
-  const fetchPlaylists = async () => {
-    setIsLoading(true);
-    try {
-      const data = await playlistDB.getPlaylists();
-      setPlaylists(data);
-    } catch (e) {
-      console.error('Failed to fetch playlists', e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { data: playlists = [], isLoading, refetch } = usePlaylistsQuery();
+  const createMutation = useCreatePlaylistMutation();
 
-  useEffect(() => {
-    fetchPlaylists();
-  }, []);
-
-  const handleCreatePlaylist = async ({
-    title,
-    description,
-    initialTrack,
-  }: {
-    title: string;
-    description?: string;
-    initialTrack?: PlaylistItem;
-  }) => {
-    await playlistDB.createPlaylist({
-      title,
-      description,
-      initialTrack,
-    });
-
-    await fetchPlaylists(); // 생성 후 목록 재조회
+  const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
+    await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
     setTargetTrack(null);
   };
 
   return {
     playlists,
     isLoading,
-    refetch: fetchPlaylists,
+    refetch,
 
     targetTrack,
     setPlaylistTargetTrack: (track: PlaylistItem) => setTargetTrack(track),

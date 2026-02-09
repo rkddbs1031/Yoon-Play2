@@ -22,3 +22,19 @@ export const useCreatePlaylistMutation = () => {
     },
   });
 };
+
+export const useAddTrackToPlaylistMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: playlistDB.addTrackToPlaylist,
+    onSuccess: (_, variables) => {
+      // TODO: 해당 플레이리스트의 트랙 목록 갱신
+      // queryClient.invalidateQueries({
+      //   queryKey: ['playlistTracks', variables.playlistId]
+      // });
+
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+    },
+  });
+};

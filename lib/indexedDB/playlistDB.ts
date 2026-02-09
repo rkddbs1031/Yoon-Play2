@@ -23,6 +23,9 @@ export const getPlaylists = async () => {
   return liked ? [liked, ...rest] : rest;
 };
 
+interface TrackEntity extends PlaylistItem {
+  id: string;
+}
 interface CreatePlaylistProps {
   title: string;
   description?: string | undefined;
@@ -48,7 +51,11 @@ export const createPlaylist = async ({ title, description, initialTrack }: Creat
 
   // 선택된 트랙 있다면,
   if (initialTrack) {
-    await tx.objectStore('tracks').put(initialTrack); // track에 음악 저장.
+    const track: TrackEntity = {
+      ...initialTrack,
+      id: initialTrack.videoId,
+    };
+    await tx.objectStore('tracks').put(track);
 
     // 새성한 재생목록(폴더)에 음악 추가
 
@@ -65,4 +72,46 @@ export const createPlaylist = async ({ title, description, initialTrack }: Creat
   await tx.done;
 
   return playlist;
+};
+
+export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: string; track: PlaylistItem }) => {
+  const db = await getPlayerDB();
+  const now = Date.now();
+
+  const tx = db.transaction(['tracks', 'playlistTracks', 'playlists'], 'readwrite');
+
+  // 1. tracks에 음악 저장
+  const trackEntity: TrackEntity = {
+    ...track,
+    id: track.videoId,
+  };
+  await tx.objectStore('tracks').put(trackEntity);
+
+  // 2. 해당 플레이리스트의 기존 트랙 개수 확인
+  const existedTrack = await tx.objectStore('playlistTracks').index('by-playlist').getAllKeys(playlistId);
+  const nextOrder = existedTrack.length;
+
+  // 3. playlistTracks 관계 추가
+  const relationId = `${playlistId}:${track.videoId}`;
+
+  await tx.objectStore('playlistTracks').put({
+    id: relationId,
+    playlistId,
+    trackId: track.videoId,
+    order: nextOrder,
+    addedAt: now,
+  });
+
+  // 4. playlists의 updatedAt 갱신
+  const playlist = await tx.objectStore('playlists').get(playlistId);
+
+  if (playlist) {
+    await tx.objectStore('playlists').put({
+      ...playlist,
+      updatedAt: now,
+    });
+  }
+
+  await tx.done;
+  return { playlistId, trackId: track.videoId };
 };

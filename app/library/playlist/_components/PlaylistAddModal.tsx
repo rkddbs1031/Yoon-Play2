@@ -11,8 +11,13 @@ interface PlaylistAddModalProps {
 
 // 재생목록 추가 모달 - 1단
 export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
-  const { playlists, isLoading } = usePlaylist();
+  const { playlists, isLoading, onAddTrack } = usePlaylist();
   const { openModal } = usePlaylistCreateModal();
+
+  const handlePlaylistClick = async (playlistId: string) => {
+    await onAddTrack(playlistId);
+    onClose();
+  };
 
   return (
     <ModalPortal>
@@ -38,7 +43,7 @@ export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
                 <li key={playlist.id}>
                   <button
                     type='button'
-                    onClick={() => console.log('todo!')}
+                    onClick={() => handlePlaylistClick(playlist.id)}
                     className='w-full flex flex-col items-start gap-1 py-2 px-4 cursor-pointer transition-bg duration-300 hover:bg-white/25                    '
                   >
                     <span className='text-sm text-[#394970] line-clamp-1'>{playlist.title}</span>

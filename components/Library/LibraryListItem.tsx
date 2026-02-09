@@ -1,15 +1,20 @@
 import { LibraryType } from '@/constants/library';
+import { usePlaylistPreviewQuery } from '@/services/playlists';
+import { getPlaylistThumbnails } from '@/utils/thumbnail';
 import ThumbnailGrid from './ThumbnailGrid';
 
 interface LibraryListItemProps {
-  thumbnails: string[];
+  playlistId: string;
   title: string;
   count: number;
   type: LibraryType;
   onNavigate: () => void;
 }
 
-export const LibraryListItem = ({ title, count, type, thumbnails, onNavigate }: LibraryListItemProps) => {
+export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: LibraryListItemProps) => {
+  const { data: tracks = [] } = usePlaylistPreviewQuery({ playlistId });
+  const thumbnails = getPlaylistThumbnails(tracks);
+
   return (
     <li className='library-item '>
       <div onClick={onNavigate} className='thumbnail-grid-container cursor-pointer'>

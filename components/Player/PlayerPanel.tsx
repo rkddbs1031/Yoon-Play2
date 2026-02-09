@@ -12,6 +12,9 @@ import { QueueContext } from '@/types/queue';
 import { PlayerPanelHeader } from './PlayerPanelHeader';
 import { PlayerPanelBackground } from './PlayerPanelBackground';
 import { PlayerQueueItem } from '../PlayerQueueItem';
+import { usePlaylist } from '@/hooks/usePlaylist';
+import { usePlaylistAddModal } from '@/hooks/useModal';
+import { PlaylistItem } from '@/types/playlist';
 
 const ANIMATION_DURATION = 400;
 
@@ -25,27 +28,34 @@ const PlayerPanel = () => {
     duration: ANIMATION_DURATION,
   });
   const backgroundImage = formatThumbnailUrl({ thumbnail: currentVideo?.thumbnail, size: 'small' });
-
   const { displayImage: overlayBG } = usePlayerBackground(backgroundImage);
+
+  const { setPlaylistTargetTrack } = usePlaylist();
+  const { openModal } = usePlaylistAddModal();
+  const { isLiked, toggleLike } = useLike();
+
   const [queueHeight, setQueueHeight] = useState<string>('auto');
   const [topHeight, setTopHeight] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleToggleMore = () => setIsDropdownOpen(prev => !prev);
-  const handleCloseDropdown = () => setIsDropdownOpen(false);
-
-  const { isLiked, toggleLike } = useLike();
   const isLikedCurrent = currentVideo ? isLiked(currentVideo.videoId) : false;
+
+  const handleToggleMore = () => setIsDropdownOpen(prev => !prev);
 
   const handleToggleLike = () => {
     if (!currentVideo) return;
     toggleLike(currentVideo); // add | remove
   };
 
-  const handleAddToPlaylist = () => console.log('handleAddToPlaylist');
+  const handleAddToPlaylist = () => {
+    if (!currentVideo) return;
+    handleToggleMore();
+
+    setPlaylistTargetTrack(currentVideo);
+    openModal();
+  };
 
   useEffect(() => {
     document.body.style.overflow = isPlaylistPanelOpen ? 'hidden' : '';
@@ -103,7 +113,7 @@ const PlayerPanel = () => {
           isDropdownOpen={isDropdownOpen}
           onTogglePanel={togglePlaylistPanel}
           onToggleMore={handleToggleMore}
-          onCloseDropdown={handleCloseDropdown}
+          onCloseDropdown={handleToggleMore}
           onToggleLike={handleToggleLike}
           onAddToPlaylist={handleAddToPlaylist}
         />

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSetAtom, useAtomValue } from 'jotai';
 
 import { LikeStatus } from '@/constants/like';
-import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/likesAtom';
+import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/like/atom';
 import { PlaylistItem } from '@/types/playlist';
 
 import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';

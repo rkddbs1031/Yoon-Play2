@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai';
 
-import { likedPlaylistAtom } from '@/store/likesAtom';
+import { likedPlaylistAtom } from '@/store/like/atom';
 import { LibraryType } from '@/constants/library';
 import { QueueContext } from '@/types/queue';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';

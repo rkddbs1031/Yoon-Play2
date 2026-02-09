@@ -23,6 +23,32 @@ export const getPlaylists = async () => {
   return liked ? [liked, ...rest] : rest;
 };
 
+export const getPlaylistTracks = async (playlistId?: string) => {
+  const db = await getPlayerDB();
+
+  const relations = await db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
+
+  relations.sort((a, b) => a.order - b.order);
+
+  const tracks = await Promise.all(relations.map(r => db.get('tracks', r.trackId)));
+
+  return tracks.filter(Boolean);
+};
+
+export const getPlaylistPreviewTracks = async ({ playlistId, limit = 4 }: { playlistId: string; limit?: number }) => {
+  const db = await getPlayerDB();
+
+  const relations = await db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
+
+  relations.sort((a, b) => a.order - b.order);
+
+  const previewRelations = relations.slice(0, limit);
+
+  const tracks = await Promise.all(previewRelations.map(r => db.get('tracks', r.trackId)));
+
+  return tracks.filter(Boolean) as PlaylistItem[];
+};
+
 interface TrackEntity extends PlaylistItem {
   id: string;
 }

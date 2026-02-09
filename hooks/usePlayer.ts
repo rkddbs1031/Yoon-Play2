@@ -15,7 +15,7 @@ import {
   currentVideoAtom,
   lastIndexAtom,
   playlistSourceAtom,
-} from '@/store/playerAtom';
+} from '@/store/player/atom';
 import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 
 import * as playerStateDB from '@/lib/indexedDB/playerStateDB';

@@ -5,7 +5,7 @@ import { useLike } from '@/hooks/useLike';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { usePlayerBackground } from '@/hooks/usePlayerBackground';
-import { currentVideoAtom } from '@/store/playerAtom';
+
 import { formatThumbnailUrl } from '@/utils/thumbnail';
 import { QueueContext } from '@/types/queue';
 
@@ -14,7 +14,6 @@ import { PlayerPanelBackground } from './PlayerPanelBackground';
 import { PlayerQueueItem } from '../PlayerQueueItem';
 import { usePlaylist } from '@/hooks/usePlaylist';
 import { usePlaylistAddModal } from '@/hooks/useModal';
-import { PlaylistItem } from '@/types/playlist';
 
 const ANIMATION_DURATION = 400;
 

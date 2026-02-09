@@ -5,7 +5,7 @@ import { useAtom, useAtomValue } from 'jotai';
 import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
 import { usePlayer, usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
-import { isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/playerAtom';
+import { isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/player/atom';
 
 const PlayerFrame = () => {
   const {

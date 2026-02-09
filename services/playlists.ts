@@ -12,6 +12,30 @@ export const usePlaylistsQuery = () => {
   });
 };
 
+export const usePlaylistTracksQuery = (playlistId: string) => {
+  return useQuery({
+    queryKey: ['playlist-tracks', playlistId],
+    queryFn: () => playlistDB.getPlaylistTracks(playlistId),
+    enabled: !!playlistId,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+};
+
+export const usePlaylistPreviewQuery = ({ playlistId, limit }: { playlistId?: string; limit?: number }) => {
+  return useQuery({
+    queryKey: ['playlist-preview', playlistId],
+    queryFn: () => {
+      if (!playlistId) return [];
+
+      return playlistDB.getPlaylistPreviewTracks({ playlistId, limit });
+    },
+    enabled: !!playlistId,
+    staleTime: Infinity,
+    gcTime: Infinity,
+  });
+};
+
 export const useCreatePlaylistMutation = () => {
   const queryClient = useQueryClient();
 

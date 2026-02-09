@@ -1,24 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAtomValue } from 'jotai';
 
 import { AnimationType } from '@/constants/animation';
 import { LibraryListType, LibraryType } from '@/constants/library';
-import { likedPlaylistAtom } from '@/store/likesAtom';
+import { usePlaylist } from '@/hooks/usePlaylist';
 import { animationStyle } from '@/utils/animation';
-import { getPlaylistThumbnails } from '@/utils/thumbnail';
-import { useLike } from '@/hooks/useLike';
 
 import { LibraryListItem } from '@/components/Library/LibraryListItem';
 import { LibrarySkeleton } from '@/components/Skeleton/LibrarySkelton';
 
 export default function Library() {
-  const { isLoading: isLikedLoading } = useLike();
-  const likedPlaylist = useAtomValue(likedPlaylistAtom);
-  const likedCount = likedPlaylist.length;
-  const likedThumbnails = getPlaylistThumbnails(likedPlaylist);
-
+  const { isLoading, likedPlaylist, userPlaylists } = usePlaylist();
   const router = useRouter();
 
   const handleNavigate = ({ type, id }: { type: LibraryType; id?: string }) => {
@@ -43,21 +36,36 @@ export default function Library() {
       </h1>
       <div className='library-list'>
         <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8'>
-          {isLikedLoading ? (
-            <LibrarySkeleton />
+          {isLoading ? (
+            <>
+              <LibrarySkeleton />
+              <LibrarySkeleton />
+            </>
           ) : (
-            likedCount > 0 && (
-              <LibraryListItem
-                title='좋아요한 플레이리스트'
-                thumbnails={likedThumbnails}
-                count={likedCount}
-                type={LibraryType.Like}
-                onNavigate={() => handleNavigate({ type: LibraryType.Like })}
-              />
-            )
-          )}
+            <>
+              {likedPlaylist && (
+                <LibraryListItem
+                  playlistId={likedPlaylist.id}
+                  title='좋아요한 플레이리스트'
+                  count={likedPlaylist.trackCount}
+                  type={LibraryType.Like}
+                  onNavigate={() => handleNavigate({ type: LibraryType.Like })}
+                />
+              )}
 
-          {/*  TODO : 나만의 플레이리스트 추가 */}
+              {userPlaylists &&
+                userPlaylists.map(p => (
+                  <LibraryListItem
+                    key={p.id}
+                    playlistId={p.id}
+                    title={p.title}
+                    count={p.trackCount}
+                    type={LibraryType.Playlist}
+                    onNavigate={() => handleNavigate({ type: LibraryType.Playlist, id: p.id })}
+                  />
+                ))}
+            </>
+          )}
         </ul>
       </div>
     </section>

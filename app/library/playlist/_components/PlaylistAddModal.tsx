@@ -2,7 +2,7 @@
 
 import { usePlaylist } from '@/hooks/usePlaylist';
 import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
-import { PlusIcon, CloseIcon } from '@/states/icon/svgs';
+import { PlusIcon, CloseIcon, SpinIcon } from '@/states/icon/svgs';
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
 
 interface PlaylistAddModalProps {
@@ -28,9 +28,13 @@ export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
 
         <div className='border-b py-4 border-[#66666610] pb-[64px]'>
           <span className='text-xs px-4'>모든 재생목록</span>
-          <ul className='mt-1'>
-            {!isLoading &&
-              playlists.map(playlist => (
+          {isLoading ? (
+            <div className='flex items-center  justify-center p-4'>
+              <SpinIcon className=' animate-spin' />
+            </div>
+          ) : (
+            <ul className='mt-1'>
+              {playlists.map(playlist => (
                 <li key={playlist.id}>
                   <button
                     type='button'
@@ -42,7 +46,8 @@ export default function PlaylistAddModal({ onClose }: PlaylistAddModalProps) {
                   </button>
                 </li>
               ))}
-          </ul>
+            </ul>
+          )}
         </div>
 
         <div className='absolute bottom-4 right-4'>

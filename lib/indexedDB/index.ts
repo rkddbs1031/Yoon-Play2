@@ -11,9 +11,6 @@ export interface PlayerDBSchema extends DBSchema {
       playlist: string[]; // trackId 배열로 변경
       currentVideoId: string | null;
       playlistSource: PlaylistSource;
-      // playlist: PlaylistItem[];
-      // currentVideoId: string | null;
-      // playlistSource: PlaylistSource;
     };
   };
 
@@ -86,6 +83,7 @@ const DB_NAME = 'player-db';
 const DB_VERSION = 4;
 export const LIKED_PLAYLIST_ID = '__liked__';
 export const USER_PLAYLIST_ID = '__playlist__';
+export const PLAYER_STATE_KEY = 'PLAYER_STATE';
 
 export const getPlayerDB = () => {
   if (!dbPromise) {

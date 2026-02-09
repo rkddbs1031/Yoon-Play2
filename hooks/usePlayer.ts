@@ -51,7 +51,7 @@ export const usePlayerCore = () => {
   // 상태 변경 시 자동 저장
   useEffect(() => {
     if (!playlistSource) return;
-    if (playlist.length === 0 && !currentVideoId) return;
+    if (playlist.length === 0) return;
 
     playerStateDB.savePlayerState({
       playlist,
@@ -132,10 +132,11 @@ export const usePlayerCore = () => {
     setIsPlaying(!isPlaying);
   };
 
-  const clearPlaylist = () => {
+  const clearPlaylist = async () => {
     setPlaylist([]);
     setCurrentVideoId(null);
     setIsPlaying(false);
+    await playerStateDB.clearPlayerState();
   };
 
   const togglePlaylistPanel = () => {

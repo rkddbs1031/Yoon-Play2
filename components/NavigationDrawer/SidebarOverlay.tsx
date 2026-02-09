@@ -1,7 +1,7 @@
 'use client';
 
 import { useAtom } from 'jotai';
-import { isSidebarOpenAtom } from '@/store/sidebarAtom';
+import { isSidebarOpenAtom } from '@/store/ui/sidebarAtom';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 
 export default function SidebarOverlay() {

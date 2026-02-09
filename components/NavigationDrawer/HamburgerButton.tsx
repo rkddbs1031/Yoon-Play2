@@ -4,7 +4,7 @@ import { useAtom } from 'jotai';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { HamburgerIcon } from '@/states/icon/svgs';
-import { isSidebarOpenAtom } from '@/store/sidebarAtom';
+import { isSidebarOpenAtom } from '@/store/ui/sidebarAtom';
 
 export default function HamburgerButton() {
   const isMobile = useMediaQuery('(max-width: 768px)');

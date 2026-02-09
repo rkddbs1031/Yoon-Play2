@@ -1,7 +1,7 @@
 'use client';
 
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
-import { usePlayer } from '@/hooks/usePlayer';
+import { usePlayerCore } from '@/hooks/usePlayer';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
 
 import { PlayerControl } from './PlayerControl';
@@ -11,7 +11,7 @@ import { formatThumbnailUrl } from '@/utils/thumbnail';
 const ANIMATION_DURATION = 300;
 
 export const PlayerBar = () => {
-  const { currentVideo, isPlaylistPanelOpen, togglePlaylistPanel } = usePlayer();
+  const { currentVideo, isPlaylistPanelOpen, togglePlaylistPanel } = usePlayerCore();
   const backgroundImage = formatThumbnailUrl({ thumbnail: currentVideo?.thumbnail, size: 'small' });
   const { displayImage: overlayBG, isTransitioning } = usePlayerBackground(backgroundImage);
 
@@ -25,7 +25,7 @@ export const PlayerBar = () => {
     <section
       className={`player-bar fixed z-[888] left-1/2 lg:left-[calc(50%+65px)] bottom-3 -translate-x-1/2  w-[calc(100%-32px)] md:max-w-[768px] lg:max-w-[960px] lg:w-full overflow-hidden  min-h-[60px] flex flex-col gap-3 overflow-hidden rounded-[8px]
         ${currentVideo ? 'cursor-pointer' : ''} 
-        transition-all duration-${ANIMATION_DURATION} ${animation} `}
+        transition-all duration-${ANIMATION_DURATION} ${animation}`}
       onClick={togglePlaylistPanel}
     >
       {overlayBG && (

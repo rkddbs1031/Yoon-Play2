@@ -19,8 +19,7 @@ import { PlaylistItem } from '@/types/playlist';
 const ANIMATION_DURATION = 400;
 
 const PlayerPanel = () => {
-  const { isPlaylistPanelOpen, playlist, togglePlaylistPanel, setCurrentVideoId } = usePlayerCore();
-  const currentVideo = useAtomValue(currentVideoAtom);
+  const { currentVideo, isPlaylistPanelOpen, playlist, togglePlaylistPanel, setCurrentVideoId } = usePlayerCore();
 
   const { shouldRender, animation } = useAnimatedMount(isPlaylistPanelOpen, {
     open_transform: 'translate-y-0',

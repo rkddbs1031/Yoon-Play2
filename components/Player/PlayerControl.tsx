@@ -53,8 +53,12 @@ const PlayerFrame = () => {
 
     intervalRef.current = setInterval(() => {
       if (localPlayerRef.current) {
-        const time = localPlayerRef.current.getCurrentTime();
-        setCurrentTime(time);
+        const newTime = localPlayerRef.current.getCurrentTime();
+
+        setCurrentTime(prev => {
+          const diff = Math.abs(newTime - prev);
+          return diff > 0.3 ? newTime : prev;
+        });
       }
     }, 300);
   };
@@ -182,7 +186,7 @@ const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize 
   );
 });
 
-const ProgressBar = ({ className }: { className?: string }) => {
+const ProgressBar = memo(({ className }: { className?: string }) => {
   const { duration, currentTime, playerRef, setCurrentTime } = usePlayerTime();
   const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -285,7 +289,7 @@ const ProgressBar = ({ className }: { className?: string }) => {
       </div>
     </div>
   );
-};
+});
 
 const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
   const [isHovered, setIsHovered] = useAtom(isHoveredVolumeButton);

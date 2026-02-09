@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { usePlaylistCreateModal } from '@/hooks/usePlaylistCreateModal';
+import { usePlaylistAddModal, usePlaylistCreateModal } from '@/hooks/useModal';
 import { FieldWrapper, InputError, TextInput } from '@/components/Input';
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
 import { usePlaylist } from '@/hooks/usePlaylist';
@@ -13,7 +13,8 @@ const INIT_TITLE = {
 
 // 새 재생목록 추가 모달 - 2단
 export default function PlaylistCreateModal() {
-  const { isOpen, closeModal } = usePlaylistCreateModal();
+  const { isOpen, closeModal: onCloseCreateModal } = usePlaylistCreateModal();
+  const { closeModal: onCloseAddModal } = usePlaylistAddModal();
   const { targetTrack, onCreatePlaylist } = usePlaylist();
 
   const [title, setTitle] = useState<{ value: string; error: InputError | null }>(INIT_TITLE);
@@ -33,14 +34,15 @@ export default function PlaylistCreateModal() {
 
     setTitle(INIT_TITLE);
     setDescription('');
-    closeModal();
+    onCloseCreateModal();
+    onCloseAddModal();
   };
 
   if (!isOpen) return null;
 
   return (
     <ModalPortal>
-      <ModalOverlay onClose={closeModal} />
+      <ModalOverlay onClose={onCloseCreateModal} />
       <ModalContent zIndex={12000} className='max-w-[420px] mx-4'>
         <div className='p-4 border-b border-[#66666610]'>
           <h2 className='font-[500]'>새 재생목록 만들기</h2>
@@ -66,7 +68,7 @@ export default function PlaylistCreateModal() {
         </div>
 
         <div className='p-4 flex justify-end gap-3'>
-          <button onClick={closeModal} className='text-xs cursor-pointer'>
+          <button onClick={onCloseCreateModal} className='text-xs cursor-pointer'>
             취소
           </button>
 

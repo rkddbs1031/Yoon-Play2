@@ -1,13 +1,13 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
 import { usePlaylist } from '@/hooks/usePlaylist';
+import { usePlaylistAddModal } from '@/hooks/useModal';
 
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
 import { QueueItemDotMenu } from './QueueItemDotMenu';
-import PlaylistAddModal from '@/app/library/playlist/_components/PlaylistAddModal';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_15%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_15%)_100%)]';
@@ -50,16 +50,12 @@ export const PlayerQueueItem = memo(
   ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 
-    const [isPlaylistAddModalOpen, setIsPlaylistAddModalOpen] = useState(false);
-    const { setPlaylistTargetTrack, clearPlaylistTargetTrack } = usePlaylist();
+    const { setPlaylistTargetTrack } = usePlaylist();
+    const { openModal } = usePlaylistAddModal();
 
-    const handleToggleModal = () => {
-      if (isPlaylistAddModalOpen) {
-        clearPlaylistTargetTrack();
-      } else {
-        setPlaylistTargetTrack(item);
-      }
-      setIsPlaylistAddModalOpen(prev => !prev);
+    const handleOpenModal = () => {
+      setPlaylistTargetTrack(item);
+      openModal();
     };
 
     return (
@@ -85,11 +81,9 @@ export const PlayerQueueItem = memo(
           {showLikeButton && <QueueItemLikeButton item={item} />}
 
           {showDotButton && (
-            <QueueItemDotMenu item={item} context={context} color={dotColor} onAddToPlaylist={handleToggleModal} />
+            <QueueItemDotMenu item={item} context={context} color={dotColor} onAddToPlaylist={handleOpenModal} />
           )}
         </div>
-
-        {isPlaylistAddModalOpen && <PlaylistAddModal onClose={handleToggleModal} />}
       </>
     );
   },

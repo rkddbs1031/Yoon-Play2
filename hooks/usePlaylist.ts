@@ -2,10 +2,10 @@
 
 import { useAtom } from 'jotai';
 
+import { LIKED_PLAYLIST_ID } from '@/constants/library';
 import { PlaylistItem } from '@/types/playlist';
 import { playlistTargetTrackAtom } from '@/store/playlist/atoms';
 import { useAddTrackToPlaylistMutation, useCreatePlaylistMutation, usePlaylistsQuery } from '@/services/playlists';
-import { LIKED_PLAYLIST_ID } from '@/lib/indexedDB';
 
 export const usePlaylist = () => {
   const [targetTrack, setTargetTrack] = useAtom(playlistTargetTrackAtom);

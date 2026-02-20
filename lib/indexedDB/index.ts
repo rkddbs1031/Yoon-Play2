@@ -1,5 +1,7 @@
-import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 import { DBSchema, IDBPDatabase, openDB } from 'idb';
+
+import { LIKED_PLAYLIST_ID } from '@/constants/library';
+import { PlaylistItem, PlaylistSource } from '@/types/playlist';
 
 export interface PlayerDBSchema extends DBSchema {
   /**
@@ -81,8 +83,6 @@ let dbPromise: Promise<IDBPDatabase<PlayerDBSchema>> | null = null;
 
 const DB_NAME = 'player-db';
 const DB_VERSION = 4;
-export const LIKED_PLAYLIST_ID = '__liked__';
-export const USER_PLAYLIST_ID = '__playlist__';
 export const PLAYER_STATE_KEY = 'PLAYER_STATE';
 
 export const getPlayerDB = () => {

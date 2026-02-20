@@ -9,6 +9,7 @@ import { animationStyle } from '@/utils/animation';
 
 import { LibraryListItem } from '@/components/Library/LibraryListItem';
 import { LibrarySkeleton } from '@/components/Skeleton/LibrarySkelton';
+import { USER_PLAYLIST_ID } from '@/constants/library';
 
 export default function Library() {
   const { isLoading, likedPlaylist, userPlaylists } = usePlaylist();
@@ -21,7 +22,8 @@ export default function Library() {
     }
 
     if (type === LibraryType.Playlist && id) {
-      router.push(`/library/playlist?list=${LibraryListType.Playlist}-${id}`);
+      const uuid = id.replace(USER_PLAYLIST_ID, '');
+      router.push(`/library/playlist?list=${LibraryListType.Playlist}-${uuid}`);
       return;
     }
   };

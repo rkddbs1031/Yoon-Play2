@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import { ReactQueryProvider } from './providers/ReactQueryProvider';
 import { DBProvider } from './providers/DBProvider';
@@ -38,6 +39,8 @@ export default function RootLayout({
             </main>
             <NavigationDrawer />
             <ModalRoot />
+
+            <ReactQueryDevtools initialIsOpen={false} />
           </ReactQueryProvider>
         </DBProvider>
       </body>

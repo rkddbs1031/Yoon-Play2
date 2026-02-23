@@ -24,16 +24,21 @@ export const getPlaylists = async () => {
   return liked ? [liked, ...rest] : rest;
 };
 
-export const getPlaylistTracks = async (playlistId?: string) => {
+// 플레이리스트 정보 + 트랙
+export const getPlaylistTracks = async (playlistId: string) => {
   const db = await getPlayerDB();
 
-  const relations = await db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
+  const playlist = await db.get('playlists', playlistId); // 플레이리스트 정보 (폴더 정보)
 
+  const relations = await db.getAllFromIndex('playlistTracks', 'by-playlist', playlistId);
   relations.sort((a, b) => a.order - b.order);
 
   const tracks = await Promise.all(relations.map(r => db.get('tracks', r.trackId)));
 
-  return tracks.filter(Boolean);
+  return {
+    playlist,
+    tracks: tracks.filter(Boolean) as PlaylistItem[],
+  };
 };
 
 export const getPlaylistPreviewTracks = async ({ playlistId, limit = 4 }: { playlistId: string; limit?: number }) => {

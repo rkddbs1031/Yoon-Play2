@@ -190,3 +190,24 @@ export const updatePlaylistInfo = async (playlistId: string, data: { title: stri
 
   return updated;
 };
+
+// 개인 플레이리스트(재생목록 = 폴더) 자체 삭제
+export const deletePlaylist = async (playlistId: string) => {
+  const db = await getPlayerDB();
+
+  const tx = db.transaction(['playlists', 'playlistTracks'], 'readwrite');
+
+  await tx.objectStore('playlists').delete(playlistId);
+
+  // 해당 재생목록에 속한 모든 트랙 관계 삭제 (by-playlist 인덱스 활용)
+  const range = IDBKeyRange.only(playlistId);
+  let cursor = await tx.objectStore('playlistTracks').index('by-playlist').openCursor(range);
+
+  while (cursor) {
+    await cursor.delete();
+    cursor = await cursor.continue();
+  }
+
+  await tx.done;
+  return playlistId;
+};

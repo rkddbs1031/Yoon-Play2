@@ -169,3 +169,24 @@ export const removeTrackFromPlaylist = async ({ playlistId, trackId }: { playlis
   await tx.done;
   return { playlistId, trackId };
 };
+
+// 개인 플레이리스트(재생목록 = 폴더) 정보 (title, desc) 수정
+export const updatePlaylistInfo = async (playlistId: string, data: { title: string; description?: string }) => {
+  const db = await getPlayerDB();
+  const tx = db.transaction('playlists', 'readwrite');
+  const playlist = await tx.store.get(playlistId);
+
+  if (!playlist) throw new Error('재생목록을 찾을 수 없습니다.');
+
+  const updated = {
+    ...playlist,
+    ...data,
+    updatedAt: Date.now(),
+  };
+
+  await tx.store.put(updated);
+
+  await tx.done;
+
+  return updated;
+};

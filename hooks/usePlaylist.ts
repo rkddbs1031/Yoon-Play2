@@ -1,51 +1,29 @@
 'use client';
 
-import { useAtom } from 'jotai';
-
 import { LIKED_PLAYLIST_ID } from '@/constants/library';
-import { PlaylistItem } from '@/types/playlist';
-import { playlistTargetTrackAtom } from '@/store/playlist/atoms';
-import { useAddTrackToPlaylistMutation, useCreatePlaylistMutation, usePlaylistsQuery } from '@/services/playlists';
+import { usePlaylistsQuery } from '@/services/playlists';
+
+/**
+ * - 유저가 만든 플레이리스트만 조회
+ * - 플레이리스트 생성 (a.k.a. 폴더)
+ * - targetTrack 관리 (어떤 트랙을 추가할지)
+ * - 트랙 추가
+ *
+ * - 플레이리스트 목록 조회 (likedPlaylist, userPlaylist)
+ * - 플레이리스트 생성 (재생목록 폴더)
+ */
 
 export const usePlaylist = () => {
-  const [targetTrack, setTargetTrack] = useAtom(playlistTargetTrackAtom);
-
   const { data: playlists = [], isLoading, refetch } = usePlaylistsQuery();
-  const createMutation = useCreatePlaylistMutation();
-  const addTrackMutation = useAddTrackToPlaylistMutation();
 
-  const likedPlaylist = playlists.find(p => p.id === LIKED_PLAYLIST_ID);
-  const userPlaylists = playlists.filter(p => p.id !== LIKED_PLAYLIST_ID);
-
-  const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
-    await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
-    setTargetTrack(null);
-  };
-
-  const handleAddTrack = async (playlistId: string) => {
-    if (!targetTrack) return;
-
-    await addTrackMutation.mutateAsync({
-      playlistId,
-      track: targetTrack,
-    });
-
-    setTargetTrack(null);
-  };
+  const likedPlaylistInfo = playlists.find(p => p.id === LIKED_PLAYLIST_ID);
+  const userPlaylistsInfo = playlists.filter(p => p.id !== LIKED_PLAYLIST_ID);
 
   return {
-    playlists,
+    playlists, // 전체
+    likedPlaylistInfo, // 좋아요 요약 정보
+    userPlaylistsInfo, // 유저 플레이리스트 요약 정보
     isLoading,
     refetch,
-
-    likedPlaylist,
-    userPlaylists,
-
-    targetTrack,
-    setPlaylistTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
-    clearPlaylistTargetTrack: () => setTargetTrack(null),
-
-    onCreatePlaylist: handleCreatePlaylist,
-    onAddTrack: handleAddTrack,
   };
 };

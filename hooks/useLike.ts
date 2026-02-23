@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useSetAtom, useAtomValue } from 'jotai';
+import { useSetAtom, useAtomValue, useAtom } from 'jotai';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { LikeStatus } from '@/constants/like';
 import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/like/atom';
@@ -7,47 +8,60 @@ import { PlaylistItem } from '@/types/playlist';
 
 import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 
+/**
+ * - 좋아요 목록 제공
+ * - 좋아요 토글 (추가/삭제)
+ * - 좋아요 여부 확인 (isLiked)
+ */
+
 export const useLike = () => {
-  const setLikedPlaylist = useSetAtom(likedPlaylistAtom);
+  const queryClient = useQueryClient();
+  const [likedPlaylist, setLikedPlaylist] = useAtom(likedPlaylistAtom);
   const isLikedSelector = useAtomValue(isLikedSelectorAtom);
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  const restoreLikedPlaylist = async () => {
-    setIsLoading(true);
-
-    try {
-      const result = await likedDB.getLikedPlaylist();
-      setLikedPlaylist(result ?? []);
-    } catch (error) {
-      console.error('Failed to restore liked playlist', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    restoreLikedPlaylist();
+    const restoreLikedPlaylist = async () => {
+      try {
+        const result = await likedDB.getLikedPlaylist();
+        setLikedPlaylist(result ?? []);
+      } catch (error) {
+        console.error('Failed to restore liked playlist', error);
+      }
+    };
+
+    if (likedPlaylist.length === 0) {
+      restoreLikedPlaylist();
+    }
   }, []);
 
-  const handleToggleLike = async (item: PlaylistItem) => {
-    const liked = await likedDB.isLikedItem(item.videoId);
+  const toggleMutation = useMutation({
+    mutationFn: async (item: PlaylistItem) => {
+      const liked = await likedDB.isLikedItem(item.videoId);
 
-    if (liked) {
-      await likedDB.deleteLikedItem(item.videoId);
-    } else {
-      await likedDB.addLikedItem(item);
-    }
+      if (liked) {
+        await likedDB.deleteLikedItem(item.videoId);
+      } else {
+        await likedDB.addLikedItem(item);
+      }
 
-    const updated = await likedDB.getLikedPlaylist();
-    setLikedPlaylist(updated);
+      return { status: liked ? LikeStatus.Remove : LikeStatus.Add };
+    },
+    onSuccess: async () => {
+      // 좋아요 목록 갱신
+      const updated = await likedDB.getLikedPlaylist();
+      setLikedPlaylist(updated);
 
-    return {
-      status: liked ? LikeStatus.Remove : LikeStatus.Add,
-    };
-  };
+      // 플레이리스트 목록도 갱신 (trackCount 변경)
+      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+    },
+  });
 
   const isLiked = (videoId: string) => isLikedSelector(videoId);
 
-  return { isLiked, toggleLike: handleToggleLike, isLoading };
+  return {
+    likedPlaylist, // 좋아요 목록
+    isLiked, // 좋아요 여부 확인
+    toggleLike: toggleMutation.mutate, // 좋아요 토글
+    isToggleing: toggleMutation.isPending,
+  };
 };

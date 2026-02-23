@@ -147,3 +147,25 @@ export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: st
   await tx.done;
   return { playlistId, trackId: track.videoId };
 };
+
+// 개인 플레이리스트(재생목록 = 폴더) 내 특정 트랙 삭제
+export const removeTrackFromPlaylist = async ({ playlistId, trackId }: { playlistId: string; trackId: string }) => {
+  const db = await getPlayerDB();
+  const now = Date.now();
+
+  const tx = db.transaction(['playlistTracks', 'playlists'], 'readwrite');
+
+  const relationId = `${playlistId}:${trackId}`;
+  await tx.objectStore('playlistTracks').delete(relationId);
+
+  const playlist = await tx.objectStore('playlists').get(playlistId);
+  if (playlist) {
+    await tx.objectStore('playlists').put({
+      ...playlist,
+      updatedAt: now,
+    });
+  }
+
+  await tx.done;
+  return { playlistId, trackId };
+};

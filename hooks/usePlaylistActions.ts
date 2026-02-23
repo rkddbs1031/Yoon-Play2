@@ -1,10 +1,14 @@
 'use client';
 
-import { useAtom } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 
 import { PlaylistItem } from '@/types/playlist';
-import { playlistTargetTrackAtom } from '@/store/playlist/atoms';
-import { useAddTrackToPlaylistMutation, useCreatePlaylistMutation } from '@/services/playlists';
+import { currentVideoPlaylistIdAtom, playlistTargetTrackAtom } from '@/store/playlist/atoms';
+import {
+  useAddTrackToPlaylistMutation,
+  useCreatePlaylistMutation,
+  useRemoveTrackFromPlaylistMutation,
+} from '@/services/playlists';
 
 /**
  * - 유저가 만든 플레이리스트만 조회
@@ -14,13 +18,17 @@ import { useAddTrackToPlaylistMutation, useCreatePlaylistMutation } from '@/serv
  *
  * - 플레이리스트 목록 조회 (likedPlaylist, userPlaylist)
  * - 플레이리스트 생성 (재생목록 폴더)
+ *
+ * - 플레이리스트 내 특정 트랙 제거
  */
 
 export const usePlaylistActions = () => {
   const [targetTrack, setTargetTrack] = useAtom(playlistTargetTrackAtom);
+  const currentPlaylistId = useAtomValue(currentVideoPlaylistIdAtom);
 
   const createMutation = useCreatePlaylistMutation();
   const addTrackMutation = useAddTrackToPlaylistMutation();
+  const removeTrackMutation = useRemoveTrackFromPlaylistMutation();
 
   const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
     await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
@@ -38,6 +46,17 @@ export const usePlaylistActions = () => {
     setTargetTrack(null);
   };
 
+  const handleRemoveTrack = async (trackId: string) => {
+    // TODO: 이 재생목록에서 곡을 삭제하시겠습니까?
+
+    if (!currentPlaylistId) return;
+
+    await removeTrackMutation.mutateAsync({
+      playlistId: currentPlaylistId,
+      trackId,
+    });
+  };
+
   return {
     targetTrack,
     setTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
@@ -45,8 +64,10 @@ export const usePlaylistActions = () => {
 
     onCreatePlaylist: handleCreatePlaylist,
     onAddTrack: handleAddTrack,
+    onRemoveTrack: handleRemoveTrack,
 
     isCreating: createMutation.isPending,
     isAdding: addTrackMutation.isPending,
+    isRemoving: removeTrackMutation.isPending,
   };
 };

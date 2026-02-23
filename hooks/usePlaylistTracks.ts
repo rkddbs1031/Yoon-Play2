@@ -1,8 +1,10 @@
-import { useAtomValue } from 'jotai';
+import { useEffect } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
 
 import { LIKED_PLAYLIST_ID } from '@/constants/library';
 import { usePlaylistTracksQuery } from '@/services/playlists';
 import { likedPlaylistAtom } from '@/store/like/atom';
+import { currentVideoPlaylistIdAtom } from '@/store/playlist/atoms';
 
 /**
  * 플레이리스트 정보 + 트랙 조회
@@ -14,6 +16,13 @@ import { likedPlaylistAtom } from '@/store/like/atom';
 export const usePlaylistTracks = (playlistId: string) => {
   const likedPlaylist = useAtomValue(likedPlaylistAtom);
   const isLiked = playlistId === LIKED_PLAYLIST_ID;
+
+  const setCurrentViewId = useSetAtom(currentVideoPlaylistIdAtom);
+
+  useEffect(() => {
+    setCurrentViewId(playlistId);
+    return () => setCurrentViewId(null);
+  }, [playlistId, setCurrentViewId]);
 
   const { data, isLoading } = usePlaylistTracksQuery(playlistId);
 

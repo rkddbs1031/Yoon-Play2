@@ -12,7 +12,8 @@ import { LibrarySkeleton } from '@/components/Skeleton/LibrarySkelton';
 import { USER_PLAYLIST_ID } from '@/constants/library';
 
 export default function Library() {
-  const { isLoading, likedPlaylist, userPlaylists } = usePlaylist();
+  const { isLoading, likedPlaylistInfo: likedPlaylist, userPlaylistsInfo: userPlaylists } = usePlaylist();
+
   const router = useRouter();
 
   const handleNavigate = ({ type, id }: { type: LibraryType; id?: string }) => {

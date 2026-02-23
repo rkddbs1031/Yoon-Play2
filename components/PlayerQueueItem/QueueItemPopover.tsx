@@ -19,7 +19,7 @@ const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element; color: 
     background: 'bg-[#F4F2FB]/90 backdrop-blur-md rounded-[5px] shadow-[0_8px_24px_rgba(46,51,79,0.12)]',
   },
 
-  [QueueContext.Playlist]: {
+  [QueueContext.UserPlaylist]: {
     label: '이 재생목록에서 삭제',
     icon: <TrashIcon size={15} />,
     color: 'text-[#52527a]',

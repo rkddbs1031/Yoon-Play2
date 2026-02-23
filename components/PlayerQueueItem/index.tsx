@@ -40,7 +40,7 @@ const COLOR_BY_CONTEXT: Record<
     channelTitle: 'text-[#5f5f7c]',
     dotColor: '#5f5f7c',
   },
-  [QueueContext.Playlist]: {
+  [QueueContext.UserPlaylist]: {
     title: 'text-[#52527a]',
     channelTitle: 'text-[#5f5f7c]',
     dotColor: '#5f5f7c',

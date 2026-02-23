@@ -53,7 +53,7 @@ export const QueueItemDotMenu = memo(({ item, context, color, onAddToPlaylist }:
   const removeHandlerMap: Record<QueueContext, () => void> = {
     [QueueContext.CurrentQueue]: () => handleRemoveCurrentPlaylist(),
     [QueueContext.LikedList]: () => handleUnLike(),
-    [QueueContext.Playlist]: () => handleRemoveUserPlaylist(),
+    [QueueContext.UserPlaylist]: () => handleRemoveUserPlaylist(),
   };
 
   const handleAction = (action: QueueContext) => {

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { fromPlaylistParam } from '@/utils/playlist';
-import PlaylistView from './_components/PlaylistView';
+import LibraryPlaylistView from './_components/LibraryPlaylistView';
 
 export default function LibraryPlaylist() {
   const searchParams = useSearchParams();
@@ -28,5 +28,5 @@ export default function LibraryPlaylist() {
 
   if (!playlistId) return null;
 
-  return <PlaylistView playlistId={playlistId} />;
+  return <LibraryPlaylistView playlistId={playlistId} />;
 }

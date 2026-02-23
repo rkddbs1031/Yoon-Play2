@@ -53,6 +53,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
                 isActive={track.videoId === currentVideoId}
                 onClick={() => handlePlay(track)}
                 context={context}
+                showLikeButton={false}
               />
             </li>
           );

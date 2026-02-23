@@ -71,6 +71,7 @@ export const useAddTrackToPlaylistMutation = () => {
   });
 };
 
+// 플레이리스트(재생목록 = 폴더)내 특정 트랙 삭제
 export const useRemoveTrackFromPlaylistMutation = () => {
   const queryClient = useQueryClient();
 
@@ -79,6 +80,31 @@ export const useRemoveTrackFromPlaylistMutation = () => {
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, data.playlistId] });
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+    },
+  });
+};
+
+// 플레이리스트(재생목록 = 폴더) 정보 수정 (제목, 설명)
+export const useUpdatePlaylistMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: playlistDB.updatePlaylistInfo,
+    onSuccess: updated => {
+      queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] }); // 제목 바뀌었으므로, 전체 재생목록 갱산
+      queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, updated.id] }); // 정보 갱신
+    },
+  });
+};
+
+// 플레이리스트(재생목록 = 폴더) 자체 삭제
+export const useDeletePlaylistMutation = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: playlistDB.deletePlaylist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] }); // 전체 목록만 갱신
     },
   });
 };

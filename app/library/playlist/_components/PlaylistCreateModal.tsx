@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
+
 import { usePlaylistAddModal, usePlaylistCreateModal } from '@/hooks/useModal';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
+
 import { FieldWrapper, InputError, TextInput } from '@/components/Input';
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
-import { usePlaylist } from '@/hooks/usePlaylist';
 
 const INIT_TITLE = {
   value: '',
@@ -15,7 +17,7 @@ const INIT_TITLE = {
 export default function PlaylistCreateModal() {
   const { isOpen, closeModal: onCloseCreateModal } = usePlaylistCreateModal();
   const { closeModal: onCloseAddModal } = usePlaylistAddModal();
-  const { targetTrack, onCreatePlaylist } = usePlaylist();
+  const { targetTrack, onCreatePlaylist } = usePlaylistActions();
 
   const [title, setTitle] = useState<{ value: string; error: InputError | null }>(INIT_TITLE);
   const [description, setDescription] = useState('');

@@ -2,12 +2,15 @@
 
 import { usePlaylist } from '@/hooks/usePlaylist';
 import { usePlaylistAddModal, usePlaylistCreateModal } from '@/hooks/useModal';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 import { PlusIcon, CloseIcon, SpinIcon } from '@/states/icon/svgs';
+
 import { ModalContent, ModalOverlay, ModalPortal } from '@/components/Modal';
 
 // 재생목록 추가 모달 - 1단
 export default function PlaylistAddModal() {
-  const { playlists, isLoading, onAddTrack } = usePlaylist();
+  const { playlists, isLoading } = usePlaylist();
+  const { onAddTrack } = usePlaylistActions();
   const { isOpen, closeModal: onCloseAddModal } = usePlaylistAddModal();
   const { openModal: onOpenCreateModal } = usePlaylistCreateModal();
 

@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useAtomValue } from 'jotai';
 
 import { useLike } from '@/hooks/useLike';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { usePlayerBackground } from '@/hooks/usePlayerBackground';
+import { usePlaylistAddModal } from '@/hooks/useModal';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 
 import { formatThumbnailUrl } from '@/utils/thumbnail';
 import { QueueContext } from '@/types/queue';
@@ -12,8 +13,6 @@ import { QueueContext } from '@/types/queue';
 import { PlayerPanelHeader } from './PlayerPanelHeader';
 import { PlayerPanelBackground } from './PlayerPanelBackground';
 import { PlayerQueueItem } from '../PlayerQueueItem';
-import { usePlaylist } from '@/hooks/usePlaylist';
-import { usePlaylistAddModal } from '@/hooks/useModal';
 
 const ANIMATION_DURATION = 400;
 
@@ -28,7 +27,7 @@ const PlayerPanel = () => {
   const backgroundImage = formatThumbnailUrl({ thumbnail: currentVideo?.thumbnail, size: 'small' });
   const { displayImage: overlayBG } = usePlayerBackground(backgroundImage);
 
-  const { setPlaylistTargetTrack } = usePlaylist();
+  const { setTargetTrack } = usePlaylistActions();
   const { openModal } = usePlaylistAddModal();
   const { isLiked, toggleLike } = useLike();
 
@@ -51,7 +50,7 @@ const PlayerPanel = () => {
     if (!currentVideo) return;
     handleToggleMore();
 
-    setPlaylistTargetTrack(currentVideo);
+    setTargetTrack(currentVideo);
     openModal();
   };
 

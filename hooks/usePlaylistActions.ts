@@ -40,8 +40,8 @@ export const usePlaylistActions = () => {
 
   return {
     targetTrack,
-    setTargetTrack: (track: PlaylistItem) => setTargetTrack(track), // setPlaylistTargetTrack
-    clearTargetTrack: () => setTargetTrack(null), //clearPlaylistTargetTrack
+    setTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
+    clearTargetTrack: () => setTargetTrack(null),
 
     onCreatePlaylist: handleCreatePlaylist,
     onAddTrack: handleAddTrack,

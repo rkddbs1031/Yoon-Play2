@@ -8,6 +8,7 @@ import { usePlaylistAddModal } from '@/hooks/useModal';
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
 import { QueueItemDotMenu } from './QueueItemDotMenu';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_15%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_15%)_100%)]';
@@ -50,11 +51,11 @@ export const PlayerQueueItem = memo(
   ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
     const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 
-    const { setPlaylistTargetTrack } = usePlaylist();
+    const { setTargetTrack } = usePlaylistActions();
     const { openModal } = usePlaylistAddModal();
 
     const handleOpenModal = () => {
-      setPlaylistTargetTrack(item);
+      setTargetTrack(item);
       openModal();
     };
 

@@ -2,13 +2,12 @@ import { memo } from 'react';
 
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
-import { usePlaylist } from '@/hooks/usePlaylist';
 import { usePlaylistAddModal } from '@/hooks/useModal';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 
 import { MusicInfoWrapper } from '../Player/MusicInfo';
 import { QueueItemLikeButton } from './QueueItemLikeButton';
 import { QueueItemDotMenu } from './QueueItemDotMenu';
-import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_15%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_15%)_100%)]';

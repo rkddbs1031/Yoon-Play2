@@ -5,6 +5,7 @@ import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
 import { useLike } from '@/hooks/useLike';
 import { usePlayerCore } from '@/hooks/usePlayer';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 
 import QueueItemPopover from './QueueItemPopover';
 
@@ -48,7 +49,8 @@ export const QueueItemDotMenu = memo(({ item, context, color, onAddToPlaylist }:
   const { toggleLike } = useLike();
   const handleUnLike = () => toggleLike(item);
 
-  const handleRemoveUserPlaylist = () => console.log('TODO: handleRemoveUserPlaylist');
+  const { onRemoveTrack } = usePlaylistActions();
+  const handleRemoveUserPlaylist = () => onRemoveTrack(item.videoId);
 
   const removeHandlerMap: Record<QueueContext, () => void> = {
     [QueueContext.CurrentQueue]: () => handleRemoveCurrentPlaylist(),

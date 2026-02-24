@@ -8,6 +8,7 @@ import {
   useAddTrackToPlaylistMutation,
   useCreatePlaylistMutation,
   useRemoveTrackFromPlaylistMutation,
+  useUpdatePlaylistMutation,
 } from '@/services/playlists';
 
 /**
@@ -29,6 +30,7 @@ export const usePlaylistActions = () => {
   const createMutation = useCreatePlaylistMutation();
   const addTrackMutation = useAddTrackToPlaylistMutation();
   const removeTrackMutation = useRemoveTrackFromPlaylistMutation();
+  const updatePlaylistMutation = useUpdatePlaylistMutation();
 
   const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
     await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
@@ -38,10 +40,7 @@ export const usePlaylistActions = () => {
   const handleAddTrack = async (playlistId: string) => {
     if (!targetTrack) return;
 
-    await addTrackMutation.mutateAsync({
-      playlistId,
-      track: targetTrack,
-    });
+    await addTrackMutation.mutateAsync({ playlistId, track: targetTrack });
 
     setTargetTrack(null);
   };
@@ -57,6 +56,10 @@ export const usePlaylistActions = () => {
     });
   };
 
+  const handleUpdatePlaylist = async ({ id, data }: { id: string; data: { title: string; description?: string } }) => {
+    await updatePlaylistMutation.mutateAsync({ id, data });
+  };
+
   return {
     targetTrack,
     setTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
@@ -65,6 +68,7 @@ export const usePlaylistActions = () => {
     onCreatePlaylist: handleCreatePlaylist,
     onAddTrack: handleAddTrack,
     onRemoveTrack: handleRemoveTrack,
+    onUpdatePlaylist: handleUpdatePlaylist,
 
     isCreating: createMutation.isPending,
     isAdding: addTrackMutation.isPending,

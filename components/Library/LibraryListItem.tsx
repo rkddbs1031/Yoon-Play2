@@ -3,11 +3,13 @@ import { useState, MouseEvent, useEffect } from 'react';
 import { LIKED_PLAYLIST_ID, LibraryType } from '@/constants/library';
 import { usePlaylistPreviewQuery } from '@/services/playlists';
 import { MoreVerticalIcon } from '@/states/icon/svgs';
+import { usePlaylistEditModal } from '@/hooks/useModal';
+import { useConfirm } from '@/hooks/useConfirm';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';
 
 import ThumbnailGrid from './ThumbnailGrid';
 import { PlaylistMenuPopover } from './PlaylistMenuPopover';
-import { usePlaylistEditModal } from '@/hooks/useModal';
 
 interface LibraryListItemProps {
   playlistId: string;
@@ -25,6 +27,8 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
   const thumbnails = getPlaylistThumbnails(tracks);
 
   const { openModal: openEditModal } = usePlaylistEditModal();
+  const { openConfirm } = useConfirm();
+  const { onDeletePlaylist } = usePlaylistActions();
 
   const handleClickPopover = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -54,18 +58,23 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
 
   const handleEdit = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-
     setIsPopoverOpen(false);
     openEditModal(playlistId);
   };
 
-  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleDelete = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    setIsPopoverOpen(false);
+    openConfirm({
+      title: '재생목록 삭제',
+      message: `${title}을(를) 삭제하시겠습니까?`,
+      confirmText: '삭제',
+      isDanger: true,
+      onConfirm: () => onDeletePlaylist(playlistId),
+    });
   };
 
-  const handleClose = () => {
-    setIsPopoverOpen(prev => !prev);
-  };
+  const handleClose = () => setIsPopoverOpen(false);
 
   return (
     <li className='library-item'>

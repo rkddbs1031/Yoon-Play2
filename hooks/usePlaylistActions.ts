@@ -7,6 +7,7 @@ import { currentVideoPlaylistIdAtom, playlistTargetTrackAtom } from '@/store/pla
 import {
   useAddTrackToPlaylistMutation,
   useCreatePlaylistMutation,
+  useDeletePlaylistMutation,
   useRemoveTrackFromPlaylistMutation,
   useUpdatePlaylistMutation,
 } from '@/services/playlists';
@@ -31,6 +32,7 @@ export const usePlaylistActions = () => {
   const addTrackMutation = useAddTrackToPlaylistMutation();
   const removeTrackMutation = useRemoveTrackFromPlaylistMutation();
   const updatePlaylistMutation = useUpdatePlaylistMutation();
+  const deletePlaylistMutation = useDeletePlaylistMutation();
 
   const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
     await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
@@ -60,6 +62,10 @@ export const usePlaylistActions = () => {
     await updatePlaylistMutation.mutateAsync({ id, data });
   };
 
+  const handleDeletePlaylist = async (playlistId: string) => {
+    await deletePlaylistMutation.mutate(playlistId);
+  };
+
   return {
     targetTrack,
     setTargetTrack: (track: PlaylistItem) => setTargetTrack(track),
@@ -69,6 +75,7 @@ export const usePlaylistActions = () => {
     onAddTrack: handleAddTrack,
     onRemoveTrack: handleRemoveTrack,
     onUpdatePlaylist: handleUpdatePlaylist,
+    onDeletePlaylist: handleDeletePlaylist,
 
     isCreating: createMutation.isPending,
     isAdding: addTrackMutation.isPending,

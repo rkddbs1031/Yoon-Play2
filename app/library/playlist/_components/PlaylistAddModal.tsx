@@ -22,7 +22,7 @@ export default function PlaylistAddModal() {
   if (!isOpen) return null;
 
   return (
-    <ModalPortal>
+    <ModalPortal label='modal'>
       <ModalOverlay onClose={onCloseAddModal} />
 
       <ModalContent className={'relative max-w-[320px] mx-4 pt-[56px]'}>

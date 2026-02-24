@@ -43,7 +43,7 @@ export default function PlaylistCreateModal() {
   if (!isOpen) return null;
 
   return (
-    <ModalPortal>
+    <ModalPortal label='modal'>
       <ModalOverlay onClose={onCloseCreateModal} />
       <ModalContent zIndex={12000} className='max-w-[420px] mx-4'>
         <div className='p-4 border-b border-[#66666610]'>

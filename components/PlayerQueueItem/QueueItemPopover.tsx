@@ -1,4 +1,4 @@
-import { JSX, ReactNode, useState } from 'react';
+import { JSX, ReactNode } from 'react';
 
 import { AddPlaylistIcon, TrashIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';

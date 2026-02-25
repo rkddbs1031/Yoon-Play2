@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { RandomHeadLineType, Recommendation } from '@/types/recommend';
 import { RecommendationResultType } from '@/constants/recommend';
 import { useRecommendationSearch } from '@/services/recommend';
+import { useYoutubeInfiniteQuery } from '@/services/search';
 import { RANDOM_HEADLINES } from '@/states/headLine';
 
 import LoadingSpinner from '@/components/Loading';
@@ -18,13 +19,25 @@ const INIT_RECOMMEND = {
 };
 
 export default function Main() {
+  const router = useRouter();
+
   const [headline, setHeadline] = useState<RandomHeadLineType>({ type: null, text: '' });
   const [searchValue, setSearchValue] = useState('');
   const [recommend, setRecommend] = useState<Recommendation>(INIT_RECOMMEND);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const { mutate: searchRecommendation, isPending, error } = useRecommendationSearch();
-  const router = useRouter();
+  const [selectedTarget, setSelectedTarget] = useState<{ type: string | null; value: string | null }>({
+    type: null,
+    value: null,
+  });
+
+  const { mutate: searchRecommendation, isPending } = useRecommendationSearch();
+
+  const { isLoading: isYoutubeLoading } = useYoutubeInfiniteQuery({
+    type: selectedTarget.type,
+    value: selectedTarget.value,
+    initialData: undefined,
+  });
 
   useEffect(() => {
     const { type, text } = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
@@ -32,8 +45,7 @@ export default function Main() {
   }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { value } = e.currentTarget;
-    setSearchValue(value);
+    setSearchValue(e.currentTarget.value);
   };
 
   const handleSubmit = () => {
@@ -59,12 +71,15 @@ export default function Main() {
   };
 
   const handleClick = ({ value, type }: { value: string; type: RecommendationResultType }) => {
+    setSelectedTarget({ value, type });
+
     router.push(`/result?type=${type}&value=${encodeURIComponent(value)}`);
   };
 
   const handleReset = () => {
     setRecommend(INIT_RECOMMEND);
     setSearchValue('');
+    setSelectedTarget({ type: null, value: null });
   };
 
   const showIntro = !(!isPending && recommend.list !== null);
@@ -89,7 +104,7 @@ export default function Main() {
 
       {errorMessage && <p>{errorMessage}</p>}
 
-      <LoadingSpinner isLoading={isPending} />
+      <LoadingSpinner isLoading={isPending || isYoutubeLoading} />
     </section>
   );
 }

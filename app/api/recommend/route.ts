@@ -23,10 +23,16 @@ export async function POST(request: NextRequest) {
     // 2. 추천 생성
     const typePrompt = isRelevant ? getTypePrompt(type) : '';
     const recommendationResp = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: '너는 음악 추천 전문가 겸 도우미야.' },
-        { role: 'user', content: generateRecommendationPrompt(query, typePrompt) },
+        {
+          role: 'system',
+          content: '너는 음악 추천 전문가야. 응답은 반드시 한국어로 작성하고, 출력은 오직 JSON 포맷으로만 해줘.',
+        },
+        {
+          role: 'user',
+          content: generateRecommendationPrompt(query, typePrompt),
+        },
       ],
       temperature: 0.7,
       response_format: { type: 'json_object' },
@@ -74,7 +80,7 @@ export async function POST(request: NextRequest) {
 async function checkQueryRelevance(query: string, type: RecommendationType) {
   try {
     const result = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: '너는 사용자의 입력과 헤드라인 타입의 관련성을 판단하는 전문가야.' },
         {
@@ -104,19 +110,24 @@ function getTypePrompt(type: RecommendationType | null) {
 }
 
 const generateRecommendationPrompt = (query: string, typePrompt?: string) => `
-사용자의 입력: "${query}"
-${typePrompt ? `타입 기반 추천: "${typePrompt}"` : ''}
+사용자의  기분/상황: "${query}"
+참고 타입: "${typePrompt ? `${typePrompt}` : ''}"
 
-- 설명: 추천 배경이나 분위기에 대한 설명
-- 리스트: 음악 장르 3개, 플레이리스트 이름 3개 (유튜브 플레이리스트 검색용으로 사용될 제목), 배열 형태
-- 리스트 하위의 장르와 플레이리스트 중복 금지
-- 유튜브 링크는 절대 포함하지 마세요
-- JSON 형식:
+너의 임무는 위 내용을 바탕으로 유튜브 검색 시 '감성적인 썸네일과 제목'을 가진 플레이리스트가 잘 나오도록 키워드를 추출하는거야.
+
+[작성 규칙]
+1. playlist는 한국어 위주로, 유튜버들이 제목으로 쓸 법한 '트렌디한 문구'와 '명사형' 키워드로 작성해.
+   - 나쁜 예: "Spring Pop Playlist" (너무 딱딱함), "봄바람을 느끼며 노래하는 시간" (너무 김)
+   - 좋은 예: "드라이브하며 듣기 좋은 청량한 팝송", "봄날 카페 플레이리스트", "햇살 좋은 날 듣는 팝송", "산뜻한 봄 팝송", "설레는 인디음악"
+2. 장르(genre)는 실제 음악 장르 명칭만 사용해 (예: K-Pop, Lo-fi, Jazz).
+3. 설명(description)은 이 음악들을 들었을 때 어떤 기분을 느낄 수 있는지 감성적으로 적어줘.
+
+JSON 형식:
 {
   "description": "...",
   "list": {
-    "genre": ["...", "...", "..."],
-    "playlist": ["...", "...", "..."]
+    "genre": ["장르1", "장르2", "장르3"],
+    "playlist": ["검색어1", "검색어2", "검색어3"]
   }
 }
 `;

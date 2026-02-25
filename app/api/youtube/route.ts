@@ -8,7 +8,7 @@ const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3/search';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const query = searchParams.get('query');
+    const query = searchParams.get('query')?.trim();
     const searchType = searchParams.get('type') || '';
     const pageToken = searchParams.get('pageToken');
 

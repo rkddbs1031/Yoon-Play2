@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 
-import { usePlayerCore } from '@/hooks/usePlayer';
 import { AnimationType } from '@/constants/animation';
+import { RecommendationResultType } from '@/constants/recommend';
+import { usePlayerCore } from '@/hooks/usePlayer';
+import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { useYoutubeInfiniteQuery } from '@/services/search';
 import { YouTubeSearchList, YoutubeItem } from '@/types/youtube';
 import { PlaylistItem } from '@/types/playlist';
@@ -14,15 +16,9 @@ import { Skeleton } from '@/components/Skeleton';
 
 interface PlayListResultClientProps {
   initialData: YouTubeSearchList;
-  type: string | null;
+  type: RecommendationResultType | null;
   value: string | null;
 }
-
-const OBSERVE_OPTIONS = {
-  root: null,
-  rootMargin: '100px',
-  threshold: 1,
-};
 
 export default function PlaylistResultClient({ initialData, type, value }: PlayListResultClientProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useYoutubeInfiniteQuery({
@@ -31,8 +27,13 @@ export default function PlaylistResultClient({ initialData, type, value }: PlayL
     initialData,
   });
 
+  const { targetRef } = useInfiniteScroll({
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  });
+
   const { setPlayerListFromSearch } = usePlayerCore();
-  const target = useRef<HTMLDivElement | null>(null);
 
   const allItems = useMemo(() => {
     return data?.pages.flatMap(page => page.items) ?? [];
@@ -50,19 +51,6 @@ export default function PlaylistResultClient({ initialData, type, value }: PlayL
     const clicked: PlaylistItem = formatPlaylistItem(clickedItem);
     setPlayerListFromSearch(playlistItems, clicked);
   };
-
-  useEffect(() => {
-    if (!target.current) return;
-
-    const observer = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
-    }, OBSERVE_OPTIONS);
-
-    observer.observe(target.current);
-    return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <section className='playlist-wrapper max-w-[960px] mx-auto pb-20'>
@@ -92,7 +80,7 @@ export default function PlaylistResultClient({ initialData, type, value }: PlayL
           {isFetchingNextPage && <Skeleton.PlayList length={4} />}
         </ul>
 
-        <div ref={target} className='h-[50px]'></div>
+        <div ref={targetRef} className='h-[50px]'></div>
       </div>
     </section>
   );

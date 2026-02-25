@@ -2,6 +2,7 @@
 
 import { LIKED_PLAYLIST_ID, LibraryType } from '@/constants/library';
 import { usePlaylistTracks } from '@/hooks/usePlaylistTracks';
+import { usePlaylistEditModal } from '@/hooks/useModal';
 import { QueueContext } from '@/types/queue';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';
 import { formatDate } from '@/utils/date';
@@ -26,11 +27,22 @@ export default function LibraryPlaylistView({ playlistId }: PlaylistViewProps) {
   const dateInfo = `${year}.${month}`;
   const trackCount = tracks.length;
 
+  const { openModal: openEditModal } = usePlaylistEditModal();
+
+  const handleEdit = () => openEditModal(playlistId);
+
   if (isLoading) return <PlaylistViewSkeleton />;
 
   return (
     <PlaylistView>
-      <PlaylistView.Header type={type} title={title} thumbnails={thumbnails} date={dateInfo} count={trackCount} />
+      <PlaylistView.Header
+        type={type}
+        title={title}
+        thumbnails={thumbnails}
+        date={dateInfo}
+        count={trackCount}
+        onEdit={handleEdit}
+      />
       <PlaylistView.TrackList tracks={tracks} context={context} />
     </PlaylistView>
   );

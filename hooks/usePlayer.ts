@@ -81,6 +81,24 @@ export const usePlayerCore = () => {
     setIsPlaying(true);
   };
 
+  const setPlayerListFromExplore = (items: PlaylistItem[], clickedItem: PlaylistItem) => {
+    setPlaylist(prev => {
+      if (playlistSource !== PlaylistSource.Explore || prev.length === 0) return items;
+
+      const newItemIds = new Set(items.map(item => item.videoId));
+      const isSameSession = prev.some(p => newItemIds.has(p.videoId));
+
+      if (!isSameSession) return items;
+
+      const hasExisted = prev.some(p => p.videoId === clickedItem.videoId);
+      return hasExisted ? prev : [...prev, clickedItem];
+    });
+
+    setPlaylistSource(PlaylistSource.Explore);
+    setCurrentVideoId(clickedItem.videoId);
+    setIsPlaying(true);
+  };
+
   const removePlaylist = (item: PlaylistItem) => {
     setPlaylist(prev => {
       const removeIndex = prev.findIndex(v => v.videoId === item.videoId);
@@ -160,6 +178,7 @@ export const usePlayerCore = () => {
     currentVideo,
     setPlayerListFromSearch,
     setPlayerListFromContext,
+    setPlayerListFromExplore,
     removePlaylist,
     nextPlay,
     prevPlay,

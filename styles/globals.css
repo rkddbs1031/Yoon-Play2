@@ -4,13 +4,13 @@
 :root {
   --background: #000000;
 
-  /* --gradient: linear-gradient(-225deg, #a8a0e8 0%, #efe9f5 48%, #d8ede9 100%); */
   --gradient: linear-gradient(-225deg, #ece8fc 0%, #efe9f5 35%, #d3ebe6 100%);
   --foreground: #171717;
   --title: #52527a;
   --text: #394970; /* (조금 더 연함, 아래 색상에서 80%) */
   --text2: #08204b; /* (조금 더 블루 + 진함)*/
   --text3: #3d3d68;
+  font-family: var(--font-pretendard), sans-serif;
 }
 
 @theme inline {

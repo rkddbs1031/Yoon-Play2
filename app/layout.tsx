@@ -29,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' className={`${pretendard.variable}`}>
-      <body className={`${pretendard.className}`}>
+    <html lang='en' className={pretendard.variable}>
+      <body className={pretendard.className}>
         <DBProvider>
           <ReactQueryProvider>
             <main className='md:ml-[130px] px-6 py-15 md:p-5 min-h-screen w-full md:w-[calc(100%-130px)]'>

@@ -11,7 +11,7 @@ interface PlayListResultPageProps {
 }
 
 export default async function PlaylistResultPage({ searchParams }: PlayListResultPageProps) {
-  const { type, value } = searchParams;
+  const { type, value } = await searchParams;
 
   const initialData = await fetchYoutubeSearch({ value, type: type as RecommendationType });
 

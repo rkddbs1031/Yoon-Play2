@@ -45,8 +45,15 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
   useEffect(() => {
     if (!isPopoverOpen) return;
 
-    const handleOutsideAction = () => setIsPopoverOpen(false);
+    const handleOutsideAction = (e: Event) => {
+      // 클릭/터치된 요소가 팝오버 내부라면 닫지 않음
+      const target = e.target as HTMLElement;
+      if (target.closest('.playlist-menu-popover')) return;
 
+      setIsPopoverOpen(false);
+    };
+
+    // Popover 전파 방지 필요
     document.addEventListener('mousedown', handleOutsideAction);
     document.addEventListener('touchstart', handleOutsideAction); // 모바일 대응
 

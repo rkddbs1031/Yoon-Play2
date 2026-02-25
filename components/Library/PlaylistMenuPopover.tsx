@@ -27,6 +27,7 @@ export function PlaylistMenuPopover({ onEdit, onDelete, onClose, position }: Pla
         role='menu'
         className={`playlist-menu-popover fixed w-[140px] z-[999] rounded-[5px] bg-[#F4F2FB]/90 backdrop-blur-md rounded-[5px] shadow-[0_8px_24px_rgba(46,51,79,0.12)]`}
         onMouseDown={e => e.stopPropagation()}
+        onTouchStart={e => e.stopPropagation()}
         style={{
           top: position.top,
           left: position.left - 140,

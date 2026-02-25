@@ -51,9 +51,10 @@ const MAX_PAGE_COUNT = 4;
 
 interface YoutubeInfiniteQueryProps extends YouTubeSearchProps {
   initialData?: YouTubeSearchList;
+  enabled?: boolean;
 }
 
-export const useYoutubeInfiniteQuery = ({ type, value, initialData }: YoutubeInfiniteQueryProps) => {
+export const useYoutubeInfiniteQuery = ({ type, value, initialData, enabled }: YoutubeInfiniteQueryProps) => {
   return useInfiniteQuery({
     queryKey: ['recommend-youtube-search', type, value],
     queryFn: ({ pageParam }) => fetchYoutubeSearch({ type: type!, value: value!, pageParam }),
@@ -63,7 +64,7 @@ export const useYoutubeInfiniteQuery = ({ type, value, initialData }: YoutubeInf
       if (allPages.length >= MAX_PAGE_COUNT) return undefined;
       return lastPage.nextPageToken;
     },
-    enabled: !!value && !!type,
+    enabled: enabled && !!value && !!type,
     staleTime: 5 * 60 * 1000, // 5분
     gcTime: 10 * 60 * 1000, //  = cacheTime
     refetchOnWindowFocus: false,

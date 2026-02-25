@@ -22,6 +22,7 @@ export default function LibraryPlaylistView({ playlistId }: PlaylistViewProps) {
   const context = isLiked ? QueueContext.LikedList : QueueContext.UserPlaylist;
 
   const title = isLiked ? '좋아요한 목록' : playlist?.title || '';
+  const description = isLiked ? '' : playlist?.description || '';
   const thumbnails = getPlaylistThumbnails(tracks);
   const { year, month } = formatDate(playlist?.createdAt);
   const dateInfo = `${year}.${month}`;
@@ -38,6 +39,7 @@ export default function LibraryPlaylistView({ playlistId }: PlaylistViewProps) {
       <PlaylistView.Header
         type={type}
         title={title}
+        description={description}
         thumbnails={thumbnails}
         date={dateInfo}
         count={trackCount}

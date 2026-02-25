@@ -10,6 +10,7 @@ export interface PlaylistItem {
 export enum PlaylistSource {
   Context = 'CONTEXT',
   Search = 'SEARCH',
+  Explore = 'EXPLORE',
 }
 
 export interface PlaylistDB {

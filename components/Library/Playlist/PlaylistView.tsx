@@ -24,12 +24,13 @@ interface HeaderProps {
   thumbnails: string[];
   count: number;
   type: LibraryType;
+  date?: string;
 }
 
-function Header({ title, thumbnails, count, type }: HeaderProps) {
+function Header({ title, thumbnails, count, type, date }: HeaderProps) {
   return (
-    <div className='playlist-view-header mb-[50px]]'>
-      <div className='thumbnail-container max-w-[180px] mx-auto mb-6'>
+    <div className='playlist-view-header mb-[50px] flex flex-col items-center'>
+      <div className='thumbnail-container w-[180px] mb-6'>
         <ThumbnailGrid thumbnails={thumbnails} />
       </div>
 
@@ -40,6 +41,9 @@ function Header({ title, thumbnails, count, type }: HeaderProps) {
           <span className="relative mr-3 after:absolute after:content-['·'] after:mx-1">재생목록</span>
         )}
         <span>{count.toLocaleString()}곡</span>
+        {type === LibraryType.Playlist && date && (
+          <span className="relative ml-3 after:absolute after:-left-3 after:content-['·'] after:mx-1">{date}</span>
+        )}
       </div>
     </div>
   );

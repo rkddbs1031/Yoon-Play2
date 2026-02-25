@@ -4,6 +4,7 @@ import { LIKED_PLAYLIST_ID, LibraryType } from '@/constants/library';
 import { usePlaylistTracks } from '@/hooks/usePlaylistTracks';
 import { QueueContext } from '@/types/queue';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';
+import { formatDate } from '@/utils/date';
 
 import PlaylistView from '@/components/Library/Playlist/PlaylistView';
 import { PlaylistViewSkeleton } from '@/components/Skeleton/PlaylistViewSkeleton';
@@ -21,13 +22,15 @@ export default function LibraryPlaylistView({ playlistId }: PlaylistViewProps) {
 
   const title = isLiked ? '좋아요한 목록' : playlist?.title || '';
   const thumbnails = getPlaylistThumbnails(tracks);
+  const { year, month } = formatDate(playlist?.createdAt);
+  const dateInfo = `${year}.${month}`;
   const trackCount = tracks.length;
 
   if (isLoading) return <PlaylistViewSkeleton />;
 
   return (
     <PlaylistView>
-      <PlaylistView.Header title={title} thumbnails={thumbnails} count={trackCount} type={type} />
+      <PlaylistView.Header type={type} title={title} thumbnails={thumbnails} date={dateInfo} count={trackCount} />
       <PlaylistView.TrackList tracks={tracks} context={context} />
     </PlaylistView>
   );

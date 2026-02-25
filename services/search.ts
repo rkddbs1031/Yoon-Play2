@@ -49,11 +49,16 @@ export const fetchYoutubeSearch = async ({
 
 const MAX_PAGE_COUNT = 4;
 
-export const useYoutubeInfiniteQuery = ({ type, value }: YouTubeSearchProps) => {
+interface YoutubeInfiniteQueryProps extends YouTubeSearchProps {
+  initialData?: YouTubeSearchList;
+}
+
+export const useYoutubeInfiniteQuery = ({ type, value, initialData }: YoutubeInfiniteQueryProps) => {
   return useInfiniteQuery({
     queryKey: ['recommend-youtube-search', type, value],
     queryFn: ({ pageParam }) => fetchYoutubeSearch({ type: type!, value: value!, pageParam }),
     initialPageParam: undefined as string | undefined,
+    initialData: initialData ? { pages: [initialData], pageParams: [undefined] } : undefined,
     getNextPageParam: (lastPage, allPages) => {
       if (allPages.length >= MAX_PAGE_COUNT) return undefined;
       return lastPage.nextPageToken;

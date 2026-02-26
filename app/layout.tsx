@@ -7,9 +7,9 @@ import { DBProvider } from './providers/DBProvider';
 
 import { NavigationDrawer } from '@/components/NavigationDrawer';
 import PlayerWrapper from '@/components/Player';
+import PortalUIRoot from '@/components/PortalUIRoot';
 
 import '../styles/globals.css';
-import ModalRoot from '@/components/ModalRoot';
 
 const pretendard = localFont({
   src: '../static/fonts/PretendardVariable.woff2',
@@ -38,7 +38,7 @@ export default function RootLayout({
               <PlayerWrapper />
             </main>
             <NavigationDrawer />
-            <ModalRoot />
+            <PortalUIRoot />
 
             <ReactQueryDevtools initialIsOpen={false} />
           </ReactQueryProvider>

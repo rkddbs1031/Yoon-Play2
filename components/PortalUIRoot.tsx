@@ -4,14 +4,16 @@ import PlaylistAddModal from '@/app/library/playlist/_components/PlaylistAddModa
 import PlaylistCreateModal from '@/app/library/playlist/_components/PlaylistCreateModal';
 import PlaylistEditModal from '@/app/library/playlist/_components/PlaylistEditModal';
 import Confirm from './Confirm';
+import { Toaster } from './Toast';
 
-export default function ModalRoot() {
+export default function PortalUIRoot() {
   return (
     <>
       <PlaylistCreateModal />
       <PlaylistAddModal />
       <PlaylistEditModal />
       <Confirm />
+      <Toaster />
     </>
   );
 }

@@ -37,12 +37,12 @@ export default function Toast({ toast }: ToastProps) {
   }, [toast.id, toast.duration]);
 
   return (
-    <div id='toast' className='absolute top-1/2 left-1/2 -translate-x-1/2 z-[200] w-full max-w-[20rem]'>
+    <div id='toast' className='fixed top-4 right-4 z-[2000] w-full max-w-[20rem]'>
       <div
         className={`
-          transition-transform duration-500 ease-out 
-          ${isVisible ? '-translate-y-1/2' : 'translate-y-[100%]'} 
-          ${toastTypeBgMap[toast.type]} text-white rounded-sm z-[200]`}
+          transition-transform duration-500 ease-in-out 
+          ${isVisible ? 'translate-x-0 translate-y-0' : 'translate-x-[110%]'} 
+          ${toastTypeBgMap[toast.type]} text-white rounded-sm `}
       >
         <div className='flex flex-row items-center justify-between gap-5 pl-4 pr-3 py-2'>
           <div className='flex flex-col items-start gap-1'>

@@ -117,7 +117,7 @@ export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: st
   const existingRelation = await tx.objectStore('playlistTracks').get(relationId);
 
   if (existingRelation) {
-    await tx.done;
+    tx.abort(); // 트랜잭션 취소
     throw new Error('ALREADY_EXISTS');
   }
 

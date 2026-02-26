@@ -39,12 +39,15 @@ export const usePlaylistActions = () => {
     setTargetTrack(null);
   };
 
-  const handleAddTrack = async (playlistId: string) => {
+  const handleAddTrack = (playlistId: string) => {
     if (!targetTrack) return;
 
-    await addTrackMutation.mutateAsync({ playlistId, track: targetTrack });
-
-    setTargetTrack(null);
+    addTrackMutation.mutate(
+      { playlistId, track: targetTrack },
+      {
+        onSuccess: () => setTargetTrack(null),
+      },
+    );
   };
 
   const handleRemoveTrack = async (trackId: string) => {

@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useToast } from '@/hooks/useToast';
 
 import * as playlistDB from '@/lib/indexedDB/playlistDB';
 
@@ -57,6 +58,7 @@ export const useCreatePlaylistMutation = () => {
 // 플레이리스트에 트랙 추가, 추가 후 목록 재조회
 export const useAddTrackToPlaylistMutation = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: playlistDB.addTrackToPlaylist,
@@ -73,9 +75,9 @@ export const useAddTrackToPlaylistMutation = () => {
     onError: (error: Error) => {
       // 중복 에러 캐치
       if (error.message === 'ALREADY_EXISTS') {
-        // TODO: toast.error("이미 이 재생목록에 추가된 곡이에요! 😊");
+        toast.info('이미 해당 플레이리스트에 추가된 곡이에요', { subtitle: '다른 곡을 추가해보세요! 😊' });
       } else {
-        // TODO: toast.warning("곡을 추가하는 중에 문제가 생겼어요.");
+        toast.warning('곡을 추가하는 중에 문제가 생겼어요.', { subtitle: '잠시 후 다시 이용해주세요.' });
       }
     },
   });

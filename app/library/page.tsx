@@ -35,7 +35,7 @@ export default function Library() {
         className={`${AnimationType.FadeInUp} text-lg sm:text-xl font-[600] text-[#52527a] mb-6 sm:mb-8 whitespace-pre-wrap`}
         style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
       >
-        보관함
+        나의 플레이리스트
       </h1>
       <div className='library-list'>
         <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8'>

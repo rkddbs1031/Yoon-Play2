@@ -61,10 +61,12 @@ export const useAddTrackToPlaylistMutation = () => {
   return useMutation({
     mutationFn: playlistDB.addTrackToPlaylist,
     onSuccess: (_, variables) => {
-      // TODO: 해당 플레이리스트의 트랙 목록 갱신
-      // queryClient.invalidateQueries({
-      //   queryKey: ['playlistTracks', variables.playlistId]
-      // });
+      if (variables.playlistId) {
+        // 트랙 재조회
+        queryClient.invalidateQueries({
+          queryKey: [PLAYLIST_TRACKS_KEY, variables.playlistId],
+        });
+      }
 
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
     },

@@ -109,24 +109,31 @@ export const createPlaylist = async ({ title, description, initialTrack }: Creat
 export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: string; track: PlaylistItem }) => {
   const db = await getPlayerDB();
   const now = Date.now();
+  const relationId = `${playlistId}:${track.videoId}`;
 
   const tx = db.transaction(['tracks', 'playlistTracks', 'playlists'], 'readwrite');
 
-  // 1. tracks에 음악 저장
+  // 1. 중복 체크
+  const existingRelation = await tx.objectStore('playlistTracks').get(relationId);
+
+  if (existingRelation) {
+    await tx.done;
+    throw new Error('ALREADY_EXISTS');
+  }
+
+  // 2. tracks에 음악 저장 (있어도 덮어쓰기 되므로 상관없음)
   const trackEntity: TrackEntity = {
     ...track,
     id: track.videoId,
   };
   await tx.objectStore('tracks').put(trackEntity);
 
-  // 2. 해당 플레이리스트의 기존 트랙 개수 확인
-  const existedTrack = await tx.objectStore('playlistTracks').index('by-playlist').getAllKeys(playlistId);
-  const nextOrder = existedTrack.length;
+  // 3. 해당 플레이리스트의 기존 트랙 개수 확인
+  const existedTrackKeys = await tx.objectStore('playlistTracks').index('by-playlist').getAllKeys(playlistId);
+  const nextOrder = existedTrackKeys.length;
 
-  // 3. playlistTracks 관계 추가
-  const relationId = `${playlistId}:${track.videoId}`;
-
-  await tx.objectStore('playlistTracks').put({
+  // 4. playlistTracks 관계 추가
+  await tx.objectStore('playlistTracks').add({
     id: relationId,
     playlistId,
     trackId: track.videoId,
@@ -134,9 +141,8 @@ export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: st
     addedAt: now,
   });
 
-  // 4. playlists의 updatedAt 갱신
+  // 5. playlists의 updatedAt 갱신
   const playlist = await tx.objectStore('playlists').get(playlistId);
-
   if (playlist) {
     await tx.objectStore('playlists').put({
       ...playlist,

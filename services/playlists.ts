@@ -70,6 +70,14 @@ export const useAddTrackToPlaylistMutation = () => {
 
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
     },
+    onError: (error: Error) => {
+      // 중복 에러 캐치
+      if (error.message === 'ALREADY_EXISTS') {
+        // TODO: toast.error("이미 이 재생목록에 추가된 곡이에요! 😊");
+      } else {
+        // TODO: toast.warning("곡을 추가하는 중에 문제가 생겼어요.");
+      }
+    },
   });
 };
 

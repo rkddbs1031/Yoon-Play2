@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useSetAtom, useAtomValue, useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useAtomValue, useAtom } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { LikeStatus } from '@/constants/like';

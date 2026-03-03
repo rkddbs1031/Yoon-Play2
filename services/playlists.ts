@@ -55,12 +55,10 @@ export const useCreatePlaylistMutation = () => {
 
   return useMutation({
     mutationFn: playlistDB.createPlaylist,
-    onSuccess: data => {
+    onSuccess: ({ trackId, title }) => {
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
-      const message = data.trackId
-        ? `${data.title} 재생목록을 만들고 곡을 추가했습니다.`
-        : `${data.title} 재생목록을 만들었습니다.`;
 
+      const message = trackId ? `${title} 재생목록을 만들고 곡을 추가했습니다.` : `${title} 재생목록을 만들었습니다.`;
       toast.success(message);
     },
   });
@@ -115,12 +113,16 @@ export const useAddTrackToPlaylistMutation = () => {
 // 플레이리스트(재생목록 = 폴더)내 특정 트랙 삭제
 export const useRemoveTrackFromPlaylistMutation = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: playlistDB.removeTrackFromPlaylist,
-    onSuccess: data => {
-      queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, data.playlistId] });
+    onSuccess: ({ playlistId, title }) => {
+      queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, playlistId] });
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+
+      const playlistName = title || '재생목록';
+      toast.success(`${playlistName}에서 곡을 삭제했습니다.`);
     },
   });
 };
@@ -128,12 +130,15 @@ export const useRemoveTrackFromPlaylistMutation = () => {
 // 플레이리스트(재생목록 = 폴더) 정보 수정 (제목, 설명)
 export const useUpdatePlaylistMutation = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: playlistDB.updatePlaylistInfo,
-    onSuccess: updated => {
+    onSuccess: ({ id, title }) => {
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] }); // 제목 바뀌었으므로, 전체 재생목록 갱산
-      queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, updated.id] }); // 정보 갱신
+      queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, id] }); // 정보 갱신
+
+      toast.success(`${title} 정보가 수정되었습니다.`);
     },
   });
 };
@@ -141,11 +146,14 @@ export const useUpdatePlaylistMutation = () => {
 // 플레이리스트(재생목록 = 폴더) 자체 삭제
 export const useDeletePlaylistMutation = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: playlistDB.deletePlaylist,
-    onSuccess: () => {
+    onSuccess: ({ title }) => {
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] }); // 전체 목록만 갱신
+
+      toast.success(`'${title}' 재생목록을 삭제했습니다.`);
     },
   });
 };

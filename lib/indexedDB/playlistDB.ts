@@ -175,15 +175,18 @@ export const removeTrackFromPlaylist = async ({ playlistId, trackId }: { playlis
   await tx.objectStore('playlistTracks').delete(relationId);
 
   const playlist = await tx.objectStore('playlists').get(playlistId);
+  let updatedPlaylist = null;
+
   if (playlist) {
-    await tx.objectStore('playlists').put({
+    updatedPlaylist = {
       ...playlist,
       updatedAt: now,
-    });
+    };
+    await tx.objectStore('playlists').put(updatedPlaylist);
   }
 
   await tx.done;
-  return { playlistId, trackId };
+  return { playlistId, trackId, ...(updatedPlaylist || { title: '재생목록' }) };
 };
 
 // 개인 플레이리스트(재생목록 = 폴더) 정보 (title, desc) 수정
@@ -207,10 +210,12 @@ export const updatePlaylistInfo = async ({
   };
 
   await tx.store.put(updated);
-
   await tx.done;
 
-  return updated;
+  return {
+    ...updated,
+    playlistId: updated.id,
+  };
 };
 
 // 개인 플레이리스트(재생목록 = 폴더) 자체 삭제
@@ -218,8 +223,13 @@ export const deletePlaylist = async (playlistId: string) => {
   const db = await getPlayerDB();
 
   const tx = db.transaction(['playlists', 'playlistTracks'], 'readwrite');
+  const playlistStore = tx.objectStore('playlists');
+  const playlist = await playlistStore.get(playlistId);
 
-  await tx.objectStore('playlists').delete(playlistId);
+  // 삭제될 이름 미리 보관 (없을 경우를 대비해 기본값 설정)
+  const deletedTitle = playlist?.title || '재생목록';
+
+  await playlistStore.delete(playlistId);
 
   // 해당 재생목록에 속한 모든 트랙 관계 삭제 (by-playlist 인덱스 활용)
   const range = IDBKeyRange.only(playlistId);
@@ -231,5 +241,10 @@ export const deletePlaylist = async (playlistId: string) => {
   }
 
   await tx.done;
-  return playlistId;
+
+  return {
+    id: playlistId,
+    playlistId,
+    title: deletedTitle,
+  };
 };

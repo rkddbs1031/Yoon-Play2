@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation';
 
 import { AnimationType } from '@/constants/animation';
 import { LibraryListType, LibraryType } from '@/constants/library';
+import { PlusIcon } from '@/states/icon/svgs';
+import { usePlaylistCreateModal } from '@/hooks/useModal';
 import { usePlaylist } from '@/hooks/usePlaylist';
 import { animationStyle } from '@/utils/animation';
 
@@ -13,6 +15,7 @@ import { USER_PLAYLIST_ID } from '@/constants/library';
 
 export default function Library() {
   const { isLoading, likedPlaylistInfo: likedPlaylist, userPlaylistsInfo: userPlaylists } = usePlaylist();
+  const { openModal: onOpenCreateModal } = usePlaylistCreateModal();
 
   const router = useRouter();
 
@@ -30,7 +33,7 @@ export default function Library() {
   };
 
   return (
-    <section className='library-wrapper max-w-[960px] mx-auto pb-20'>
+    <section className='library-wrapper max-w-[960px] mx-auto pb-14'>
       <h1
         className={`${AnimationType.FadeInUp} text-lg sm:text-xl font-[600] text-[#52527a] mb-6 sm:mb-8 whitespace-pre-wrap`}
         style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
@@ -70,6 +73,16 @@ export default function Library() {
             </>
           )}
         </ul>
+      </div>
+
+      <div className='sticky bottom-25 right-0 flex justify-end'>
+        <button
+          className='flex gap-1 md:gap-2 items-center py-2 pl-4 pr-6 pr-4 mt-6 bg-[#F4F2FB]/90 hover:bg-white/90 duration-400 cursor-pointer backdrop-blur-md rounded-full'
+          onClick={onOpenCreateModal}
+        >
+          <PlusIcon size={20} />
+          <span className='text-sm sm:text-base lg:text-lg font-[500]'>새 재생목록</span>
+        </button>
       </div>
     </section>
   );

@@ -26,7 +26,7 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
 
   if (count === 0) {
     return (
-      <div className='thumbnail relative w-full aspect-square rounded-[8px] overflow-hidden  bg-[#F4F2FB]/90 backdrop-blur-md flex items-center justify-center'>
+      <div className='thumbnail relative w-full aspect-square rounded-[8px] overflow-hidden bg-[#F4F2FB]/80 backdrop-blur-md flex items-center justify-center'>
         <ListMusic size={28} color='#9291a0' />
       </div>
     );

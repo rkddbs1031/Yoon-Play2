@@ -25,6 +25,15 @@ export default function TrackList({ tracks, context }: TrackListProps) {
     overscan: 2,
   });
 
+  if (tracks.length === 0) {
+    return (
+      <div className='playlist-track-list-container py-10 md:py-20'>
+        <p className='text-center text-sm text-[#52527a] font-[500]'>저장된 트랙이 없습니다.</p>
+        <p className='text-center text-xs text-[#5f5f7c] mt-2'>좋아하는 곡을 재생목록에 추가해 보세요!</p>
+      </div>
+    );
+  }
+
   const virtualItems = rowVirtualizer.getVirtualItems();
 
   const handlePlay = (clickedItem: PlaylistItem) => setPlayerListFromContext(tracks, clickedItem);
@@ -43,7 +52,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
           return (
             <li
               key={track.videoId}
-              className={`${index + 1} absolute left-0 top-0 w-full border-t border-[#66666610] last:border-b last:border-white/20`}
+              className={`${index + 1} absolute left-0 top-0 w-full border-t border-[#66666610] last:border-b`}
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
               }}

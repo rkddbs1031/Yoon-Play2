@@ -14,7 +14,7 @@ interface PlaylistViewProps {
 
 function PlaylistView({ children }: PlaylistViewProps) {
   return (
-    <section id='playlist-view' className='max-w-[960px] mx-auto'>
+    <section id='playlist-view' className='max-w-[960px] mx-auto md:mt-10'>
       {children}
     </section>
   );

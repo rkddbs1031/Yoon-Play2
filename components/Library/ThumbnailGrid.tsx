@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
+import { ListMusic } from '@/states/icon/svgs';
 
 interface ThumbnailGridProps {
   thumbnails: string[];
@@ -22,6 +23,14 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
 
     return thumbnails;
   }, [thumbnails]);
+
+  if (count === 0) {
+    return (
+      <div className='thumbnail relative w-full aspect-square rounded-[8px] overflow-hidden  bg-[#F4F2FB]/90 backdrop-blur-md flex items-center justify-center'>
+        <ListMusic size={28} color='#9291a0' />
+      </div>
+    );
+  }
 
   if (count === 1) {
     return (

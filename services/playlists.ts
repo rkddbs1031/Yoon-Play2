@@ -51,11 +51,17 @@ export const usePlaylistPreviewQuery = ({ playlistId, limit }: { playlistId?: st
 // 플레이리스트 생성, 생성 후 목록 재조회
 export const useCreatePlaylistMutation = () => {
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   return useMutation({
     mutationFn: playlistDB.createPlaylist,
-    onSuccess: () => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+      const message = data.trackId
+        ? `${data.title} 재생목록을 만들고 곡을 추가했습니다.`
+        : `${data.title} 재생목록을 만들었습니다.`;
+
+      toast.success(message);
     },
   });
 };

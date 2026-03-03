@@ -103,7 +103,11 @@ export const createPlaylist = async ({ title, description, initialTrack }: Creat
 
   await tx.done;
 
-  return playlist;
+  return {
+    ...playlist,
+    trackId: initialTrack?.videoId || null,
+    isFirstTrack: !!initialTrack,
+  };
 };
 
 export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: string; track: PlaylistItem }) => {

@@ -143,15 +143,21 @@ export const addTrackToPlaylist = async ({ playlistId, track }: { playlistId: st
 
   // 5. playlists의 updatedAt 갱신
   const playlist = await tx.objectStore('playlists').get(playlistId);
+  let updatedPlaylist = null;
   if (playlist) {
-    await tx.objectStore('playlists').put({
+    updatedPlaylist = {
       ...playlist,
       updatedAt: now,
-    });
+    };
+    await tx.objectStore('playlists').put(updatedPlaylist);
   }
 
   await tx.done;
-  return { playlistId, trackId: track.videoId };
+  return {
+    playlistId,
+    trackId: track.videoId,
+    ...(updatedPlaylist || { title: '재생목록' }),
+  };
 };
 
 // 개인 플레이리스트(재생목록 = 폴더) 내 특정 트랙 삭제

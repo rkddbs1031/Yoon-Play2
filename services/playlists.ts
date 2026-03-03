@@ -1,7 +1,12 @@
+import { useSetAtom } from 'jotai';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 import { useToast } from '@/hooks/useToast';
+import { likedPlaylistAtom } from '@/store/like/atom';
+import { LIKED_PLAYLIST_ID } from '@/constants/library';
 
 import * as playlistDB from '@/lib/indexedDB/playlistDB';
+import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 
 const PLAYLISTS_KEY = 'playlists';
 const PLAYLIST_TRACKS_KEY = 'playlist-tracks';
@@ -59,18 +64,36 @@ export const useCreatePlaylistMutation = () => {
 export const useAddTrackToPlaylistMutation = () => {
   const queryClient = useQueryClient();
   const toast = useToast();
+  const setLikedPlaylist = useSetAtom(likedPlaylistAtom);
 
   return useMutation({
     mutationFn: playlistDB.addTrackToPlaylist,
-    onSuccess: (_, variables) => {
-      if (variables.playlistId) {
+    onSuccess: async (data, variables) => {
+      const { title: playlistName, playlistId } = data;
+      const { track } = variables;
+
+      if (playlistId) {
         // 트랙 재조회
         queryClient.invalidateQueries({
-          queryKey: [PLAYLIST_TRACKS_KEY, variables.playlistId],
+          queryKey: [PLAYLIST_TRACKS_KEY, playlistId],
         });
       }
 
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+
+      if (playlistId === LIKED_PLAYLIST_ID) {
+        try {
+          await likedDB.addLikedItem(track);
+
+          // Jotai 전역 상태 갱신 -> 모든 하트 아이콘 즉시 불 들어옴
+          const updated = await likedDB.getLikedPlaylist();
+          setLikedPlaylist(updated);
+        } catch (error) {
+          console.error('좋아요 동기화 실패:', error);
+        }
+      }
+
+      toast.success(`'${playlistName}'에 추가되었습니다.`);
     },
     onError: (error: Error) => {
       // 중복 에러 캐치

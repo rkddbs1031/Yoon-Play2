@@ -69,8 +69,11 @@ export default function PlaylistCreateModal() {
           </FieldWrapper>
         </div>
 
-        <div className='p-4 flex justify-end gap-3'>
-          <button onClick={onCloseCreateModal} className='text-xs cursor-pointer'>
+        <div className='p-4 flex justify-end gap-2'>
+          <button
+            onClick={onCloseCreateModal}
+            className='text-xs cursor-pointer rounded-full px-4 py-2  hover:bg-white/40 duration-200'
+          >
             취소
           </button>
 

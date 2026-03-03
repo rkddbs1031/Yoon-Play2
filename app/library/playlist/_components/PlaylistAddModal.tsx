@@ -28,8 +28,12 @@ export default function PlaylistAddModal() {
       <ModalContent className={'relative max-w-[320px] mx-4 pt-[56px]'}>
         <div className='fixed top-0 w-full flex items-center justify-between p-4 border-b border-[#66666610]'>
           <h2 className='font-[500]'>재생목록 저장</h2>
-          <button type='button' onClick={onCloseAddModal} className='cursor-pointer border-none bg-none outline-none'>
-            <CloseIcon size={20} />
+          <button
+            type='button'
+            onClick={onCloseAddModal}
+            className='absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center  cursor-pointer border-none bg-none outline-none w-[30px] h-[30px] rounded-full hover:bg-white/30 text-[#52527a] transition-colors'
+          >
+            <CloseIcon size={18} />
           </button>
         </div>
 

@@ -3,11 +3,12 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { RandomHeadLineType, Recommendation } from '@/types/recommend';
 import { RecommendationResultType } from '@/constants/recommend';
 import { useRecommendationSearch } from '@/services/recommend';
 import { useYoutubeInfiniteQuery } from '@/services/search';
 import { RANDOM_HEADLINES } from '@/states/headLine';
+import { CustomAxiosError } from '@/types/error';
+import { RandomHeadLineType, Recommendation } from '@/types/recommend';
 
 import LoadingSpinner from '@/components/Loading';
 import MainIntro from './_components/MainIntro';
@@ -59,12 +60,11 @@ export default function Main() {
           setRecommend({ description, list });
           setErrorMessage(null);
         },
-        onError: (err: any) => {
-          if (err?.response) {
-            setErrorMessage(err.response.data.error || '오류가 발생했습니다.');
-          } else {
-            setErrorMessage('서버에 연결할 수 없습니다.');
-          }
+        onError: (err: CustomAxiosError) => {
+          const serverError = err.response?.data;
+          const message = serverError?.message || '추천 정보를 가져오지 못했습니다.';
+
+          setErrorMessage(message);
         },
       },
     );
@@ -92,6 +92,7 @@ export default function Main() {
         searchValue={searchValue}
         onChange={handleChange}
         onSubmit={handleSubmit}
+        errorMessage={errorMessage}
       />
 
       <MainResult
@@ -101,8 +102,6 @@ export default function Main() {
         onClick={handleClick}
         onReset={handleReset}
       />
-
-      {errorMessage && <p>{errorMessage}</p>}
 
       <LoadingSpinner isLoading={isPending || isYoutubeLoading} />
     </section>

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { ERROR_CODE } from '@/constants/error';
 import { RecommendationResultType } from '@/constants/recommend';
-import { MOCK } from '@/constants/mock';
 
 const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3/search';
 

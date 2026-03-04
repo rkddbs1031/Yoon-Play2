@@ -59,8 +59,8 @@ export const QueueItemDotMenu = memo(({ item, context, color, onAddToPlaylist }:
   };
 
   const handleAction = (action: QueueContext) => {
-    removeHandlerMap[action]();
     setIsOpen(false);
+    removeHandlerMap[action]();
   };
 
   return (

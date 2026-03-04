@@ -11,6 +11,7 @@ import {
   useRemoveTrackFromPlaylistMutation,
   useUpdatePlaylistMutation,
 } from '@/services/playlists';
+import { useConfirm } from './useConfirm';
 
 /**
  * - 유저가 만든 플레이리스트만 조회
@@ -34,6 +35,8 @@ export const usePlaylistActions = () => {
   const updatePlaylistMutation = useUpdatePlaylistMutation();
   const deletePlaylistMutation = useDeletePlaylistMutation();
 
+  const { openConfirm } = useConfirm();
+
   const handleCreatePlaylist = async (data: { title: string; description?: string; initialTrack?: PlaylistItem }) => {
     await createMutation.mutateAsync(data); // 플레이리스트 생성 완료 기다림
     setTargetTrack(null);
@@ -50,14 +53,20 @@ export const usePlaylistActions = () => {
     );
   };
 
-  const handleRemoveTrack = async (trackId: string) => {
-    // TODO: 이 재생목록에서 곡을 삭제하시겠습니까?
+  const handleRemoveTrack = (trackId: string) => {
+    openConfirm({
+      title: '곡 삭제',
+      message: '현재 재생목록에서 곡을 삭제하시겠습니까?',
+      confirmText: '삭제',
+      isDanger: true,
+      onConfirm: () => {
+        if (!currentPlaylistId) return;
 
-    if (!currentPlaylistId) return;
-
-    await removeTrackMutation.mutateAsync({
-      playlistId: currentPlaylistId,
-      trackId,
+        removeTrackMutation.mutate({
+          playlistId: currentPlaylistId,
+          trackId,
+        });
+      },
     });
   };
 

@@ -31,7 +31,7 @@ export default function PlaylistAddModal() {
           <button
             type='button'
             onClick={onCloseAddModal}
-            className='absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center  cursor-pointer border-none bg-none outline-none w-[30px] h-[30px] rounded-full hover:bg-white/30 text-[#52527a] transition-colors'
+            className='absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-[30px] h-[30px] rounded-full hover:bg-white/30 text-[#52527a] transition-colors duration-200'
           >
             <CloseIcon size={18} />
           </button>
@@ -40,7 +40,7 @@ export default function PlaylistAddModal() {
         <div className='pt-4'>
           <span className='text-xs px-4'>모든 재생목록</span>
           {isLoading ? (
-            <div className='flex items-center  justify-center p-4'>
+            <div className='flex items-center justify-center p-4'>
               <SpinIcon className=' animate-spin' />
             </div>
           ) : (
@@ -50,7 +50,7 @@ export default function PlaylistAddModal() {
                   <button
                     type='button'
                     onClick={() => handlePlaylistClick(playlist.id)}
-                    className='w-full flex flex-col items-start gap-1 py-2 px-4 cursor-pointer transition-bg duration-300 hover:bg-white/30                    '
+                    className='w-full flex flex-col items-start gap-1 py-2 px-4 transition-bg duration-400 hover:bg-white/30                    '
                   >
                     <span className='text-sm text-[#394970] line-clamp-1'>{playlist.title}</span>
                     <span className='text-xs text-[#5f5f7c] line-clamp-1'>{playlist.trackCount}곡</span>
@@ -63,7 +63,8 @@ export default function PlaylistAddModal() {
 
         <div className='sticky bottom-4 right-0 flex justify-end'>
           <button
-            className='flex gap-1 items-center bg-[currentColor]/90 rounded-full py-1 pl-2 pr-4 cursor-pointer mr-4'
+            type='button'
+            className='flex gap-1 items-center bg-[currentColor]/90 rounded-full py-1 pl-2 pr-4 mr-4'
             onClick={onOpenCreateModal}
           >
             <PlusIcon size={20} color='white' />

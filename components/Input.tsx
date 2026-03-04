@@ -75,8 +75,7 @@ export function BaseInput<T extends string | number>({
       value={value}
       disabled={isDisabled}
       onChange={e => onChange?.(type === 'number' ? (Number(e.target.value) as T) : (e.target.value as T))}
-      className={`w-full py-2 rounded-lg focus:outline-none ${className}`}
-      //  px-3
+      className={`w-full py-2 rounded-lg ${className}`}
       {...rest}
     />
   );

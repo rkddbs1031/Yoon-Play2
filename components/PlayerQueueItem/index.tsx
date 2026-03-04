@@ -68,13 +68,13 @@ export const PlayerQueueItem = memo(
           />
         )}
 
-        <div className='relative flex gap-3 items-center px-2 py-[12px]'>
-          <button type='button' className='w-full cursor-pointer' onClick={onClick}>
+        <div className='relative flex gap-3 items-center px-2 py-3'>
+          <button type='button' className='w-full' onClick={onClick}>
             <MusicInfoWrapper
               item={item}
               imageSize={36}
               color={textColor}
-              fontSize={{ title: 'text-[12px]', channelTitle: 'text-[10px]' }}
+              fontSize={{ title: 'text-xs', channelTitle: 'text-[10px]' }}
             />
           </button>
 

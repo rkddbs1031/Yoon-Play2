@@ -71,13 +71,14 @@ export default function PlaylistCreateModal() {
 
         <div className='p-4 flex justify-end gap-2'>
           <button
+            type='button'
             onClick={onCloseCreateModal}
-            className='text-xs cursor-pointer rounded-full px-4 py-2  hover:bg-white/40 duration-200'
+            className='text-xs rounded-full px-4 py-2 hover:bg-white/40 duration-200'
           >
             취소
           </button>
 
-          <button onClick={handleCreate} className='text-xs bg-[currentColor]/90 rounded-full px-4 py-2 cursor-pointer'>
+          <button type='button' onClick={handleCreate} className='text-xs bg-[currentColor]/90 rounded-full px-4 py-2'>
             <span className='text-white'>만들기</span>
           </button>
         </div>

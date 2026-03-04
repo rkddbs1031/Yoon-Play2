@@ -83,15 +83,17 @@ export default function MainIntro({
 
           <div className='flex gap-3 justify-center w-full'>
             <button
+              type='button'
               onClick={() => router.push('/explore')}
-              className='text-xs sm:text-sm rounded-full backdrop-blur-xl shadow-lg px-6 py-2 bg-white/40 hover:bg-white/70 duration-200 cursor-pointer'
+              className='text-xs sm:text-sm rounded-full backdrop-blur-xl shadow-lg px-6 py-2 bg-white/40 hover:bg-white/70 duration-200'
             >
               다른 곡 둘러보기
             </button>
 
             <button
+              type='button'
               onClick={() => router.push('/library')}
-              className='text-xs sm:text-sm rounded-full backdrop-blur-xl shadow-lg px-6 py-2 bg-white/40 hover:bg-white/70 duration-200 cursor-pointer'
+              className='text-xs sm:text-sm rounded-full backdrop-blur-xl shadow-lg px-6 py-2 bg-white/40 hover:bg-white/70 duration-200'
             >
               내 보관함 가기
             </button>

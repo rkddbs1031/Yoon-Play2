@@ -113,7 +113,7 @@ export default function Sidebar() {
         <div className='close-button absolute top-[10px] right-[10px]'>
           <button
             type='button'
-            className='flex justify-center items-center w-6 h-6 hover:bg-white/30 duration-300 rounded-full cursor-pointer'
+            className='flex justify-center items-center w-6 h-6 hover:bg-white/30 duration-300 rounded-full'
             onClick={() => setIsOpen(false)}
           >
             <CloseIcon size={12} />

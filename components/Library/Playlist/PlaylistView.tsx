@@ -47,7 +47,7 @@ function Header({ type, title, description, thumbnails, count, date, onEdit }: H
             <button
               type='button'
               onClick={onEdit}
-              className='absolute left-[calc(100%+4px)] top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-[#52527a]/10 text-[#52527a] transition-colors cursor-pointer'
+              className='absolute left-[calc(100%+4px)] top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-[#52527a]/10 text-[#52527a] transition-colors'
               aria-label='정보 수정'
             >
               <EditIcon size={15} />

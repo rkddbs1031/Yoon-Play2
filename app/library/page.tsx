@@ -77,7 +77,8 @@ export default function Library() {
 
       <div className='sticky bottom-25 right-0 flex justify-end'>
         <button
-          className='flex gap-1 md:gap-2 items-center py-2 pl-4 pr-6 pr-4 mt-6 bg-[#F4F2FB]/90 hover:bg-white/90 duration-400 cursor-pointer backdrop-blur-md rounded-full'
+          type='button'
+          className='flex gap-1 md:gap-2 items-center py-2 pl-4 pr-6 pr-4 mt-6 bg-[#F4F2FB]/90 hover:bg-white/90 duration-400 backdrop-blur-md rounded-full'
           onClick={onOpenCreateModal}
         >
           <PlusIcon size={20} />

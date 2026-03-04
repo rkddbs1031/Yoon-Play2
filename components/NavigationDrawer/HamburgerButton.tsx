@@ -14,8 +14,9 @@ export default function HamburgerButton() {
 
   return (
     <button
+      type='button'
       onClick={() => setIsOpen(true)}
-      className={`${isMobile ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400 fixed top-4 left-4 z-[555] p-2 hover:bg-white/30 backdrop-blur-md rounded-full shadow cursor-pointer`}
+      className={`${isMobile ? 'opacity-100 visible' : 'opacity-0 invisible'} duration-400 fixed top-4 left-4 z-[555] p-2 hover:bg-white/30 backdrop-blur-md rounded-full shadow`}
     >
       <HamburgerIcon size={16} />
     </button>

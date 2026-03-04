@@ -32,15 +32,17 @@ export default function Confrim() {
 
         <div className='p-4 flex justify-end gap-2'>
           <button
+            type='button'
             onClick={closeConfirm}
-            className='text-xs cursor-pointer rounded-full px-4 py-2  hover:bg-white/40 duration-200'
+            className='text-xs rounded-full px-4 py-2 hover:bg-white/40 duration-200'
           >
             {cancelText || '취소'}
           </button>
 
           <button
+            type='button'
             onClick={handleConfirm}
-            className={`text-xs ${isDanger ? 'bg-[#e44545]' : 'bg-[currentColor]/90'} rounded-full px-4 py-2 cursor-pointer`}
+            className={`text-xs ${isDanger ? 'bg-[#e44545]' : 'bg-[currentColor]/90'} rounded-full px-4 py-2`}
           >
             <span className='text-white'>{confirmText || '확인'}</span>
           </button>

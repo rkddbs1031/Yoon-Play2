@@ -23,7 +23,7 @@ export const PlayListCard = ({ idx, style, thumbnail, title, channelTitle, onPla
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <button type='button' className='flex flex-col w-full items-start gap-2 cursor-pointer' onClick={onPlay}>
+      <button type='button' className='flex flex-col w-full items-start gap-2' onClick={onPlay}>
         <div className='relative w-full aspect-[16/9] overflow-hidden rounded-[8px]'>
           <Image
             src={formatThumbnailUrl({ thumbnail, size: 'medium' })}

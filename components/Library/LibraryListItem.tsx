@@ -94,7 +94,7 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
           <button
             type='button'
             onClick={onNavigate}
-            className='text-sm md:text-base font-[500] text-left line-clamp-2 bg-transparent border-none hover:underline active:underline cursor-pointer'
+            className='text-sm md:text-base font-[500] text-left line-clamp-2 bg-transparent hover:underline active:underline'
           >
             {title}
           </button>
@@ -106,7 +106,7 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
                 aria-haspopup='true'
                 aria-expanded={isPopoverOpen}
                 aria-label='재생목록 메뉴 열기'
-                className='cursor-pointer w-8 h-8 rounded-full flex items-center justify-center hover:bg-white/50 translate-x-3 transition-all duration-300 outline-none'
+                className='w-7 h-7 rounded-full flex items-center justify-center hover:bg-white/30 translate-x-2 duration-200'
                 onClick={handleClickPopover}
               >
                 <MoreVerticalIcon size={16} />

@@ -15,7 +15,7 @@ export const QueueItemLikeButton = memo(({ item }: QueueItemLikeButtonProps) => 
   const handleToggleLike = () => toggleLike(item);
 
   return (
-    <button type='button' onClick={handleToggleLike} className='cursor-pointer'>
+    <button type='button' onClick={handleToggleLike}>
       <LikeIcon fill={isLikedCurrent ? '#6FB7AA' : 'none'} size={14} color='#6FB7AA' />
     </button>
   );

@@ -60,7 +60,7 @@ function MenuItem({ children, label, onClick }: MenuItemProps) {
       role='menuitem'
       aria-label={label}
       onClick={onClick}
-      className='px-4 py-2 flex gap-2 w-full items-center justify-between cursor-pointer hover:bg-white/30 duration-300'
+      className='px-4 py-2 flex gap-2 w-full items-center justify-between hover:bg-white/30 duration-200'
     >
       {children}
     </button>

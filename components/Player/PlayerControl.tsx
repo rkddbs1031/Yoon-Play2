@@ -343,7 +343,7 @@ const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
         />
       </div>
 
-      <button type='button' className='cursor-pointer z-10 relative p-[2px]' disabled={!isActuallyPlayerReady}>
+      <button type='button' className='z-10 relative p-[2px]' disabled={!isActuallyPlayerReady}>
         <CurrentVolumeIcon size={18} color={volumeIconColor} />
       </button>
     </div>

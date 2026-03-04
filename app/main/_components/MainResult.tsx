@@ -41,7 +41,7 @@ export default function MainResult({ isVisible, description, data, onClick, onRe
               <p className='text-sm mb-4'>원하는 음악이 없으신가요?</p>
               <button
                 type='button'
-                className='block my-0 mx-auto bg-white/50 hover:bg-white/70 cursor-pointer duration-200 rounded-[24px] backdrop-blur-xl shadow-lg w-full max-w-[120px] px-2 py-2 text-[12px]'
+                className='block my-0 mx-auto bg-white/50 hover:bg-white/70 duration-200 rounded-[24px] backdrop-blur-xl shadow-lg w-full max-w-[120px] px-2 py-2 text-[12px]'
                 onClick={onReset}
               >
                 다시 검색하기

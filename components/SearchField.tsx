@@ -74,11 +74,11 @@ const SearchField = ({
         onKeyDown={fieldType === TextFieldType.Textarea ? handleKeyDown : undefined}
         placeholder={placeholder}
         disabled={disabled}
-        className={`w-full text-sm text-medium border-none outline-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}
+        className={`w-full text-sm text-medium border-none ${fieldType === TextFieldType.Textarea && 'resize-none'} border`}
         id='search-input-textarea'
         rows={1}
       />
-      <button type='submit' className='text-white cursor-pointer' aria-label='검색'>
+      <button type='submit' className='text-white' aria-label='검색'>
         <span className='sr-only'>검색</span>
         <SearchIcon size={16} stroke={color} />
       </button>

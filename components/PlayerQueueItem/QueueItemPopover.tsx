@@ -68,7 +68,7 @@ interface MenuItemProps {
 
 function MenuItem({ children, onClick }: MenuItemProps) {
   return (
-    <button type='button' onClick={onClick} className='px-3 py-2 flex gap-2 w-full items-center cursor-pointer'>
+    <button type='button' onClick={onClick} className='px-3 py-2 flex gap-2 w-full items-center'>
       {children}
     </button>
   );

@@ -65,7 +65,7 @@ export const QueueItemDotMenu = memo(({ item, context, color, onAddToPlaylist }:
 
   return (
     <div ref={dotMenuRef} className='relative flex items-center justify-center' onClick={e => e.stopPropagation()}>
-      <button type='button' onClick={handleClickDotMenu} className='cursor-pointer'>
+      <button type='button' onClick={handleClickDotMenu}>
         <MoreVerticalIcon size={16} color={color} />
       </button>
 

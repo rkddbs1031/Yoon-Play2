@@ -36,11 +36,19 @@ export const PlayerPanelHeader = forwardRef<HTMLDivElement, PlayerPanelHeaderPro
     return (
       <div ref={ref} className='player-top'>
         <div className='top-button flex justify-between w-full'>
-          <button type='button' onClick={onTogglePanel} className='down-btn cursor-pointer'>
+          <button
+            type='button'
+            onClick={onTogglePanel}
+            className='down-btn rounded-full flex items-center justify-center w-8 h-8 -translate-x-2 duration-200 hover:bg-white/20 backdrop-blur-md'
+          >
             <DownIcon color='white' size={20} />
           </button>
-          <button type='button' className='more-btn cursor-pointer' onClick={onToggleMore}>
-            <MoreVerticalIcon color='white' size={20} />
+          <button
+            type='button'
+            className='more-btn rounded-full flex items-center justify-center w-8 h-8 translate-x-2 duration-200 hover:bg-white/20 backdrop-blur-md'
+            onClick={onToggleMore}
+          >
+            <MoreVerticalIcon color='white' size={18} />
           </button>
           <PlayerDropdown
             isOpen={isDropdownOpen}
@@ -71,7 +79,7 @@ export const PlayerPanelHeader = forwardRef<HTMLDivElement, PlayerPanelHeaderPro
               <span className={`text-[10px] text-white/60 `}>{currentVideo.channelTitle}</span>
             </div>
             <div className='like'>
-              <button type='button' onClick={onToggleLike} className='cursor-pointer'>
+              <button type='button' onClick={onToggleLike}>
                 <LikeIcon fill={isLiked ? '#5E9F94' : 'none'} size={20} color='#5E9F94' />
               </button>
             </div>
@@ -80,7 +88,7 @@ export const PlayerPanelHeader = forwardRef<HTMLDivElement, PlayerPanelHeaderPro
           <PlayerControl.ProgressBar />
 
           <div className='player-control-buttons mb-6'>
-            <PlayerControl.Buttons color='#ffffff' disabledColor={currentVideo && '#ffffff66'} size={28} />
+            <PlayerControl.Buttons color='white' disabledColor={currentVideo && '#ffffff66'} size={28} />
           </div>
         </div>
       </div>

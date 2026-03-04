@@ -44,7 +44,7 @@ export default function PlayerDropdown({
           <button
             type='button'
             onClick={onToggleLike}
-            className='px-3 py-2 flex gap-2 w-full items-center cursor-pointer'
+            className='px-3 py-2 flex gap-2 w-full items-center hover:bg-white/20 duration-200'
           >
             <LikeIcon fill={isLiked ? 'currentColor' : 'none'} size={18} />
             <span className='text-sm'>{isLiked ? '좋아요 목록에서 삭제' : '좋아요 목록에 추가'}</span>
@@ -54,7 +54,7 @@ export default function PlayerDropdown({
           <button
             type='button'
             onClick={onAddToPlaylist}
-            className='px-3 py-2 flex gap-2 w-full items-center cursor-pointer'
+            className='px-3 py-2 flex gap-2 w-full items-center hover:bg-white/20 duration-200'
           >
             <AddPlaylistIcon size={18} />
             <span className='text-sm'>재생목록에 추가</span>

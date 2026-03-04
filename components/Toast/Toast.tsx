@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 
 import type { Toast as ToastType } from '@/types/toast';
 
-const toastTypeBgMap = {
-  success: 'bg-green-500',
-  error: 'bg-red-500',
-  warning: 'bg-orange-500',
-  info: 'bg-blue-500',
+const toastAccentColorMap = {
+  success: 'bg-emerald-500',
+  error: 'bg-rose-500',
+  warning: 'bg-amber-500',
+  info: 'bg-sky-500',
 };
 
 interface ToastProps {
@@ -37,19 +37,21 @@ export default function Toast({ toast }: ToastProps) {
   }, [toast.id, toast.duration]);
 
   return (
-    <div id='toast' className='fixed top-4 right-4 z-[2000] w-full max-w-[20rem]'>
+    <div id='toast' className='fixed top-6 right-4 z-[2000] flex flex-col items-end pointer-events-none'>
       <div
         className={`
-          transition-transform duration-500 ease-in-out 
+          relative overflow-hidden transition-transform duration-500 ease-in-out 
           ${isVisible ? 'translate-x-0 translate-y-0' : 'translate-x-[110%]'} 
-          ${toastTypeBgMap[toast.type]} text-white rounded-sm `}
+          shadow-xl bg-white/80 backdrop-blur-sm rounded-md w-fit min-w-[200px] max-w-[320px]`}
       >
-        <div className='flex flex-row items-center justify-between gap-5 pl-4 pr-3 py-2'>
-          <div className='flex flex-col items-start gap-1'>
-            <span className='text-base'>{toast.title}</span>
-            {toast.subtitle && <span className='text-sm'>{toast.subtitle}</span>}
-          </div>
+        <div className='flex flex-col items-start gap-1 pl-4 pr-2 py-2'>
+          <span className={`text-sm md:text-base font-semibold whitespace-nowrap`}>{toast.title}</span>
+          {toast.subtitle && (
+            <span className={`text-xs md:text-sm text-[currentColor]/80 break-all`}>{toast.subtitle}</span>
+          )}
         </div>
+
+        <div className={`absolute left-0 top-0 h-full w-[4px] ${toastAccentColorMap[toast.type]}`} />
       </div>
     </div>
   );

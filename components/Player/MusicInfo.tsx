@@ -1,6 +1,7 @@
+import Image from 'next/image';
+
 import { PlaylistItem } from '@/types/playlist';
 import { formatThumbnailUrl } from '@/utils/thumbnail';
-import Image from 'next/image';
 
 interface ColorAndFontSize {
   title: string;

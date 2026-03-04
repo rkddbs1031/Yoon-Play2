@@ -81,7 +81,7 @@ export function BaseInput<T extends string | number>({
   );
 }
 
-interface TextInputProps extends BaseInputProps<string> {}
+type TextInputProps = BaseInputProps<string>;
 
 export function TextInput(props: TextInputProps) {
   return <BaseInput type='text' {...props} />;

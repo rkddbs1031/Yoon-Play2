@@ -1,15 +1,15 @@
-import { useState, MouseEvent, useEffect } from 'react';
+import { useState, MouseEvent, useEffect, useCallback } from 'react';
 
 import { LIKED_PLAYLIST_ID, LibraryType } from '@/constants/library';
+import { useConfirm } from '@/hooks/useConfirm';
+import { usePlaylistEditModal } from '@/hooks/useModal';
+import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 import { usePlaylistPreviewQuery } from '@/services/playlists';
 import { MoreVerticalIcon } from '@/states/icon/svgs';
-import { usePlaylistEditModal } from '@/hooks/useModal';
-import { useConfirm } from '@/hooks/useConfirm';
-import { usePlaylistActions } from '@/hooks/usePlaylistActions';
 import { getPlaylistThumbnails } from '@/utils/thumbnail';
 
-import ThumbnailGrid from './ThumbnailGrid';
 import { PlaylistMenuPopover } from './PlaylistMenuPopover';
+import ThumbnailGrid from './ThumbnailGrid';
 
 interface LibraryListItemProps {
   playlistId: string;
@@ -81,7 +81,7 @@ export const LibraryListItem = ({ playlistId, title, count, type, onNavigate }: 
     });
   };
 
-  const handleClose = () => setIsPopoverOpen(false);
+  const handleClose = useCallback(() => setIsPopoverOpen(false), []);
 
   return (
     <li className='library-item'>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useAtom } from 'jotai';
+import { useSetAtom } from 'jotai';
 
 import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { HamburgerIcon } from '@/states/icon/svgs';
@@ -8,7 +8,7 @@ import { isSidebarOpenAtom } from '@/store/ui/sidebarAtom';
 
 export default function HamburgerButton() {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const [_, setIsOpen] = useAtom(isSidebarOpenAtom);
+  const setIsOpen = useSetAtom(isSidebarOpenAtom);
 
   if (!isMobile) return null;
 

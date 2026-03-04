@@ -3,9 +3,9 @@
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
+import { usePlayerCore } from '@/hooks/usePlayer';
 import { PlaylistItem } from '@/types/playlist';
 import { QueueContext } from '@/types/queue';
-import { usePlayerCore } from '@/hooks/usePlayer';
 
 import { PlayerQueueItem } from '@/components/PlayerQueueItem';
 

@@ -1,4 +1,5 @@
 import { useAtomValue, useSetAtom } from 'jotai';
+
 import { addToastAtom, clearQueueAtom, currentToastAtom, removeToastAtom } from '@/store/ui/toastAtom';
 
 const DEFAULT_DURATION = {

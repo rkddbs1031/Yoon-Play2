@@ -32,7 +32,7 @@ const SearchField = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit && onSubmit();
+    if (onSubmit) onSubmit();
   };
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const SearchField = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (fieldType === TextFieldType.Textarea) handleResizeHeight();
-    onChange && onChange(e);
+    if (onChange) onChange(e);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {

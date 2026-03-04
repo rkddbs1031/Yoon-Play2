@@ -3,10 +3,10 @@ import Image from 'next/image';
 
 import { DownIcon, LikeIcon, MoreVerticalIcon } from '@/states/icon/svgs';
 import { PlaylistItem } from '@/types/playlist';
-
-import PlayerDropdown from './PlayerDropdown';
-import { PlayerControl } from './PlayerControl';
 import { formatThumbnailUrl } from '@/utils/thumbnail';
+
+import { PlayerControl } from './PlayerControl';
+import PlayerDropdown from './PlayerDropdown';
 
 interface PlayerPanelHeaderProps {
   currentVideo: PlaylistItem;
@@ -95,3 +95,5 @@ export const PlayerPanelHeader = forwardRef<HTMLDivElement, PlayerPanelHeaderPro
     );
   },
 );
+
+PlayerPanelHeader.displayName = 'PlayerPanelHeader';

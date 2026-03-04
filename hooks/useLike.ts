@@ -1,12 +1,11 @@
 import { useEffect } from 'react';
-import { useAtomValue, useAtom } from 'jotai';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useAtomValue, useAtom } from 'jotai';
 
 import { LikeStatus } from '@/constants/like';
+import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/like/atom';
 import { PlaylistItem } from '@/types/playlist';
-
-import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 
 /**
  * - 좋아요 목록 제공

@@ -1,12 +1,11 @@
-import { useSetAtom } from 'jotai';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
 
-import { useToast } from '@/hooks/useToast';
-import { likedPlaylistAtom } from '@/store/like/atom';
 import { LIKED_PLAYLIST_ID } from '@/constants/library';
-
-import * as playlistDB from '@/lib/indexedDB/playlistDB';
+import { useToast } from '@/hooks/useToast';
 import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
+import * as playlistDB from '@/lib/indexedDB/playlistDB';
+import { likedPlaylistAtom } from '@/store/like/atom';
 
 const PLAYLISTS_KEY = 'playlists';
 const PLAYLIST_TRACKS_KEY = 'playlist-tracks';

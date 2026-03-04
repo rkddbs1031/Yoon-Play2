@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, MouseEvent, memo } from 'react';
 
-import { MoreVerticalIcon } from '@/states/icon/svgs';
-import { PlaylistItem } from '@/types/playlist';
-import { QueueContext } from '@/types/queue';
 import { useLike } from '@/hooks/useLike';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { usePlaylistActions } from '@/hooks/usePlaylistActions';
+import { MoreVerticalIcon } from '@/states/icon/svgs';
+import { PlaylistItem } from '@/types/playlist';
+import { QueueContext } from '@/types/queue';
 
 import QueueItemPopover from './QueueItemPopover';
 

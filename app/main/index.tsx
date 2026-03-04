@@ -11,6 +11,7 @@ import { CustomAxiosError } from '@/types/error';
 import { RandomHeadLineType, Recommendation } from '@/types/recommend';
 
 import LoadingSpinner from '@/components/Loading';
+
 import MainIntro from './_components/MainIntro';
 import MainResult from './_components/MainResult';
 

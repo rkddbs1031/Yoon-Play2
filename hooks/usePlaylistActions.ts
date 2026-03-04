@@ -2,8 +2,6 @@
 
 import { useAtom, useAtomValue } from 'jotai';
 
-import { PlaylistItem } from '@/types/playlist';
-import { currentVideoPlaylistIdAtom, playlistTargetTrackAtom } from '@/store/playlist/atoms';
 import {
   useAddTrackToPlaylistMutation,
   useCreatePlaylistMutation,
@@ -11,6 +9,9 @@ import {
   useRemoveTrackFromPlaylistMutation,
   useUpdatePlaylistMutation,
 } from '@/services/playlists';
+import { currentVideoPlaylistIdAtom, playlistTargetTrackAtom } from '@/store/playlist/atoms';
+import { PlaylistItem } from '@/types/playlist';
+
 import { useConfirm } from './useConfirm';
 
 /**

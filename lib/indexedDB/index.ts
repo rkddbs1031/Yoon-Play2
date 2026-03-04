@@ -1,7 +1,9 @@
-import { DBSchema, IDBPDatabase, openDB } from 'idb';
+import { openDB } from 'idb';
 
 import { LIKED_PLAYLIST_ID } from '@/constants/library';
 import { PlaylistItem, PlaylistSource } from '@/types/playlist';
+
+import type { DBSchema, IDBPDatabase } from 'idb';
 
 export interface PlayerDBSchema extends DBSchema {
   /**

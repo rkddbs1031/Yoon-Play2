@@ -1,13 +1,13 @@
 import { memo } from 'react';
 
-import { PlaylistItem } from '@/types/playlist';
-import { QueueContext } from '@/types/queue';
 import { usePlaylistAddModal } from '@/hooks/useModal';
 import { usePlaylistActions } from '@/hooks/usePlaylistActions';
+import { PlaylistItem } from '@/types/playlist';
+import { QueueContext } from '@/types/queue';
 
-import { MusicInfoWrapper } from '../Player/MusicInfo';
-import { QueueItemLikeButton } from './QueueItemLikeButton';
 import { QueueItemDotMenu } from './QueueItemDotMenu';
+import { QueueItemLikeButton } from './QueueItemLikeButton';
+import { MusicInfoWrapper } from '../Player/MusicInfo';
 
 const ACTIVE_ITEM_BG =
   'bg-[linear-gradient(180deg,rgb(255_255_255_/_15%)_0%,rgb(255_255_255_/_10%)_20%,rgb(255_255_255_/_10%)_70%,rgb(255_255_255_/_15%)_100%)]';
@@ -46,45 +46,52 @@ const COLOR_BY_CONTEXT: Record<
   },
 };
 
-export const PlayerQueueItem = memo(
-  ({ item, isActive, onClick, context, showLikeButton = true, showDotButton = true }: PlayerQueueItemProps) => {
-    const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
+export const PlayerQueueItem = memo(function PlayerQueueItem({
+  item,
+  isActive,
+  onClick,
+  context,
+  showLikeButton = true,
+  showDotButton = true,
+}: PlayerQueueItemProps) {
+  const { dotColor, ...textColor } = COLOR_BY_CONTEXT[context];
 
-    const { setTargetTrack } = usePlaylistActions();
-    const { openModal } = usePlaylistAddModal();
+  const { setTargetTrack } = usePlaylistActions();
+  const { openModal } = usePlaylistAddModal();
 
-    const handleOpenModal = () => {
-      setTargetTrack(item);
-      openModal();
-    };
+  const handleOpenModal = () => {
+    setTargetTrack(item);
+    openModal();
+  };
 
-    return (
-      <>
-        {context === QueueContext.CurrentQueue && (
-          <div
-            className={`layer absolute pointer-events-none inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
-              isActive ? 'opacity-100' : 'opacity-0'
-            }`}
+  return (
+    <>
+      {context === QueueContext.CurrentQueue && (
+        <div
+          className={`layer absolute pointer-events-none inset-0 ${ACTIVE_ITEM_BG} transition-opacity duration-300 ${
+            isActive ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
+      )}
+
+      <div className='relative flex gap-3 items-center px-2 py-3'>
+        <button type='button' className='w-full' onClick={onClick}>
+          <MusicInfoWrapper
+            item={item}
+            imageSize={36}
+            color={textColor}
+            fontSize={{ title: 'text-xs', channelTitle: 'text-[10px]' }}
           />
+        </button>
+
+        {showLikeButton && <QueueItemLikeButton item={item} />}
+
+        {showDotButton && (
+          <QueueItemDotMenu item={item} context={context} color={dotColor} onAddToPlaylist={handleOpenModal} />
         )}
+      </div>
+    </>
+  );
+});
 
-        <div className='relative flex gap-3 items-center px-2 py-3'>
-          <button type='button' className='w-full' onClick={onClick}>
-            <MusicInfoWrapper
-              item={item}
-              imageSize={36}
-              color={textColor}
-              fontSize={{ title: 'text-xs', channelTitle: 'text-[10px]' }}
-            />
-          </button>
-
-          {showLikeButton && <QueueItemLikeButton item={item} />}
-
-          {showDotButton && (
-            <QueueItemDotMenu item={item} context={context} color={dotColor} onAddToPlaylist={handleOpenModal} />
-          )}
-        </div>
-      </>
-    );
-  },
-);
+PlayerQueueItem.displayName = 'PlayerQueueItem';

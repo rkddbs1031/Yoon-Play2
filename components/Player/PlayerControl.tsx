@@ -1,11 +1,13 @@
 import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo } from 'react';
-import YouTube, { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 import { useAtom, useAtomValue } from 'jotai';
+import YouTube from 'react-youtube';
 
 import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
 import { usePlayer, usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
 import { isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/player/atom';
+
+import type { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 
 const PlayerFrame = () => {
   const {
@@ -90,7 +92,7 @@ const PlayerFrame = () => {
         playerRef.pauseVideo();
       }
     } catch (error) {
-      // console.log('YouTube 플레이어 조작 중 오류 발생:', error);
+      console.error('YouTube 플레이어 조작 중 오류 발생:', error);
     }
   }, [isPlaying, playerRef, isActuallyPlayerReady]);
 
@@ -107,10 +109,10 @@ const PlayerFrame = () => {
       try {
         playerRef.setVolume(volume);
       } catch (error) {
-        // console.error('Failed to set volume:', error);
+        console.error('Failed to set volume:', error);
       }
     }
-  }, [volume, isActuallyPlayerReady]);
+  }, [volume, isActuallyPlayerReady, playerRef]);
 
   useEffect(() => {
     return () => {
@@ -118,7 +120,7 @@ const PlayerFrame = () => {
       setPlayerRef(null);
       setIsPlayerReady(false);
     };
-  }, []);
+  }, [setPlayerRef, setIsPlayerReady]);
 
   if (!currentVideo) return null;
 
@@ -149,7 +151,7 @@ interface ColorProps {
   disabledColor?: string | null;
 }
 
-const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) => {
+const PlayerButtons = memo(function PlayerButtons({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) {
   const isHovered = useAtomValue(isHoveredVolumeButton);
   const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayerCore();
 
@@ -186,7 +188,9 @@ const PlayerButtons = memo(({ size = 18, color, disabledColor }: IconButtonSize 
   );
 });
 
-const ProgressBar = memo(({ className }: { className?: string }) => {
+PlayerButtons.displayName = 'PlayerButtons';
+
+const ProgressBar = memo(function ProgressBar({ className }: { className?: string }) {
   const { duration, currentTime, playerRef, setCurrentTime } = usePlayerTime();
   const seekTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -291,7 +295,9 @@ const ProgressBar = memo(({ className }: { className?: string }) => {
   );
 });
 
-const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
+ProgressBar.displayName = 'ProgressBar';
+
+const PlayerVolumeControl = memo(function ({ color, disabledColor }: ColorProps) {
   const [isHovered, setIsHovered] = useAtom(isHoveredVolumeButton);
   const { handleVolume, volume, setVolume } = usePlayerVolume();
   const isActuallyPlayerReady = useAtomValue(isPlayerReadyAtom);
@@ -349,6 +355,8 @@ const PlayerVolumeControl = memo(({ color, disabledColor }: ColorProps) => {
     </div>
   );
 });
+
+PlayerVolumeControl.displayName = 'PlayerVolumeControl';
 
 export const PlayerControl = {
   Frame: PlayerFrame,

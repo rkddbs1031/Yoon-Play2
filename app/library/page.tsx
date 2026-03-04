@@ -3,15 +3,14 @@
 import { useRouter } from 'next/navigation';
 
 import { AnimationType } from '@/constants/animation';
-import { LibraryListType, LibraryType } from '@/constants/library';
-import { PlusIcon } from '@/states/icon/svgs';
+import { LibraryListType, LibraryType, USER_PLAYLIST_ID } from '@/constants/library';
 import { usePlaylistCreateModal } from '@/hooks/useModal';
 import { usePlaylist } from '@/hooks/usePlaylist';
+import { PlusIcon } from '@/states/icon/svgs';
 import { animationStyle } from '@/utils/animation';
 
 import { LibraryListItem } from '@/components/Library/LibraryListItem';
 import { LibrarySkeleton } from '@/components/Skeleton/LibrarySkelton';
-import { USER_PLAYLIST_ID } from '@/constants/library';
 
 export default function Library() {
   const { isLoading, likedPlaylistInfo: likedPlaylist, userPlaylistsInfo: userPlaylists } = usePlaylist();

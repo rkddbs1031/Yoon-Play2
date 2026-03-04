@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
+
 import { ListMusic } from '@/states/icon/svgs';
 
 interface ThumbnailGridProps {
@@ -22,7 +23,7 @@ export default function ThumbnailGrid({ thumbnails }: ThumbnailGridProps) {
     }
 
     return thumbnails;
-  }, [thumbnails]);
+  }, [thumbnails, count]);
 
   if (count === 0) {
     return (

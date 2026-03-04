@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAtom } from 'jotai';
 
-import { YoonLogoIcon, HomeIcon, ExploreIcon, Libraryicon, CloseIcon } from '@/states/icon/svgs';
 import { useMediaQuery } from '@/hooks/useMediaQuery';
+import { YoonLogoIcon, HomeIcon, ExploreIcon, Libraryicon, CloseIcon } from '@/states/icon/svgs';
 import { isSidebarOpenAtom } from '@/store/ui/sidebarAtom';
 
 interface NavMenu {
@@ -95,7 +95,7 @@ export default function Sidebar() {
     }
 
     setIsOpen(false);
-  }, [isMobile]);
+  }, [isMobile, setIsOpen]);
 
   return (
     <aside

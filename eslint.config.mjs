@@ -25,14 +25,13 @@ const eslintConfig = [
     },
     rules: {
       // TS & React 규칙
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'error',
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off',
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'react/react-in-jsx-scope': 'off',
       'react/jsx-props-no-spreading': 'off',
-      'react/no-array-index-key': 'warn',
-      'react/jsx-props-no-spreading': 'off',
+      'react/no-array-index-key': 'off',
       'react/self-closing-comp': [
         'error',
         {
@@ -46,47 +45,31 @@ const eslintConfig = [
         'error',
         {
           groups: [
-            ['builtin', 'external'], // Node.js 내장 모듈 + 외부 패키지
-            ['internal', 'type'], // 내부 모듈(@/components, @/utils 등) + 타입
-            ['parent', 'sibling', 'index'], // 상위, 같은 폴더, 인덱스
+            ['builtin', 'external'], // 1. React, Next, 외부 라이브러리
+            'internal', // 2. 로직 (@/constants, hooks, services, types 등)
+            'object', // 3. 컴포넌트 전용 (internal과 상대 경로 사이의 벽!)
+            ['parent', 'sibling', 'index'], // 4. 모든 상대 경로 (../ 와 ./ 를 하나로 묶음!)
+            'type',
           ],
           pathGroups: [
             {
+              pattern: 'react',
+              group: 'builtin',
+              position: 'before',
+            },
+            {
+              pattern: 'next/**',
+              group: 'builtin',
+              position: 'before',
+            },
+            {
               pattern: '@/components/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/hooks/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/utils/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/services/**',
-              group: 'internal',
-              position: 'after',
-            },
-            {
-              pattern: '@/types/**',
-              group: 'type',
-              position: 'after',
-            },
-            {
-              pattern: '@/states/**',
-              group: 'type',
-              position: 'after',
-            },
-            {
-              pattern: '@/styles/**',
-              group: 'type',
-              position: 'after',
+              group: 'object',
+              position: 'before',
             },
           ],
+          pathGroupsExcludedImportTypes: [], // 타입 임포트가 섞일 수 있도록 해제
+          distinctGroup: false,
           'newlines-between': 'always', // 그룹 사이 한 줄 띄우기
           alphabetize: {
             order: 'asc', // 그룹 내부 알파벳 순

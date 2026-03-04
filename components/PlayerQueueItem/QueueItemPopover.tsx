@@ -2,6 +2,7 @@ import { JSX, ReactNode } from 'react';
 
 import { AddPlaylistIcon, TrashIcon } from '@/states/icon/svgs';
 import { QueueContext } from '@/types/queue';
+
 import Portal from '../Portal';
 
 const MENU_MAP: Record<QueueContext, { label: string; icon: JSX.Element; color: string; background: string }> = {

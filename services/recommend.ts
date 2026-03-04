@@ -1,8 +1,9 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { FetchMethod } from '@/constants/fetch';
 import { RecommendationType } from '@/constants/recommend';
 import { Recommendation } from '@/types/recommend';
 import { fetcher } from '@/utils/request';
-import { useMutation } from '@tanstack/react-query';
 
 export const RECOMMEND_API_KEY = '/api/recommend';
 export const AI_RECOMMENDATION_KEY = 'ai-recommendation-keyword';

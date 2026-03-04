@@ -19,7 +19,7 @@ export function PlaylistMenuPopover({ onEdit, onDelete, onClose, position }: Pla
 
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
-  }, []);
+  }, [onClose]);
 
   return (
     <Portal>

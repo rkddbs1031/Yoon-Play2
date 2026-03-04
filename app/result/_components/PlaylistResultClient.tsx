@@ -5,12 +5,12 @@ import { useRouter } from 'next/navigation';
 
 import { AnimationType } from '@/constants/animation';
 import { RecommendationResultType } from '@/constants/recommend';
-import { usePlayerCore } from '@/hooks/usePlayer';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
+import { usePlayerCore } from '@/hooks/usePlayer';
 import { useYoutubeInfiniteQuery } from '@/services/search';
 import { ApiErrorResponse, CustomAxiosError } from '@/types/error';
-import { YouTubeSearchList, YoutubeItem } from '@/types/youtube';
 import { PlaylistItem } from '@/types/playlist';
+import { YouTubeSearchList, YoutubeItem } from '@/types/youtube';
 import { animationStyle } from '@/utils/animation';
 
 import { PlayListCard } from '@/components/Playlist';
@@ -69,7 +69,7 @@ export default function PlaylistResultClient({ initialData, type, value }: PlayL
         className={`${AnimationType.FadeInUp} text-lg sm:text-xl font-[600] text-[#52527a] mb-6 sm:mb-8 whitespace-pre-wrap`}
         style={animationStyle({ useAnimation: true, delay: 0.3, duration: 0.6 })}
       >
-        "{value}" 키워드에 맞는 추천 플레이리스트예요!
+        {`"${value}" 키워드에 맞는 추천 플레이리스트예요!`}
       </h1>
 
       {hasResults && (
@@ -92,7 +92,7 @@ export default function PlaylistResultClient({ initialData, type, value }: PlayL
             {isFetchingNextPage && <Skeleton.PlayList length={4} />}
           </ul>
 
-          <div ref={targetRef} className='h-[50px]'></div>
+          <div ref={targetRef} className='h-[50px]' />
         </div>
       )}
 

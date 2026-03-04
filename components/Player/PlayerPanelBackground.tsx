@@ -16,7 +16,7 @@ export const PlayerPanelBackground = ({ overlayImage, height }: PlayerPanelBackg
           />
         </div>
       )}
-      <div className='overlay absolute bottom-0 left-0 transition-all duration-500 bg-[linear-gradient(to_bottom,transparent_20%,rgb(0_0_0_/_40%)_100%)]  backdrop-blur-[30px] w-full h-full'></div>
+      <div className='overlay absolute bottom-0 left-0 transition-all duration-500 bg-[linear-gradient(to_bottom,transparent_20%,rgb(0_0_0_/_40%)_100%)]  backdrop-blur-[30px] w-full h-full' />
     </>
   );
 };

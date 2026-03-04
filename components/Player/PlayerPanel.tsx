@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useLike } from '@/hooks/useLike';
-import { usePlayerCore } from '@/hooks/usePlayer';
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
-import { usePlayerBackground } from '@/hooks/usePlayerBackground';
+import { useLike } from '@/hooks/useLike';
 import { usePlaylistAddModal } from '@/hooks/useModal';
+import { usePlayerCore } from '@/hooks/usePlayer';
+import { usePlayerBackground } from '@/hooks/usePlayerBackground';
 import { usePlaylistActions } from '@/hooks/usePlaylistActions';
-
-import { formatThumbnailUrl } from '@/utils/thumbnail';
 import { QueueContext } from '@/types/queue';
+import { formatThumbnailUrl } from '@/utils/thumbnail';
 
-import { PlayerPanelHeader } from './PlayerPanelHeader';
-import { PlayerPanelBackground } from './PlayerPanelBackground';
 import { PlayerQueueItem } from '../PlayerQueueItem';
+import { PlayerPanelBackground } from './PlayerPanelBackground';
+import { PlayerPanelHeader } from './PlayerPanelHeader';
 
 const ANIMATION_DURATION = 400;
 

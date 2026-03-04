@@ -1,12 +1,16 @@
 'use client';
 
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { fromPlaylistParam } from '@/utils/playlist';
+
+import { PlaylistViewSkeleton } from '@/components/Skeleton/PlaylistViewSkeleton';
+
 import LibraryPlaylistView from './_components/LibraryPlaylistView';
 
-export default function LibraryPlaylist() {
+function PlaylistContent() {
   const searchParams = useSearchParams();
   const listParam = searchParams.get('list');
 
@@ -29,4 +33,12 @@ export default function LibraryPlaylist() {
   if (!playlistId) return null;
 
   return <LibraryPlaylistView playlistId={playlistId} />;
+}
+
+export default function LibraryPlaylist() {
+  return (
+    <Suspense fallback={<PlaylistViewSkeleton />}>
+      <PlaylistContent />
+    </Suspense>
+  );
 }

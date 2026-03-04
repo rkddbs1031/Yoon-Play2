@@ -1,8 +1,8 @@
 import { memo } from 'react';
 
-import { PlaylistItem } from '@/types/playlist';
 import { useLike } from '@/hooks/useLike';
 import { LikeIcon } from '@/states/icon/svgs';
+import { PlaylistItem } from '@/types/playlist';
 
 interface QueueItemLikeButtonProps {
   item: PlaylistItem;

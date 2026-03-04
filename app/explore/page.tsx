@@ -7,13 +7,13 @@ import { TextFieldType } from '@/constants/textFiled';
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { useYoutubeInfiniteQuery } from '@/services/search';
-import { YoutubeItem } from '@/types/youtube';
 import { PlaylistItem } from '@/types/playlist';
+import { YoutubeItem } from '@/types/youtube';
 
+import LoadingSpinner from '@/components/Loading';
+import { PlayListCard } from '@/components/Playlist';
 import SearchField from '@/components/SearchField';
 import { Skeleton } from '@/components/Skeleton';
-import { PlayListCard } from '@/components/Playlist';
-import LoadingSpinner from '@/components/Loading';
 
 export default function Explore() {
   const [keyword, setKeyword] = useState('');
@@ -33,9 +33,12 @@ export default function Explore() {
 
   const { setPlayerListFromExplore } = usePlayerCore();
 
+  const searchResults = useMemo(() => {
+    return data?.pages.flatMap(page => page.items) || [];
+  }, [data?.pages]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setKeyword(e.currentTarget.value);
-    // TODO: 최근 검색어 저장?
   };
 
   const handleSubmitSearch = () => {
@@ -62,10 +65,6 @@ export default function Explore() {
 
     setPlayerListFromExplore(playlistItems, clicked);
   };
-
-  const searchResults = useMemo(() => {
-    return data?.pages.flatMap(page => page.items) || [];
-  }, [data?.pages]);
 
   const hasResults = !isLoading && searchResults.length > 0;
 
@@ -94,7 +93,9 @@ export default function Explore() {
 
         {hasResults && (
           <>
-            <span className='inline-block mb-6 text-sm font-[400] text-[#52527a]'>'{activeKeyword}' 검색 결과</span>
+            <span className='inline-block mb-6 text-sm font-[400] text-[#52527a]'>
+              &apos;{activeKeyword}&apos; 검색 결과
+            </span>
 
             <ul className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-6 sm:gap-x-6 sm:gap-y-8 auto-rows-fr'>
               {searchResults.map((item, idx) => (
@@ -111,7 +112,7 @@ export default function Explore() {
               {isFetchingNextPage && <Skeleton.PlayList length={4} />}
             </ul>
 
-            <div ref={targetRef} className='h-[50px]'></div>
+            <div ref={targetRef} className='h-[50px]' />
           </>
         )}
       </div>

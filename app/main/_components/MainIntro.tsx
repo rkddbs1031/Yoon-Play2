@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { AnimationType } from '@/constants/animation';
 import { TextFieldType } from '@/constants/textFiled';
 import { animationStyle } from '@/utils/animation';
+
 import SearchField from '@/components/SearchField';
 
 interface MainIntroProps {

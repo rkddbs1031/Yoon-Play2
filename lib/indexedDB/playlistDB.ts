@@ -1,6 +1,7 @@
-import { getPlayerDB } from '.';
 import { LIKED_PLAYLIST_ID, USER_PLAYLIST_ID } from '@/constants/library';
 import { PlaylistItem } from '@/types/playlist';
+
+import { getPlayerDB } from '.';
 
 export const getPlaylists = async () => {
   const db = await getPlayerDB();

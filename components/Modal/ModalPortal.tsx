@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+
 import Portal from '../Portal';
 
 interface ModalPortalProps {

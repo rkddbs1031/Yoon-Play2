@@ -1,6 +1,6 @@
 import { useToast } from '@/hooks/useToast';
 
-import Toast from './Toast';
+import { Toast } from './Toast';
 
 export function Toaster() {
   const { currentToast } = useToast();

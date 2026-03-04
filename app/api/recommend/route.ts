@@ -103,7 +103,7 @@ async function checkQueryRelevance(query: string, type: RecommendationType) {
 
     const rawContent = JSON.parse(result.choices[0].message?.content ?? '{"isRelevant":false}');
     return { isRelevant: rawContent.isRelevant === true };
-  } catch (err) {
+  } catch {
     return { isRelevant: false };
   }
 }

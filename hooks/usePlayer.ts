@@ -1,6 +1,7 @@
 import { MouseEvent, useEffect } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 
+import * as playerStateDB from '@/lib/indexedDB/playerStateDB';
 import {
   currentVideoIdAtom,
   isPlayingState,
@@ -17,8 +18,6 @@ import {
   playlistSourceAtom,
 } from '@/store/player/atom';
 import { PlaylistItem, PlaylistSource } from '@/types/playlist';
-
-import * as playerStateDB from '@/lib/indexedDB/playerStateDB';
 
 export const usePlayerCore = () => {
   const [playlist, setPlaylist] = useAtom(playlistState);

@@ -3,10 +3,10 @@
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { usePlayerCore } from '@/hooks/usePlayer';
 import { TRANSITION_DURATION, usePlayerBackground } from '@/hooks/usePlayerBackground';
-
-import { PlayerControl } from './PlayerControl';
-import { MusicInfoWrapper } from './MusicInfo';
 import { formatThumbnailUrl } from '@/utils/thumbnail';
+
+import { MusicInfoWrapper } from './MusicInfo';
+import { PlayerControl } from './PlayerControl';
 
 const ANIMATION_DURATION = 300;
 
@@ -48,7 +48,7 @@ export const PlayerBar = () => {
           {currentVideo ? (
             <MusicInfoWrapper item={currentVideo} color={{ title: 'text-white', channelTitle: 'text-white/60' }} />
           ) : (
-            <div className='w-[50px] h-[50px] rounded-[8px] bg-black/10'></div>
+            <div className='w-[50px] h-[50px] rounded-[8px] bg-black/10' />
           )}
 
           <div className='control-wrapper flex items-center gap-2'>

@@ -13,7 +13,7 @@ interface ToastProps {
   toast: ToastType;
 }
 
-export default function Toast({ toast }: ToastProps) {
+export function Toast({ toast }: ToastProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -56,3 +56,5 @@ export default function Toast({ toast }: ToastProps) {
     </div>
   );
 }
+
+Toast.displayName = 'Toast';

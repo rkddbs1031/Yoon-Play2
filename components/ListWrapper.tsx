@@ -15,7 +15,7 @@ export const ListWrapper = ({ type, title, list, onClick }: ListWrapperProps) =>
     <Card>
       <h3 className='font-[600] text-[12px] text-[#52527a]'>{title}</h3>
       {list && (
-        <ul className='flex flex-col sm:flex-row gap-5 sm:gap-4'>
+        <ul className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           {list.map(label => (
             <li key={label} className='flex-1'>
               <Button label={label} onClick={() => onClick({ value: label, type })} />

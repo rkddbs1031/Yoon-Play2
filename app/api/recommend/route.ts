@@ -1,6 +1,8 @@
-import { RecommendationType } from '@/constants/recommend';
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
+
+import { ERROR_CODE } from '@/constants/error';
+import { RecommendationType } from '@/constants/recommend';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY || '',
@@ -12,6 +14,29 @@ const TYPE_PROMPT_MAP: Record<RecommendationType, string> = {
   weather: '오늘 날씨에 맞는 음악 및 플레이리스트를 추천해줘.',
   time: '현재 시간대에 맞는 음악 및 플레이리스트를 추천해줘.',
   activity: '사용자의 활동에 맞는 음악 및 플레이리스트를 추천해줘.',
+};
+
+const OPENAI_ERROR_MAP: Record<string | number, { status: number; code: string; message: string }> = {
+  429: {
+    status: 429,
+    code: ERROR_CODE.QUOTA_EXCEEDED,
+    message: '오늘 준비된 AI 추천 한도가 소진되었습니다. 내일 다시 시도해주세요! 👋',
+  },
+  401: {
+    status: 401,
+    code: ERROR_CODE.AUTH_ERROR,
+    message: '추천 시스템 인증에 실패했습니다. 관리자에게 문의해주세요.',
+  },
+  insufficient_quota: {
+    status: 429,
+    code: ERROR_CODE.QUOTA_EXCEEDED,
+    message: '보유하신 API 크레딧이 부족합니다. 계정 설정을 확인해주세요.',
+  },
+  500: {
+    status: 500,
+    code: ERROR_CODE.SERVER_ERROR,
+    message: 'AI 모델이 응답하지 않습니다. 잠시 후 다시 시도해주세요.',
+  },
 };
 
 export async function POST(request: NextRequest) {
@@ -41,39 +66,18 @@ export async function POST(request: NextRequest) {
     const result = JSON.parse(recommendationResp.choices[0].message?.content || '{}');
     return NextResponse.json({ ...result, is_relevant: isRelevant });
   } catch (error: any) {
-    console.error('OpenAI API 오류:', error, error.status);
+    const status = error.status;
+    const errorCode = error.code || error.type;
 
-    // 오류 유형에 따라 다른 메시지와 상태 코드 반환
-    if (error.status === 429) {
-      return NextResponse.json(
-        {
-          error: '일일 API 요청 한도를 초과했습니다. 잠시 후 다시 시도해주세요.',
-        },
-        { status: 429 },
-      );
-    } else if (error.status === 401) {
-      return NextResponse.json(
-        {
-          error: 'API 인증에 실패했습니다. API 키를 확인해주세요.',
-        },
-        { status: 401 },
-      );
-    } else if (error.message && error.message.includes('quota')) {
-      return NextResponse.json(
-        {
-          error: '할당된 API 사용량이 모두 소진되었습니다. 요금제를 확인해주세요.',
-        },
-        { status: 429 },
-      );
-    } else {
-      // 그 외 모든 오류
-      return NextResponse.json(
-        {
-          error: '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.',
-        },
-        { status: 500 },
-      );
-    }
+    const errorInfo = OPENAI_ERROR_MAP[status] || OPENAI_ERROR_MAP[errorCode];
+
+    const finalStatus = errorInfo?.status || status || 500;
+    const finalCode = errorInfo?.code || ERROR_CODE.SERVER_ERROR;
+    const finalMessage = errorInfo?.message || error.message || '추천 서비스 일시 점검 중입니다.';
+
+    console.error(`🔴 [OpenAI API] ${status || errorCode}:`, error);
+
+    return NextResponse.json({ success: false, code: finalCode, message: finalMessage }, { status: finalStatus });
   }
 }
 

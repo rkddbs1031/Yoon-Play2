@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useAtom } from 'jotai';
 
@@ -20,20 +20,20 @@ export const useLike = () => {
   const [likedPlaylist, setLikedPlaylist] = useAtom(likedPlaylistAtom);
   const isLikedSelector = useAtomValue(isLikedSelectorAtom);
 
-  useEffect(() => {
-    const restoreLikedPlaylist = async () => {
-      try {
-        const result = await likedDB.getLikedPlaylist();
-        setLikedPlaylist(result ?? []);
-      } catch (error) {
-        console.error('Failed to restore liked playlist', error);
-      }
-    };
+  const restoreLikedPlaylist = useCallback(async () => {
+    try {
+      const result = await likedDB.getLikedPlaylist();
+      setLikedPlaylist(result ?? []);
+    } catch (error) {
+      console.error('Failed to restore liked playlist', error);
+    }
+  }, [setLikedPlaylist]);
 
+  useEffect(() => {
     if (likedPlaylist.length === 0) {
       restoreLikedPlaylist();
     }
-  }, []);
+  }, [restoreLikedPlaylist, likedPlaylist.length]);
 
   const toggleMutation = useMutation({
     mutationFn: async (item: PlaylistItem) => {

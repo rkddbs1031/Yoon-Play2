@@ -9,6 +9,9 @@ import { currentTimeAtom, durationAtom, isPlayerReadyAtom } from '@/store/player
 
 import type { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 
+const MemoizedYouTube = memo(YouTube);
+MemoizedYouTube.displayName = 'MemoizedYouTube';
+
 const PlayerFrame = () => {
   const {
     currentIndex,
@@ -29,26 +32,29 @@ const PlayerFrame = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const localPlayerRef = useRef<YouTubePlayer | null>(null);
 
-  const handleReady = (e: YouTubeEvent) => {
-    // console.log('handleReady! YouTube Player fully loaded.');
-    localPlayerRef.current = e.target;
-    setPlayerRef(e.target);
-    setIsPlayerReady(true); // 플레이어가 완전히 준비되었음을 전역 상태에 알림!
+  const handleReady = useCallback(
+    (e: YouTubeEvent) => {
+      // console.log('handleReady! YouTube Player fully loaded.');
+      localPlayerRef.current = e.target;
+      setPlayerRef(e.target);
+      setIsPlayerReady(true); // 플레이어가 완전히 준비되었음을 전역 상태에 알림!
 
-    const duration = e.target.getDuration();
-    setDuration(duration);
-    setCurrentTime(0);
-  };
+      const duration = e.target.getDuration();
+      setDuration(duration);
+      setCurrentTime(0);
+    },
+    [setPlayerRef, setIsPlayerReady, setDuration, setCurrentTime],
+  );
 
-  const handleEnd = () => {
+  const handleEnd = useCallback(() => {
     if (currentIndex < lastIndex) {
       setCurrentVideoId(playlist[currentIndex + 1].videoId);
     } else if (currentIndex === lastIndex) {
       setIsPlaying(false);
     }
-  };
+  }, [currentIndex, lastIndex, playlist, setCurrentVideoId, setIsPlaying]);
 
-  const startInterval = () => {
+  const startInterval = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -63,24 +69,27 @@ const PlayerFrame = () => {
         });
       }
     }, 300);
-  };
+  }, [setCurrentTime]);
 
-  const stopInterval = () => {
+  const stopInterval = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-  };
+  }, []);
 
-  const handleStateChange = (e: YouTubeEvent) => {
-    if (!isActuallyPlayerReady) return;
+  const handleStateChange = useCallback(
+    (e: YouTubeEvent) => {
+      if (!isActuallyPlayerReady) return;
 
-    // 0 = 종료, 1 = 재생중, 2 = 일시 정지, 3 = 버퍼링 5 = 동영상 준비
-    if (e.data === 1) {
-      startInterval();
-    } else if (e.data === 0 || e.data === 2) {
-      stopInterval();
-    }
-  };
+      // 0 = 종료, 1 = 재생중, 2 = 일시 정지, 3 = 버퍼링 5 = 동영상 준비
+      if (e.data === 1) {
+        startInterval();
+      } else if (e.data === 0 || e.data === 2) {
+        stopInterval();
+      }
+    },
+    [isActuallyPlayerReady, startInterval, stopInterval],
+  );
 
   const handlePlayVideo = useCallback(() => {
     if (!isActuallyPlayerReady) return;
@@ -120,12 +129,12 @@ const PlayerFrame = () => {
       setPlayerRef(null);
       setIsPlayerReady(false);
     };
-  }, [setPlayerRef, setIsPlayerReady]);
+  }, [stopInterval, setPlayerRef, setIsPlayerReady]);
 
   if (!currentVideo) return null;
 
   return (
-    <YouTube
+    <MemoizedYouTube
       key={currentVideo.videoId}
       className='player-frame hidden'
       videoId={currentVideo.videoId}

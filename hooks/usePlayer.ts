@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect } from 'react';
+import { MouseEvent, useCallback, useEffect } from 'react';
 import { useAtom, useAtomValue } from 'jotai';
 
 import * as playerStateDB from '@/lib/indexedDB/playerStateDB';
@@ -34,18 +34,18 @@ export const usePlayerCore = () => {
 
   const isActuallyPlayerReady = playerRef !== null && isPlayerReady;
 
-  const restorePlayerState = async () => {
+  const restorePlayerState = useCallback(async () => {
     const savedState = await playerStateDB.getPlayerState();
     if (!savedState) return;
 
     setPlaylist(savedState.playlist);
     setPlaylistSource(savedState.playlistSource);
     setCurrentVideoId(savedState.currentVideoId);
-  };
+  }, [setPlaylist, setPlaylistSource, setCurrentVideoId]);
 
   useEffect(() => {
     restorePlayerState();
-  }, []);
+  }, [restorePlayerState]);
 
   // 상태 변경 시 자동 저장
   useEffect(() => {

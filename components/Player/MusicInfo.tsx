@@ -15,14 +15,14 @@ interface MusicInfoWrapperProps {
   fontSize?: ColorAndFontSize;
 }
 
-const DEFUALT_COLOR = 'text-[#3d3d68]';
+const DEFAULT_COLOR = 'text-[#3d3d68]';
 const DEFAULT_TITLE_SIZE = 'text-[14px]';
 const DEFAULT_CHANNEL_TITLE_SIZE = 'text-[10px]';
 
 export const MusicInfoWrapper = ({
   item,
   imageSize = 50,
-  color = { title: DEFUALT_COLOR, channelTitle: DEFUALT_COLOR },
+  color = { title: DEFAULT_COLOR, channelTitle: DEFAULT_COLOR },
   fontSize = { title: DEFAULT_TITLE_SIZE, channelTitle: DEFAULT_CHANNEL_TITLE_SIZE },
 }: MusicInfoWrapperProps) => {
   const { title, channelTitle, thumbnail } = item;

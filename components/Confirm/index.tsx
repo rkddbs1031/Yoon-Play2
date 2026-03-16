@@ -6,7 +6,7 @@ import {
   ModalContent as ConfirmContent,
 } from '@/components/Modal';
 
-export default function Confrim() {
+export default function Confirm() {
   const { isOpen, title, message, confirmText, cancelText, isDanger, onConfirm, closeConfirm } = useConfirm();
 
   if (!isOpen) return null;

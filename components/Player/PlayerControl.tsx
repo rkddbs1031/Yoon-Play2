@@ -296,7 +296,6 @@ const ProgressBar = memo(function ProgressBar({ className }: { className?: strin
 ProgressBar.displayName = 'ProgressBar';
 
 const PlayerVolumeControl = memo(function ({ color, disabledColor }: ColorProps) {
-  const [isHovered, setIsHovered] = useState(false);
   const { volume, setVolume } = usePlayerVolume();
   const isActuallyPlayerReady = useAtomValue(isPlayerReadyAtom);
 
@@ -311,30 +310,14 @@ const PlayerVolumeControl = memo(function ({ color, disabledColor }: ColorProps)
   const volumeIconColor = isActuallyPlayerReady ? color || ACTIVE_COLOR : disabledColor || DISABLED_COLOR;
   const CurrentVolumeIcon = volume === 0 ? MutedVolumeIcon : VolumeIcon;
 
-  const handleMouseEnter = () => {
-    if (!isActuallyPlayerReady) return;
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (!isActuallyPlayerReady) return;
-    setIsHovered(false);
-  };
-
   const handleClickVolumeWrapper = (e: MouseEvent) => e.stopPropagation();
 
   return (
     <div
-      className='volume-wrapper flex items-center relative z-10'
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={`volume-wrapper flex items-center relative z-10 ${isActuallyPlayerReady ? 'group' : ''}`}
       onClick={handleClickVolumeWrapper}
     >
-      <div
-        className={`absolute right-full top-1/2 -translate-y-1/2 w-[80px] pr-2 ${
-          isHovered ? 'z-20 opacity-100 visible' : 'z-[-1] opacity-0 invisible'
-        } transition-all duration-200 pb-[5px]`}
-      >
+      <div className='absolute right-full top-1/2 -translate-y-1/2 w-[80px] pr-2 z-[-1] opacity-0 invisible group-hover:z-20 group-hover:opacity-100 group-hover:visible transition-all duration-200 pb-[5px]'>
         <input
           type='range'
           min={0}

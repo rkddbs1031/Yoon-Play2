@@ -1,7 +1,8 @@
 import { atom } from 'jotai';
-import { YouTubePlayer } from 'react-youtube';
 
 import { PlaylistItem, PlaylistSource } from '@/types/playlist';
+
+import type { YouTubePlayer } from 'react-youtube';
 
 export const isPlayerReadyAtom = atom(false);
 

@@ -14,6 +14,7 @@ export const useInfiniteScroll = ({
   options = { rootMargin: '100px', threshold: 1.0 },
 }: useInfiniteScrollProps) => {
   const targetRef = useRef<HTMLDivElement | null>(null);
+  const optionsRef = useRef(options);
 
   useEffect(() => {
     const currentTarget = targetRef.current;
@@ -24,12 +25,12 @@ export const useInfiniteScroll = ({
       if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
       }
-    }, options);
+    }, optionsRef.current);
 
     observer.observe(currentTarget);
 
     return () => observer.disconnect();
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage, options]);
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return { targetRef };
 };

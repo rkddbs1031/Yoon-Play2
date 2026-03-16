@@ -296,16 +296,15 @@ ProgressBar.displayName = 'ProgressBar';
 
 const PlayerVolumeControl = memo(function ({ color, disabledColor }: ColorProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const { handleVolume, volume, setVolume } = usePlayerVolume();
+  const { volume, setVolume } = usePlayerVolume();
   const isActuallyPlayerReady = useAtomValue(isPlayerReadyAtom);
 
   const handleVolumeChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const newVolume = Number(e.target.value);
-      handleVolume(newVolume);
       setVolume(newVolume);
     },
-    [handleVolume, setVolume],
+    [setVolume],
   );
 
   const volumeIconColor = isActuallyPlayerReady ? color || ACTIVE_COLOR : disabledColor || DISABLED_COLOR;

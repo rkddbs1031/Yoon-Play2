@@ -16,7 +16,7 @@ interface PlayerQueueItemProps {
   item: PlaylistItem;
   isActive: boolean;
   context: QueueContext;
-  onClick: () => void;
+  onClick: (videoId: string) => void;
   showLikeButton?: boolean;
   showDotButton?: boolean;
 }
@@ -75,7 +75,7 @@ export const PlayerQueueItem = memo(function PlayerQueueItem({
       )}
 
       <div className='relative flex gap-3 items-center px-2 py-3'>
-        <button type='button' className='w-full' onClick={onClick}>
+        <button type='button' className='w-full' onClick={() => onClick(item.videoId)}>
           <MusicInfoWrapper
             item={item}
             imageSize={36}

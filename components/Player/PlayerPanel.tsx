@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useAnimatedMount } from '@/hooks/useAnimatedMount';
 import { useLike } from '@/hooks/useLike';
@@ -38,20 +38,22 @@ const PlayerPanel = () => {
 
   const isLikedCurrent = currentVideo ? isLiked(currentVideo.videoId) : false;
 
-  const handleToggleMore = () => setIsDropdownOpen(prev => !prev);
+  const handleToggleMore = useCallback(() => setIsDropdownOpen(prev => !prev), []);
 
-  const handleToggleLike = () => {
+  const handleToggleLike = useCallback(() => {
     if (!currentVideo) return;
     toggleLike(currentVideo); // add | remove
-  };
+  }, [currentVideo, toggleLike]);
 
-  const handleAddToPlaylist = () => {
+  const handleAddToPlaylist = useCallback(() => {
     if (!currentVideo) return;
     handleToggleMore();
 
     setTargetTrack(currentVideo);
     openModal();
-  };
+  }, [currentVideo, handleToggleMore, setTargetTrack, openModal]);
+
+  const handleItemClick = useCallback((videoId: string) => setCurrentVideoId(videoId), [setCurrentVideoId]);
 
   useEffect(() => {
     document.body.style.overflow = isPlaylistPanelOpen ? 'hidden' : '';
@@ -124,7 +126,7 @@ const PlayerPanel = () => {
                 <PlayerQueueItem
                   item={item}
                   isActive={item.videoId === currentVideo.videoId}
-                  onClick={() => setCurrentVideoId(item.videoId)}
+                  onClick={handleItemClick}
                   context={QueueContext.CurrentQueue}
                 />
               </li>

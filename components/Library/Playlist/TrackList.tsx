@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { usePlayerCore } from '@/hooks/usePlayer';
@@ -25,6 +25,14 @@ export default function TrackList({ tracks, context }: TrackListProps) {
     overscan: 2,
   });
 
+  const handlePlay = useCallback(
+    (videoId: string) => {
+      const track = tracks.find(t => t.videoId === videoId);
+      if (track) setPlayerListFromContext(tracks, track);
+    },
+    [tracks, setPlayerListFromContext],
+  );
+
   if (tracks.length === 0) {
     return (
       <div className='playlist-track-list-container py-10 md:py-20'>
@@ -35,8 +43,6 @@ export default function TrackList({ tracks, context }: TrackListProps) {
   }
 
   const virtualItems = rowVirtualizer.getVirtualItems();
-
-  const handlePlay = (clickedItem: PlaylistItem) => setPlayerListFromContext(tracks, clickedItem);
 
   return (
     <div
@@ -60,7 +66,7 @@ export default function TrackList({ tracks, context }: TrackListProps) {
               <PlayerQueueItem
                 item={track}
                 isActive={track.videoId === currentVideoId}
-                onClick={() => handlePlay(track)}
+                onClick={handlePlay}
                 context={context}
                 showLikeButton={false}
               />

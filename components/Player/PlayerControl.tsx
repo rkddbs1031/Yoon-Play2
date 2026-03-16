@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import YouTube from 'react-youtube';
 
 import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
-import { usePlayer, usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
+import { usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
-import { isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/player/atom';
+import { currentTimeAtom, durationAtom, isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/player/atom';
 
 import type { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 
@@ -19,13 +19,13 @@ const PlayerFrame = () => {
     setIsPlaying,
     playerRef,
     setPlayerRef,
-    setDuration,
-    setCurrentTime,
-    volume,
     isActuallyPlayerReady,
     setIsPlayerReady,
     playlist,
-  } = usePlayer();
+  } = usePlayerCore();
+  const setCurrentTime = useSetAtom(currentTimeAtom);
+  const setDuration = useSetAtom(durationAtom);
+  const { volume } = usePlayerVolume();
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const localPlayerRef = useRef<YouTubePlayer | null>(null);
 
@@ -57,7 +57,7 @@ const PlayerFrame = () => {
       if (localPlayerRef.current) {
         const newTime = localPlayerRef.current.getCurrentTime();
 
-        setCurrentTime(prev => {
+        setCurrentTime((prev: number) => {
           const diff = Math.abs(newTime - prev);
           return diff > 0.3 ? newTime : prev;
         });
@@ -127,7 +127,7 @@ const PlayerFrame = () => {
   return (
     <YouTube
       key={currentVideo.videoId}
-      className='hidden'
+      className='player-frame hidden'
       videoId={currentVideo.videoId}
       onReady={handleReady}
       onEnd={handleEnd}

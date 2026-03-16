@@ -52,8 +52,12 @@ export const PlayerBar = () => {
           )}
 
           <div className='control-wrapper flex items-center gap-2'>
-            <PlayerControl.Buttons color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
-            <PlayerControl.Volume color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
+            <div className='peer order-2'>
+              <PlayerControl.Volume color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
+            </div>
+            <div className='order-1 peer-hover:opacity-0 transition-all'>
+              <PlayerControl.Buttons color='#ffffff' disabledColor={currentVideo && '#ffffff66'} />
+            </div>
           </div>
         </div>
       </div>

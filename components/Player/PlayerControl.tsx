@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useRef, useState, PointerEvent, MouseEvent, useCallback, memo } from 'react';
-import { useAtom, useAtomValue, useSetAtom } from 'jotai';
+import { useAtomValue, useSetAtom } from 'jotai';
 import YouTube from 'react-youtube';
 
 import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
 import { usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
-import { currentTimeAtom, durationAtom, isHoveredVolumeButton, isPlayerReadyAtom } from '@/store/player/atom';
+import { currentTimeAtom, durationAtom, isPlayerReadyAtom } from '@/store/player/atom';
 
 import type { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 
@@ -152,7 +152,6 @@ interface ColorProps {
 }
 
 const PlayerButtons = memo(function PlayerButtons({ size = 18, color, disabledColor }: IconButtonSize & ColorProps) {
-  const isHovered = useAtomValue(isHoveredVolumeButton);
   const { isPlaying, currentIndex, lastIndex, isActuallyPlayerReady, prevPlay, nextPlay, togglePlay } = usePlayerCore();
 
   const isPrevButtonDisabled = !isActuallyPlayerReady || currentIndex === 0;
@@ -168,9 +167,7 @@ const PlayerButtons = memo(function PlayerButtons({ size = 18, color, disabledCo
   const nextCursor = isNextButtonDisabled ? 'cursor-default' : 'cursor-pointer';
 
   return (
-    <div
-      className={`${isHovered ? 'opacity-0' : 'opacity-100'} transition-all button-wrapper flex flex-row gap-1 items-center justify-center`}
-    >
+    <div className='transition-all button-wrapper flex flex-row gap-1 items-center justify-center'>
       <button type='button' onClick={prevPlay} disabled={isPrevButtonDisabled} className={`${prevCursor} p-[2px]`}>
         <PrevIcon size={size} color={prevIconColor} />
       </button>
@@ -298,7 +295,7 @@ const ProgressBar = memo(function ProgressBar({ className }: { className?: strin
 ProgressBar.displayName = 'ProgressBar';
 
 const PlayerVolumeControl = memo(function ({ color, disabledColor }: ColorProps) {
-  const [isHovered, setIsHovered] = useAtom(isHoveredVolumeButton);
+  const [isHovered, setIsHovered] = useState(false);
   const { handleVolume, volume, setVolume } = usePlayerVolume();
   const isActuallyPlayerReady = useAtomValue(isPlayerReadyAtom);
 

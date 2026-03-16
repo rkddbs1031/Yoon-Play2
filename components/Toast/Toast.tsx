@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
 
+import { ToastSuccuessIcon, ToastErrorIcon, ToastWarningIcon, ToastInfoIcon } from '@/states/icon/svgs';
+
 import type { Toast as ToastType } from '@/types/toast';
 
-const toastAccentColorMap = {
-  success: 'bg-emerald-500',
-  error: 'bg-rose-500',
-  warning: 'bg-amber-500',
-  info: 'bg-sky-500',
+const toastIconMap: Record<ToastType['type'], React.ReactNode> = {
+  success: <ToastSuccuessIcon size={20} color='#509f93' />,
+  error: <ToastErrorIcon size={16} color='#B55E5E' />,
+  warning: <ToastWarningIcon size={20} color='#B5893A' />,
+  info: <ToastInfoIcon size={22} color='#5A6FA8' />,
+};
+
+const toastStyleMap = {
+  success: { gradient: 'from-[#70aaa1]/75' },
+  error: { gradient: 'from-[#C97B7B]/75' },
+  warning: { gradient: 'from-[#C9A96E]/75' },
+  info: { gradient: 'from-[#7B8FC9]/75' },
 };
 
 interface ToastProps {
@@ -40,18 +49,22 @@ export function Toast({ toast }: ToastProps) {
     <div id='toast' className='fixed top-6 right-4 z-[2000] flex flex-col items-end pointer-events-none'>
       <div
         className={`
-          relative overflow-hidden transition-transform duration-500 ease-in-out 
-          ${isVisible ? 'translate-x-0 translate-y-0' : 'translate-x-[110%]'} 
-          shadow-xl bg-white/80 backdrop-blur-sm rounded-md w-fit min-w-[200px] max-w-[320px]`}
+          relative transition-transform duration-500 ease-in-out
+          ${isVisible ? 'translate-x-0' : 'translate-x-[110%]'}
+          bg-gradient-to-r ${toastStyleMap[toast.type].gradient} via-white/75 via-10% to-white/90
+          shadow-lg rounded-xl w-fit min-w-[220px] max-w-[320px]`}
       >
-        <div className='flex flex-col items-start gap-1 pl-4 pr-2 py-2'>
-          <span className={`text-sm md:text-base font-semibold whitespace-nowrap`}>{toast.title}</span>
-          {toast.subtitle && (
-            <span className={`text-xs md:text-sm text-[currentColor]/80 break-all`}>{toast.subtitle}</span>
+        <div className='flex items-start gap-3 px-4 py-3'>
+          {toastIconMap[toast.type] && (
+            <div className='flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-white/60'>
+              {toastIconMap[toast.type]}
+            </div>
           )}
+          <div className='flex flex-col'>
+            <span className='text-sm font-semibold text-[#3d3d68] break-words'>{toast.title}</span>
+            {toast.subtitle && <span className='text-xs text-[#3d3d68]/60 break-words mt-[2px]'>{toast.subtitle}</span>}
+          </div>
         </div>
-
-        <div className={`absolute left-0 top-0 h-full w-[4px] ${toastAccentColorMap[toast.type]}`} />
       </div>
     </div>
   );

@@ -243,13 +243,6 @@ const ProgressBar = memo(function ProgressBar({ className }: { className?: strin
     e.currentTarget.releasePointerCapture(e.pointerId);
   };
 
-  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    if (isDragging) return;
-    const newTime = getTimeFromPosition(e.clientX);
-    updateTime(newTime);
-  };
-
   useEffect(() => {
     return () => {
       if (seekTimeoutRef.current) {
@@ -262,7 +255,6 @@ const ProgressBar = memo(function ProgressBar({ className }: { className?: strin
     <div className={`progress-bar relative w-full ${className || ''}`}>
       <div
         ref={progressBarRef}
-        onClick={handleClick}
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}

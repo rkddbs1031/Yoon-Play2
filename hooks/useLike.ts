@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAtomValue, useAtom } from 'jotai';
 
+import { LIKED_PLAYLIST_ID } from '@/constants/library';
 import { LikeStatus } from '@/constants/like';
 import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
+import { PLAYLIST_PREVIEW_KEY, PLAYLISTS_KEY } from '@/services/playlists';
 import { isLikedSelectorAtom, likedPlaylistAtom } from '@/store/like/atom';
 import { PlaylistItem } from '@/types/playlist';
 
@@ -51,7 +53,10 @@ export const useLike = () => {
       setLikedPlaylist(updated);
 
       // 플레이리스트 목록도 갱신 (trackCount 변경)
-      queryClient.invalidateQueries({ queryKey: ['playlists'] });
+      queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+
+      // 썸네일 미리보기 갱신
+      queryClient.invalidateQueries({ queryKey: [PLAYLIST_PREVIEW_KEY, LIKED_PLAYLIST_ID] });
     },
   });
 

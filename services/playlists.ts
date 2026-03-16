@@ -7,9 +7,9 @@ import * as likedDB from '@/lib/indexedDB/likedPlaylistDB';
 import * as playlistDB from '@/lib/indexedDB/playlistDB';
 import { likedPlaylistAtom } from '@/store/like/atom';
 
-const PLAYLISTS_KEY = 'playlists';
-const PLAYLIST_TRACKS_KEY = 'playlist-tracks';
-const PLAYLIST_PREVIEW_KEY = 'playlist-preview';
+export const PLAYLISTS_KEY = 'playlists';
+export const PLAYLIST_TRACKS_KEY = 'playlist-tracks';
+export const PLAYLIST_PREVIEW_KEY = 'playlist-preview';
 
 // 전체 플레이리스트 목록 조회 - usePlaylist 훅 내부, Library 페이지
 export const usePlaylistsQuery = () => {

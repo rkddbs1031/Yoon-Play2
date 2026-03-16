@@ -80,6 +80,10 @@ export const useAddTrackToPlaylistMutation = () => {
         queryClient.invalidateQueries({
           queryKey: [PLAYLIST_TRACKS_KEY, playlistId],
         });
+        // 썸네일 미리보기 갱신
+        queryClient.invalidateQueries({
+          queryKey: [PLAYLIST_PREVIEW_KEY, playlistId],
+        });
       }
 
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
@@ -118,6 +122,7 @@ export const useRemoveTrackFromPlaylistMutation = () => {
     mutationFn: playlistDB.removeTrackFromPlaylist,
     onSuccess: ({ playlistId, title }) => {
       queryClient.invalidateQueries({ queryKey: [PLAYLIST_TRACKS_KEY, playlistId] });
+      queryClient.invalidateQueries({ queryKey: [PLAYLIST_PREVIEW_KEY, playlistId] });
       queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
 
       const playlistName = title || '재생목록';

@@ -34,7 +34,6 @@ const PlayerFrame = () => {
 
   const handleReady = useCallback(
     (e: YouTubeEvent) => {
-      // console.log('handleReady! YouTube Player fully loaded.');
       localPlayerRef.current = e.target;
       setPlayerRef(e.target);
       setIsPlayerReady(true); // 플레이어가 완전히 준비되었음을 전역 상태에 알림!

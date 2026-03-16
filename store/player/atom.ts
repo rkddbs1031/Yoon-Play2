@@ -14,7 +14,7 @@ export const playlistSourceAtom = atom<PlaylistSource | null>(null);
 
 export const isPlayingState = atom<boolean>(false);
 
-export const currentVideoIdAtom = atom<string | null>('');
+export const currentVideoIdAtom = atom<string | null>(null);
 
 export const durationAtom = atom<number>(0);
 

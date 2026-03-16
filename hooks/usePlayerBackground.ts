@@ -24,7 +24,12 @@ export const usePlayerBackground = (imageUrl: string | undefined, transitionMs =
       setDisplayImage(imageUrl);
       setIsTransitioning(false);
     };
-  }, [imageUrl]);
+
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [imageUrl, transitionMs, displayImage]);
 
   return { displayImage, isTransitioning };
 };

@@ -154,8 +154,9 @@ export const useDeletePlaylistMutation = () => {
 
   return useMutation({
     mutationFn: playlistDB.deletePlaylist,
-    onSuccess: ({ title }) => {
-      queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] }); // 전체 목록만 갱신
+    onSuccess: ({ id, title }) => {
+      queryClient.invalidateQueries({ queryKey: [PLAYLISTS_KEY] });
+      queryClient.removeQueries({ queryKey: [PLAYLIST_PREVIEW_KEY, id] });
 
       toast.success(`'${title}' 재생목록을 삭제했습니다.`);
     },

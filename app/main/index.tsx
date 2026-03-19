@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 
 import { RecommendationResultType } from '@/constants/recommend';
 import { useRecommendationSearch } from '@/services/recommend';
-import { useYoutubeInfiniteQuery } from '@/services/search';
 import { RANDOM_HEADLINES } from '@/states/headLine';
 import { CustomAxiosError } from '@/types/error';
 import { RandomHeadLineType, Recommendation } from '@/types/recommend';
@@ -28,18 +27,7 @@ export default function Main() {
   const [recommend, setRecommend] = useState<Recommendation>(INIT_RECOMMEND);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [selectedTarget, setSelectedTarget] = useState<{ type: string | null; value: string | null }>({
-    type: null,
-    value: null,
-  });
-
   const { mutate: searchRecommendation, isPending } = useRecommendationSearch();
-
-  const { isLoading: isYoutubeLoading } = useYoutubeInfiniteQuery({
-    type: selectedTarget.type,
-    value: selectedTarget.value,
-    initialData: undefined,
-  });
 
   useEffect(() => {
     const { type, text } = RANDOM_HEADLINES[Math.floor(Math.random() * RANDOM_HEADLINES.length)];
@@ -72,15 +60,12 @@ export default function Main() {
   };
 
   const handleClick = ({ value, type }: { value: string; type: RecommendationResultType }) => {
-    setSelectedTarget({ value, type });
-
     router.push(`/result?type=${type}&value=${encodeURIComponent(value)}`);
   };
 
   const handleReset = () => {
     setRecommend(INIT_RECOMMEND);
     setSearchValue('');
-    setSelectedTarget({ type: null, value: null });
   };
 
   const showIntro = !(!isPending && recommend.list !== null);
@@ -104,7 +89,7 @@ export default function Main() {
         onReset={handleReset}
       />
 
-      <LoadingSpinner isLoading={isPending || isYoutubeLoading} />
+      <LoadingSpinner isLoading={isPending} />
     </section>
   );
 }

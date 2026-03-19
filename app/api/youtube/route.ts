@@ -62,6 +62,7 @@ export async function GET(request: NextRequest) {
       ...(query && {
         q: `${query} ${searchType === RecommendationResultType.Genre ? '장르' : ''} 플레이리스트 `,
       }),
+      videoEmbeddable: 'true',
       videoDuration: 'long',
       order: 'relevance',
       regionCode: 'KR',

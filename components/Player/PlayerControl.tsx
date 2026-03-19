@@ -6,6 +6,7 @@ import { ACTIVE_COLOR, DISABLED_COLOR } from '@/constants/colors';
 import { usePlayerCore, usePlayerTime, usePlayerVolume } from '@/hooks/usePlayer';
 import { MutedVolumeIcon, NextIcon, PauseIcon, PlayIcon, PrevIcon, VolumeIcon } from '@/states/icon/svgs';
 import { currentTimeAtom, durationAtom, isPlayerReadyAtom } from '@/store/player/atom';
+import { addToastAtom } from '@/store/ui/toastAtom';
 
 import type { YouTubeEvent, YouTubePlayer } from 'react-youtube';
 
@@ -29,6 +30,8 @@ const PlayerFrame = () => {
   const setCurrentTime = useSetAtom(currentTimeAtom);
   const setDuration = useSetAtom(durationAtom);
   const { volume } = usePlayerVolume();
+  const addToast = useSetAtom(addToastAtom);
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const localPlayerRef = useRef<YouTubePlayer | null>(null);
 
@@ -90,6 +93,31 @@ const PlayerFrame = () => {
     [isActuallyPlayerReady, startInterval, stopInterval],
   );
 
+  const handleError = useCallback(
+    (e: YouTubeEvent) => {
+      const errorCode = e.data;
+      console.error(`[YouTube] 재생 오류 - 에러 코드: ${errorCode}`);
+
+      // 100 = 영상 삭제/비공개,  101,150 = 임베드 재생 불가
+      const shouldSkip = [100, 101, 150].includes(errorCode);
+
+      if (shouldSkip) {
+        addToast({
+          type: 'warning',
+          title: '재생할 수 없는 음악이에요',
+          subtitle: '다음 곡으로 넘어갑니다',
+          duration: 3000,
+        });
+
+        if (currentIndex < lastIndex) {
+          setCurrentVideoId(playlist[currentIndex + 1].videoId);
+          setIsPlaying(true);
+        }
+      }
+    },
+    [addToast, currentIndex, lastIndex, playlist, setCurrentVideoId, setIsPlaying],
+  );
+
   const handlePlayVideo = useCallback(() => {
     if (!isActuallyPlayerReady) return;
 
@@ -140,6 +168,7 @@ const PlayerFrame = () => {
       onReady={handleReady}
       onEnd={handleEnd}
       onStateChange={handleStateChange}
+      onError={handleError}
       opts={{
         playerVars: {
           autoplay: 0,

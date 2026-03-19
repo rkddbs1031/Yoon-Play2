@@ -54,6 +54,10 @@ scaleX 변경 →                        Composite  (GPU 처리)
 
 플레이리스트 트랙 목록에 `useVirtualizer`를 적용해 실제 DOM에는 뷰포트에 보이는 항목만 렌더링합니다.
 
+**Streaming SSR (result 페이지)**
+
+`/result` 페이지는 Server Component에서 YouTube 데이터를 fetch합니다. `loading.tsx`를 추가해 fetch 대기 중에 스켈레톤을 즉시 스트리밍하고, 데이터가 준비되면 실제 결과로 교체합니다.
+
 ---
 
 ### IndexedDB 스키마 설계
